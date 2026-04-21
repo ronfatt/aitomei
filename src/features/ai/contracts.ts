@@ -9,6 +9,9 @@ export interface AiCoachRequest {
 export interface AiCoachResponse {
   reply: string;
   suggestedActions: string[];
+  provider?: "mock" | "openai";
+  model?: string;
+  notice?: string | null;
 }
 
 export interface AiConciergeInsight {
@@ -245,6 +248,8 @@ function getSuggestedActions(topic: GoldNowTopic) {
   switch (topic) {
     case "buy":
       return ["演示 Top Up 与 Buy 流程", "强调 0.1 克起购", "补一句按克数长期累积"];
+    case "entry":
+      return ["强调 0.1 克起购", "补一句长期累积", "避免讲短线收益"];
     case "redeem":
       return ["打开兑换流程说明", "强调可到 Tomei 门店领取", "提醒需带身份资料核验"];
     case "shariah":
@@ -260,6 +265,12 @@ function getSuggestedActions(topic: GoldNowTopic) {
   }
 }
 
+export function getAiCoachSuggestedActionsForMessage(message: string) {
+  const normalizedMessage = normalizeMessage(message);
+  const topic = detectTopic(normalizedMessage);
+  return getSuggestedActions(topic);
+}
+
 // Placeholder integration surface for future LLM orchestration.
 export async function mockAiCoach(request: AiCoachRequest): Promise<AiCoachResponse> {
   const normalizedMessage = normalizeMessage(request.message);
@@ -269,5 +280,8 @@ export async function mockAiCoach(request: AiCoachRequest): Promise<AiCoachRespo
   return {
     reply: buildReply(normalizedMessage, topic, knowledge),
     suggestedActions: getSuggestedActions(topic),
+    provider: "mock",
+    model: "local-demo",
+    notice: "未检测到 OpenAI 连接，当前使用本地 demo 知识回答。",
   };
 }

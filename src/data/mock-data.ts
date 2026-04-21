@@ -1,0 +1,410 @@
+import type {
+  ActivityItem,
+  Campaign,
+  ContentTemplate,
+  DashboardMetric,
+  LearningModule,
+  Mission,
+  NewsItem,
+  ProductHighlight,
+  ProofSubmission,
+  RewardMilestone,
+} from "@/types/domain";
+
+export const memberMetrics: DashboardMetric[] = [
+  { label: "Mission Completion", value: "68%", trend: "+12% this week" },
+  { label: "Reward Points", value: "1,820", trend: "120 points to next tier" },
+  { label: "Content Outputs", value: "24", trend: "7 saved this month" },
+  { label: "Campaign Participation", value: "5", trend: "2 active now" },
+];
+
+export const adminMetrics: DashboardMetric[] = [
+  { label: "Active Members", value: "4,218", trend: "+9.4% MoM" },
+  { label: "Mission Completion Rate", value: "72%", trend: "+6% vs last month" },
+  { label: "Generated Asset Count", value: "3,412", trend: "Poster flow leads" },
+  { label: "Proof Submissions", value: "1,182", trend: "+17 today" },
+  { label: "Campaign Participation", value: "74%", trend: "Healthy momentum" },
+  { label: "Learning Completion", value: "76%", trend: "+9% after AI nudges" },
+];
+
+export const missions: Mission[] = [
+  {
+    id: "complete-profile",
+    sequence: 1,
+    title: "Complete Your Member Profile",
+    description: "Add your personal details, preferred product interests, and content goals.",
+    type: "profile",
+    status: "completed",
+    rewardPoints: 100,
+    rewardItem: "Foundation badge",
+    unlockCondition: "Available on signup",
+    proofRequirement: "No proof required",
+    validationRule: "Profile completion reaches 100%",
+  },
+  {
+    id: "upload-profile-photo",
+    sequence: 2,
+    title: "Upload a Premium Profile Photo",
+    description: "Upload a clear portrait for personalized posters and branded materials.",
+    type: "profile",
+    status: "completed",
+    rewardPoints: 80,
+    rewardItem: "Visual identity badge",
+    unlockCondition: "Mission 1 completed",
+    proofRequirement: "Profile photo upload",
+    validationRule: "A valid storage object is attached to the profile",
+  },
+  {
+    id: "generate-first-poster",
+    sequence: 3,
+    title: "Generate Your First Personalized Poster",
+    description: "Pick a campaign theme, upload a photo, and request a branded poster output.",
+    type: "content",
+    status: "in_progress",
+    rewardPoints: 150,
+    rewardItem: "Studio starter bonus",
+    unlockCondition: "Profile photo uploaded",
+    proofRequirement: "Saved generated asset",
+    validationRule: "At least one poster asset exists for the member",
+  },
+  {
+    id: "submit-first-post",
+    sequence: 4,
+    title: "Publish Your First Social Post",
+    description: "Share your poster with a polished caption and submit the social URL for review.",
+    type: "social",
+    status: "available",
+    rewardPoints: 180,
+    rewardItem: "Spotlight badge",
+    unlockCondition: "Poster generated",
+    proofRequirement: "Social URL and optional screenshot",
+    validationRule: "Approved proof submission on any supported platform",
+  },
+  {
+    id: "three-day-streak",
+    sequence: 5,
+    title: "Complete a 3-Day Posting Streak",
+    description: "Stay visible for three consecutive days using campaign-aligned content.",
+    type: "social",
+    status: "locked",
+    rewardPoints: 260,
+    rewardItem: "Consistency badge",
+    unlockCondition: "First social post approved",
+    proofRequirement: "Three approved submissions across three dates",
+    validationRule: "Three-day streak recorded in activity logs",
+  },
+  {
+    id: "brand-introduction-lesson",
+    sequence: 6,
+    title: "Complete the TOMEI Brand Introduction",
+    description: "Learn the brand story, positioning, and how members should communicate it.",
+    type: "learning",
+    status: "available",
+    rewardPoints: 120,
+    rewardItem: "Brand fluency badge",
+    unlockCondition: "Available on signup",
+    proofRequirement: "Lesson completion",
+    validationRule: "Learning module completion stored",
+  },
+  {
+    id: "first-video-request",
+    sequence: 7,
+    title: "Request Your First Personalized Short Video",
+    description: "Queue a branded short-form template with your member CTA and ending card.",
+    type: "content",
+    status: "locked",
+    rewardPoints: 200,
+    rewardItem: "Motion creator badge",
+    unlockCondition: "First poster and first post completed",
+    proofRequirement: "Queued video generation request",
+    validationRule: "A completed or queued video asset request exists",
+  },
+  {
+    id: "product-knowledge-quiz",
+    sequence: 8,
+    title: "Pass the Product Knowledge Quiz",
+    description: "Demonstrate confidence recommending collections across key jewelry categories.",
+    type: "learning",
+    status: "locked",
+    rewardPoints: 220,
+    rewardItem: "Advisor badge",
+    unlockCondition: "Brand lesson completed",
+    proofRequirement: "Quiz score submission",
+    validationRule: "Quiz score greater than configured pass threshold",
+  },
+  {
+    id: "ask-ai-coach",
+    sequence: 9,
+    title: "Ask AI Coach Three Questions",
+    description: "Use AI Coach to learn product talking points and campaign-ready recommendations.",
+    type: "ai",
+    status: "locked",
+    rewardPoints: 90,
+    rewardItem: "AI learner badge",
+    unlockCondition: "AI Coach activated",
+    proofRequirement: "Chat interaction count",
+    validationRule: "Three member messages logged in AI chat",
+  },
+  {
+    id: "campaign-finale",
+    sequence: 10,
+    title: "Complete a Campaign Challenge Finale",
+    description: "Join a featured campaign, hit the final milestone, and unlock a premium reward.",
+    type: "campaign",
+    status: "locked",
+    rewardPoints: 400,
+    rewardItem: "Campaign prestige badge",
+    unlockCondition: "Missions 1-9 completed",
+    proofRequirement: "Campaign participation and approved proof",
+    validationRule: "Campaign milestone met and verified",
+  },
+];
+
+export const rewardMilestones: RewardMilestone[] = [
+  {
+    id: "milestone-1",
+    title: "Starter Glow",
+    description: "Unlock the foundational badge set and AI onboarding pack.",
+    requiredPoints: 500,
+    badge: "Founder Light",
+    status: "unlocked",
+  },
+  {
+    id: "milestone-2",
+    title: "Signature Presence",
+    description: "Access premium content templates and priority challenge invites.",
+    requiredPoints: 1500,
+    badge: "Signature Circle",
+    status: "current",
+  },
+  {
+    id: "milestone-3",
+    title: "Campaign Luminary",
+    description: "Unlock exclusive campaign briefs and elevated seasonal rewards.",
+    requiredPoints: 3000,
+    badge: "Luminary Crest",
+    status: "locked",
+  },
+];
+
+export const campaigns: Campaign[] = [
+  {
+    id: "raya-radiance",
+    title: "Raya Radiance 2026",
+    theme: "Festive elegance",
+    activePeriod: "20 Apr - 31 May 2026",
+    summary: "Drive festive storytelling with family-inspired gold gifting and celebration visuals.",
+    cta: "Generate a festive poster",
+  },
+  {
+    id: "bridal-signatures",
+    title: "Bridal Signatures",
+    theme: "Bridal & promise",
+    activePeriod: "Ongoing",
+    summary: "Highlight timeless bridal pieces with personal recommendation guidance and testimonial prompts.",
+    cta: "Open campaign brief",
+  },
+  {
+    id: "daily-gold-story",
+    title: "Daily Gold Story",
+    theme: "Educational content",
+    activePeriod: "Always-on",
+    summary: "Encourage daily product education content with simple prompts and AI caption support.",
+    cta: "See today’s prompt",
+  },
+];
+
+export const newsItems: NewsItem[] = [
+  {
+    id: "notice-1",
+    category: "Campaign",
+    title: "New social assets released for Raya Radiance",
+    summary: "Fresh poster layouts and short-video end cards are now available in Content Studio.",
+    publishedAt: "Today",
+  },
+  {
+    id: "notice-2",
+    category: "Training",
+    title: "Brand story micro-learning refreshed",
+    summary: "The intro lesson now includes new luxury positioning language and updated quiz prompts.",
+    publishedAt: "2 days ago",
+  },
+  {
+    id: "notice-3",
+    category: "Operations",
+    title: "Proof review SLA improved to same-day",
+    summary: "Pending social proof submissions will be reviewed within the same business day when possible.",
+    publishedAt: "4 days ago",
+  },
+];
+
+export const products: ProductHighlight[] = [
+  {
+    id: "product-1",
+    name: "Celestial Gold Pendant",
+    category: "Gold jewelry",
+    story: "A lightweight everyday gold piece designed for gifting and effortless layering.",
+    priceRange: "RM 899 - RM 1,299",
+    spotlight: "Great for daily elegance storytelling and gifting themes.",
+  },
+  {
+    id: "product-2",
+    name: "Promise Diamond Ring",
+    category: "Diamond jewelry",
+    story: "A modern promise silhouette for anniversaries, engagement preludes, and milestone moments.",
+    priceRange: "RM 2,600 - RM 4,800",
+    spotlight: "Ideal for romantic, aspiration-led content with polished educational captions.",
+  },
+  {
+    id: "product-3",
+    name: "Heritage Bangle Collection",
+    category: "Festive collection",
+    story: "Warm gold bangles built for family occasions, festive dressing, and heirloom gifting stories.",
+    priceRange: "RM 1,800 - RM 3,500",
+    spotlight: "Strong fit for festive campaign visuals and family-focused narratives.",
+  },
+];
+
+export const learningModules: LearningModule[] = [
+  {
+    id: "brand-story",
+    title: "The TOMEI Brand Story",
+    category: "Brand fundamentals",
+    duration: "8 min",
+    completionRate: "92%",
+    quizId: "brand-story-quiz",
+    summary: "Learn the brand narrative, trust cues, and premium communication pillars.",
+  },
+  {
+    id: "gold-basics",
+    title: "Gold Jewelry Basics for Members",
+    category: "Product knowledge",
+    duration: "12 min",
+    completionRate: "84%",
+    quizId: "gold-basics-quiz",
+    summary: "Understand categories, gifting occasions, and how to explain quality with confidence.",
+  },
+  {
+    id: "luxury-social",
+    title: "Posting Luxury Content Without Feeling Pushy",
+    category: "Promotion skills",
+    duration: "10 min",
+    completionRate: "71%",
+    quizId: "luxury-social-quiz",
+    summary: "Create aspirational, helpful content that supports the brand without sounding salesy.",
+  },
+];
+
+export const proofQueue: ProofSubmission[] = [
+  {
+    id: "proof-1",
+    memberName: "Aisyah Nordin",
+    missionTitle: "Publish Your First Social Post",
+    platform: "Instagram",
+    submittedAt: "10:15 AM",
+    status: "pending",
+  },
+  {
+    id: "proof-2",
+    memberName: "Lee Jia En",
+    missionTitle: "Complete a 3-Day Posting Streak",
+    platform: "TikTok",
+    submittedAt: "9:42 AM",
+    status: "needs_revision",
+  },
+  {
+    id: "proof-3",
+    memberName: "Nur Amalina",
+    missionTitle: "Publish Your First Social Post",
+    platform: "Facebook",
+    submittedAt: "Yesterday",
+    status: "approved",
+  },
+];
+
+export const contentTemplates: ContentTemplate[] = [
+  {
+    id: "template-1",
+    title: "Ivory Signature Poster",
+    format: "poster",
+    audience: "Festive & gifting",
+    lastUpdated: "18 Apr 2026",
+  },
+  {
+    id: "template-2",
+    title: "Luxury Social Starter Caption Set",
+    format: "caption",
+    audience: "Education-first promoters",
+    lastUpdated: "17 Apr 2026",
+  },
+  {
+    id: "template-3",
+    title: "30s Campaign End Card Video",
+    format: "video",
+    audience: "Short-form creators",
+    lastUpdated: "15 Apr 2026",
+  },
+];
+
+export const recentGeneratedAssets = [
+  {
+    id: "asset-1",
+    title: "Raya Radiance Poster",
+    detail: "Official festive poster template personalized with member photo and CTA.",
+    status: "Delivered",
+  },
+  {
+    id: "asset-2",
+    title: "Luxury Instagram Caption",
+    detail: "Elegant product education caption generated for festive gifting content.",
+    status: "Saved",
+  },
+  {
+    id: "asset-3",
+    title: "Campaign End Card Video",
+    detail: "Official short-form video request queued with member end card note.",
+    status: "Queued",
+  },
+] as const;
+
+export const memberActivities: ActivityItem[] = [
+  {
+    id: "activity-1",
+    title: "Poster request delivered",
+    detail: "Your Raya Radiance poster is ready in Asset Library.",
+    when: "18 min ago",
+  },
+  {
+    id: "activity-2",
+    title: "Campaign reminder",
+    detail: "Daily Gold Story prompt refreshed for today’s content window.",
+    when: "1 hour ago",
+  },
+  {
+    id: "activity-3",
+    title: "Lesson completed",
+    detail: "You finished The TOMEI Brand Story and earned 120 points.",
+    when: "Yesterday",
+  },
+];
+
+export const adminActivity: ActivityItem[] = [
+  {
+    id: "admin-activity-1",
+    title: "Proof review spike detected",
+    detail: "Pending queue increased by 11 after the latest campaign card launch.",
+    when: "Today",
+  },
+  {
+    id: "admin-activity-2",
+    title: "High-performing campaign",
+    detail: "Raya Radiance generated the best poster request conversion this week.",
+    when: "Today",
+  },
+  {
+    id: "admin-activity-3",
+    title: "Learning completion uptrend",
+    detail: "Brand fundamentals lesson completion climbed 14% after AI Coach prompts.",
+    when: "Yesterday",
+  },
+];

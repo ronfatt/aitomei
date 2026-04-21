@@ -291,6 +291,132 @@ export interface Database {
           created_at: string;
         };
       };
+      ai_knowledge_sources: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          language: string;
+          page_count: number;
+          scope: string;
+          summary: string | null;
+          status: Database["public"]["Enums"]["record_status"];
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          title: string;
+          language: string;
+          page_count?: number;
+          scope: string;
+          summary?: string | null;
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          title?: string;
+          language?: string;
+          page_count?: number;
+          scope?: string;
+          summary?: string | null;
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
+      };
+      ai_knowledge_entries: {
+        Row: {
+          id: string;
+          slug: string;
+          source_id: string | null;
+          tag: string;
+          title: string;
+          detail: string;
+          sequence: number;
+          status: Database["public"]["Enums"]["record_status"];
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          source_id?: string | null;
+          tag: string;
+          title: string;
+          detail: string;
+          sequence?: number;
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          source_id?: string | null;
+          tag?: string;
+          title?: string;
+          detail?: string;
+          sequence?: number;
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
+      };
+      ai_objection_scripts: {
+        Row: {
+          id: string;
+          slug: string;
+          objection: string;
+          short_answer: string;
+          talk_track: string;
+          next_move: string;
+          sequence: number;
+          status: Database["public"]["Enums"]["record_status"];
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          objection: string;
+          short_answer: string;
+          talk_track: string;
+          next_move: string;
+          sequence?: number;
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          objection?: string;
+          short_answer?: string;
+          talk_track?: string;
+          next_move?: string;
+          sequence?: number;
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
+      };
       proof_submissions: {
         Row: {
           id: string;

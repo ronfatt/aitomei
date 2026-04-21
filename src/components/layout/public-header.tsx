@@ -21,12 +21,18 @@ export function PublicHeader() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
-          <Link href="/login" className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}>
-            Login
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/api/demo-login?role=member"
+            className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "rounded-full")}
+          >
+            Member
           </Link>
-          <Link href="/signup" className={cn(buttonVariants({ size: "sm" }))}>
-            Join the platform
+          <Link
+            href="/api/demo-login?role=admin"
+            className={cn(buttonVariants({ size: "sm" }), "rounded-full")}
+          >
+            Admin
           </Link>
         </div>
       </div>

@@ -153,6 +153,11 @@ export const adminNavigation: NavItem[] = [
     description: "海报、文案与视频模板管理。",
   },
   {
+    title: "AI 知识库",
+    href: "/admin/ai-knowledge",
+    description: "管理 AI 回答所依赖的官方知识、脚本与来源。",
+  },
+  {
     title: "数据分析",
     href: "/admin/analytics",
     description: "互动、留存与活动参与趋势。",

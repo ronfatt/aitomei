@@ -7,3 +7,7 @@ export const supabaseEnv = {
 export function hasSupabaseEnv() {
   return Boolean(supabaseEnv.url && supabaseEnv.anonKey);
 }
+
+export function hasSupabaseAdminEnv() {
+  return Boolean(supabaseEnv.url && supabaseEnv.serviceRoleKey);
+}

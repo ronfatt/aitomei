@@ -32,17 +32,17 @@ interface AssetPreview {
 }
 
 const suggestedPrompts = [
-  "What should I post today?",
-  "Help me write a caption",
-  "Show my next mission",
-  "Explain today’s campaign",
+  "我今天适合发什么内容？",
+  "帮我写一段文案",
+  "显示我的下一个任务",
+  "解释今天的活动重点",
 ] as const;
 
 const quickActions = [
-  { title: "Generate Poster", href: "/member/content-studio/poster-generator", icon: FileImage },
-  { title: "Create Caption", href: "/member/content-studio/caption-generator", icon: WandSparkles },
-  { title: "Create Short Video", href: "/member/content-studio/short-video-requests", icon: PlayCircle },
-  { title: "Submit Proof", href: "/member/missions/submit-first-post", icon: MessageSquareQuote },
+  { title: "生成海报", href: "/member/content-studio/poster-generator", icon: FileImage },
+  { title: "生成文案", href: "/member/content-studio/caption-generator", icon: WandSparkles },
+  { title: "生成短视频", href: "/member/content-studio/short-video-requests", icon: PlayCircle },
+  { title: "提交证明", href: "/member/missions/submit-first-post", icon: MessageSquareQuote },
 ] as const;
 
 function getFirstName(displayName: string) {
@@ -64,6 +64,21 @@ function getMissionProgress(status: Mission["status"]) {
   }
 }
 
+function missionNeedsProof(proofRequirement: string) {
+  return !/^(No proof required|无需提交证明)$/i.test(proofRequirement.trim());
+}
+
+function getRewardStatusLabel(status: RewardOverview["milestones"][number]["status"]) {
+  switch (status) {
+    case "unlocked":
+      return "已解锁";
+    case "current":
+      return "进行中";
+    default:
+      return "未解锁";
+  }
+}
+
 function getTodayBrief(
   mission: Mission | undefined,
   campaigns: Campaign[],
@@ -71,29 +86,29 @@ function getTodayBrief(
 ) {
   return [
     {
-      label: "Today’s focus",
-      value: "Lead with festive gifting",
-      detail: "Pair a refined product story with a warm, elegant CTA.",
+      label: "今日重点",
+      value: "主打节庆送礼内容",
+      detail: "用精致产品故事搭配温和而有质感的行动引导。",
     },
     {
-      label: "Pending mission",
-      value: mission?.title ?? "Complete your next mission",
-      detail: mission?.status === "submitted" ? "Awaiting review" : "Ready to continue",
+      label: "待完成任务",
+      value: mission?.title ?? "继续完成下一个任务",
+      detail: mission?.status === "submitted" ? "等待审核中" : "现在可以继续推进",
     },
     {
-      label: "Latest campaign",
-      value: campaigns[0]?.title ?? "Featured campaign",
-      detail: campaigns[0]?.activePeriod ?? "Live now",
+      label: "最新活动",
+      value: campaigns[0]?.title ?? "精选活动",
+      detail: campaigns[0]?.activePeriod ?? "进行中",
     },
     {
-      label: "Featured product",
-      value: "Heritage Bangle Collection",
-      detail: "Strong fit for family-led festive content today.",
+      label: "主推产品",
+      value: "传承金镯系列",
+      detail: "很适合今天用于家庭氛围与节庆主题内容。",
     },
     {
-      label: "Brand update",
-      value: learningModules[0]?.title ?? "Brand module refreshed",
-      detail: "A short refresh is ready if you have 8 minutes.",
+      label: "品牌更新",
+      value: learningModules[0]?.title ?? "品牌学习内容已更新",
+      detail: "如果你有 8 分钟，现在就可以快速学习一次。",
     },
   ];
 }
@@ -142,9 +157,9 @@ export function MemberMobileDashboard({
   return (
     <div className="mx-auto max-w-md space-y-4 pb-4 lg:max-w-none">
       <section className="panel rounded-[32px] px-5 py-5">
-        <p className="text-[13px] font-medium text-[var(--muted)]">Hi, {firstName}</p>
+        <p className="text-[13px] font-medium text-[var(--muted)]">你好，{firstName}</p>
         <h1 className="mt-1 font-[family-name:var(--font-display)] text-[2.1rem] leading-none tracking-[-0.04em] text-[var(--foreground)]">
-          Welcome back to your growth dashboard
+          欢迎回到你的成长首页
         </h1>
       </section>
 
@@ -152,13 +167,13 @@ export function MemberMobileDashboard({
         <div className="flex items-start justify-between gap-4">
           <div>
             <Badge className="w-fit" variant="default">
-              AI Coach
+              AI 教练
             </Badge>
             <h2 className="mt-4 text-[2rem] font-semibold leading-none tracking-[-0.04em] text-[var(--foreground)]">
-              Your personal growth mentor
+              你的专属成长导师
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              Ask about products, posting ideas, missions, or campaigns and continue straight into AI chat.
+              你可以直接询问产品、发帖建议、任务进度或最新活动，并立即进入 AI 对话。
             </p>
           </div>
           <div className="flex h-14 w-14 items-center justify-center rounded-[22px] bg-[linear-gradient(135deg,#d9b235,#c09517)] text-white shadow-[0_18px_40px_rgba(185,140,28,0.22)]">
@@ -170,11 +185,11 @@ export function MemberMobileDashboard({
           <Input
             value={coachPrompt}
             onChange={(event) => setCoachPrompt(event.target.value)}
-            placeholder="Ask about products, posting ideas, missions, or campaigns..."
+            placeholder="询问产品、发帖灵感、任务安排或活动重点……"
             className="h-12 border-0 bg-transparent px-1 shadow-none focus:ring-0"
           />
           <Button className="h-11 rounded-2xl px-4" onClick={() => openCoach()} type="button">
-            Open
+            进入
           </Button>
         </div>
 
@@ -198,10 +213,10 @@ export function MemberMobileDashboard({
       <section className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            Today brief
+            今日简报
           </h2>
           <Link href="/member/ai-concierge" className="text-sm font-semibold text-[var(--gold-strong)]">
-            Open AI Concierge
+            打开 AI 礼宾
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -221,7 +236,7 @@ export function MemberMobileDashboard({
         <section className="panel rounded-[30px] p-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <Badge variant="neutral">Mission {currentMission.sequence}</Badge>
+              <Badge variant="neutral">任务 {currentMission.sequence}</Badge>
               <h2 className="mt-3 text-[1.45rem] font-semibold leading-7 tracking-[-0.03em] text-[var(--foreground)]">
                 {currentMission.title}
               </h2>
@@ -232,16 +247,16 @@ export function MemberMobileDashboard({
 
           <div className="mt-5 space-y-3">
             <div className="flex items-center justify-between text-sm text-[var(--muted)]">
-              <span>Progress</span>
+              <span>进度</span>
               <span>{missionProgress}%</span>
             </div>
             <Progress value={missionProgress} className="h-3" />
           </div>
 
           <div className="mt-5 rounded-[22px] border border-[rgba(196,168,114,0.14)] bg-white/72 px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">Next reward</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">下一项奖励</p>
             <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
-              {currentMission.rewardPoints} pts · {currentMission.rewardItem}
+              {currentMission.rewardPoints} 积分 · {currentMission.rewardItem}
             </p>
           </div>
 
@@ -250,14 +265,14 @@ export function MemberMobileDashboard({
               href={`/member/missions/${currentMission.id}`}
               className={cn(buttonVariants(), "min-w-0 flex-1 justify-center")}
             >
-              Continue mission
+              继续任务
             </Link>
-            {currentMission.proofRequirement !== "No proof required" ? (
+            {missionNeedsProof(currentMission.proofRequirement) ? (
               <Link
                 href={`/member/missions/${currentMission.id}`}
                 className={cn(buttonVariants({ variant: "secondary" }), "min-w-0 flex-1 justify-center")}
               >
-                Submit proof
+                提交证明
               </Link>
             ) : null}
           </div>
@@ -267,7 +282,7 @@ export function MemberMobileDashboard({
       <section className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            Quick actions
+            快捷操作
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -289,10 +304,10 @@ export function MemberMobileDashboard({
       <section className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            Active campaigns
+            进行中的活动
           </h2>
           <Link href="/member/campaigns" className="text-sm font-semibold text-[var(--gold-strong)]">
-            View all
+            查看全部
           </Link>
         </div>
         <div className="flex snap-x gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -323,10 +338,10 @@ export function MemberMobileDashboard({
       <section className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            Learning center
+            学习中心
           </h2>
           <Link href="/member/learning" className="text-sm font-semibold text-[var(--gold-strong)]">
-            Continue learning
+            继续学习
           </Link>
         </div>
         <div className="space-y-3">
@@ -335,7 +350,7 @@ export function MemberMobileDashboard({
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                    {index === 0 ? "Continue lesson" : lesson.category}
+                    {index === 0 ? "继续课程" : lesson.category}
                   </p>
                   <h3 className="mt-2 text-base font-semibold leading-6 text-[var(--foreground)]">
                     {lesson.title}
@@ -346,7 +361,7 @@ export function MemberMobileDashboard({
               </div>
               <div className="mt-4 flex items-center justify-between text-sm text-[var(--muted)]">
                 <span>{lesson.duration}</span>
-                <span>{lesson.completionRate} complete</span>
+                <span>完成度 {lesson.completionRate}</span>
               </div>
             </Card>
           ))}
@@ -356,14 +371,14 @@ export function MemberMobileDashboard({
       <section className="panel rounded-[30px] p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <Badge variant="default">Rewards & badges</Badge>
+            <Badge variant="default">奖励与徽章</Badge>
             <h2 className="mt-3 text-[1.45rem] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-              {rewardOverview.currentPoints.toLocaleString()} points
+              {rewardOverview.currentPoints.toLocaleString()} 积分
             </h2>
             <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
               {rewardOverview.nextMilestonePoints
-                ? `${Math.max(rewardOverview.nextMilestonePoints - rewardOverview.currentPoints, 0)} points to your next unlock.`
-                : "Your top milestone is already unlocked."}
+                ? `距离下一个里程碑还差 ${Math.max(rewardOverview.nextMilestonePoints - rewardOverview.currentPoints, 0)} 积分。`
+                : "当前最高里程碑已解锁。"}
             </p>
           </div>
           <Gift className="mt-1 h-5 w-5 text-[var(--gold-strong)]" />
@@ -371,7 +386,7 @@ export function MemberMobileDashboard({
 
         <div className="mt-5 space-y-3">
           <div className="flex items-center justify-between text-sm text-[var(--muted)]">
-            <span>Progress to next reward</span>
+            <span>距离下一级奖励</span>
             <span>{rewardOverview.progressPercent}%</span>
           </div>
           <Progress value={rewardOverview.progressPercent} className="h-3" />
@@ -396,7 +411,7 @@ export function MemberMobileDashboard({
                       : "warning"
                 }
               >
-                {reward.status}
+                {getRewardStatusLabel(reward.status)}
               </Badge>
             </div>
           ))}
@@ -404,7 +419,7 @@ export function MemberMobileDashboard({
 
         {unlockedReward ? (
           <div className="mt-5 rounded-[22px] border border-[rgba(196,168,114,0.14)] bg-[linear-gradient(180deg,rgba(255,248,237,0.9),rgba(250,242,228,0.82))] px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">Unlocked reward</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">已解锁奖励</p>
             <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{unlockedReward.title}</p>
           </div>
         ) : null}
@@ -413,10 +428,10 @@ export function MemberMobileDashboard({
       <section className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            Recent assets
+            最近生成的素材
           </h2>
           <Link href="/member/asset-library" className="text-sm font-semibold text-[var(--gold-strong)]">
-            Asset library
+            素材库
           </Link>
         </div>
         <div className="space-y-3">
@@ -445,7 +460,7 @@ export function MemberMobileDashboard({
           <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[rgba(217,178,53,0.14)] text-[var(--gold-strong)]">
             <Sparkles className="h-4 w-4" />
           </span>
-          <span className="text-sm font-semibold text-[var(--foreground)]">Continue with AI Coach</span>
+          <span className="text-sm font-semibold text-[var(--foreground)]">继续使用 AI 教练</span>
         </span>
         <ChevronRight className="h-4 w-4 text-[var(--gold-strong)]" />
       </Link>

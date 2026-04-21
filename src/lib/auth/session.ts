@@ -1,8 +1,11 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import type { AuthenticatedUser, UserRole } from "@/types/domain";
+
+export const DEMO_ROLE_COOKIE = "tomei_demo_role";
 
 const demoUsers: Record<UserRole, AuthenticatedUser> = {
   member: {
@@ -28,11 +31,25 @@ export function getRoleHomePath(role: UserRole) {
   return role === "admin" ? "/admin/dashboard" : "/member/dashboard";
 }
 
+async function getDemoRoleFromCookie(): Promise<UserRole | null> {
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get(DEMO_ROLE_COOKIE)?.value;
+  return cookieValue === "member" || cookieValue === "admin" ? cookieValue : null;
+}
+
 export async function getAuthContext(
   roleHint: UserRole = "member",
   options: { allowDemoFallback?: boolean } = {},
 ): Promise<AuthContext> {
   const allowDemoFallback = options.allowDemoFallback ?? true;
+  const demoRole = allowDemoFallback ? await getDemoRoleFromCookie() : null;
+
+  if (demoRole) {
+    return {
+      mode: "demo",
+      user: demoUsers[demoRole],
+    };
+  }
 
   if (!hasSupabaseEnv()) {
     return {
@@ -108,6 +125,12 @@ export async function requireRole(
 }
 
 export async function redirectAuthenticatedUser() {
+  const demoRole = await getDemoRoleFromCookie();
+
+  if (demoRole) {
+    redirect(getRoleHomePath(demoRole));
+  }
+
   const context = await getAuthContext("member", { allowDemoFallback: false });
 
   if (!context.user) {

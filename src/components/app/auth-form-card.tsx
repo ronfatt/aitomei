@@ -30,44 +30,44 @@ import { Input } from "@/components/ui/input";
 
 const authCopy = {
   login: {
-    eyebrow: "Welcome back",
-    title: "Sign in to continue your growth journey",
+    eyebrow: "欢迎回来",
+    title: "登录以继续你的成长旅程",
     description:
-      "Access your missions, AI support tools, campaign updates, and premium member content workspace.",
-    cta: "Sign in",
-    helper: "New to the platform?",
+      "进入你的任务中心、AI 支持工具、活动更新与高级会员内容工作台。",
+    cta: "登录",
+    helper: "第一次使用平台？",
     helperHref: "/signup",
-    helperLabel: "Create an account",
+    helperLabel: "创建账号",
   },
   signup: {
-    eyebrow: "Member onboarding",
-    title: "Create your TOMEI member workspace",
+    eyebrow: "会员启用",
+    title: "创建你的 TOMEI 会员工作台",
     description:
-      "Set up your account, complete onboarding, and start generating branded content with confidence.",
-    cta: "Create account",
-    helper: "Already registered?",
+      "设置账号、完成引导流程，并开始安心生成品牌内容。",
+    cta: "创建账号",
+    helper: "已经注册？",
     helperHref: "/login",
-    helperLabel: "Sign in",
+    helperLabel: "前往登录",
   },
   forgot: {
-    eyebrow: "Recovery",
-    title: "Reset your password securely",
+    eyebrow: "账号恢复",
+    title: "安全重设你的密码",
     description:
-      "Enter your email address and Supabase Auth will send a secure recovery link to continue.",
-    cta: "Send reset link",
-    helper: "Remembered your password?",
+      "输入你的邮箱后，Supabase Auth 会发送安全恢复链接给你。",
+    cta: "发送重设链接",
+    helper: "想起密码了？",
     helperHref: "/login",
-    helperLabel: "Back to login",
+    helperLabel: "返回登录",
   },
   updatePassword: {
-    eyebrow: "Account recovery",
-    title: "Create a new secure password",
+    eyebrow: "账号恢复",
+    title: "设置新的安全密码",
     description:
-      "Open this page from your recovery email and set a fresh password for your member workspace.",
-    cta: "Update password",
-    helper: "Back to sign in",
+      "请从恢复邮件打开此页面，并为你的会员工作台设置新的密码。",
+    cta: "更新密码",
+    helper: "返回登录",
     helperHref: "/login",
-    helperLabel: "Return to login",
+    helperLabel: "回到登录页",
   },
 } as const;
 
@@ -154,13 +154,13 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
         {variant === "signup" ? (
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Input placeholder="First name" {...form.register("firstName")} />
+              <Input placeholder="名字" {...form.register("firstName")} />
               <p className="mt-2 text-xs text-[var(--warning)]">
                 {form.formState.errors.firstName?.message as string | undefined}
               </p>
             </div>
             <div>
-              <Input placeholder="Last name" {...form.register("lastName")} />
+              <Input placeholder="姓氏" {...form.register("lastName")} />
               <p className="mt-2 text-xs text-[var(--warning)]">
                 {form.formState.errors.lastName?.message as string | undefined}
               </p>
@@ -170,7 +170,7 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
 
         {variant !== "updatePassword" ? (
           <div>
-            <Input type="email" placeholder="Email address" {...form.register("email")} />
+            <Input type="email" placeholder="邮箱地址" {...form.register("email")} />
             <p className="mt-2 text-xs text-[var(--warning)]">
               {form.formState.errors.email?.message as string | undefined}
             </p>
@@ -179,7 +179,7 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
 
         {variant === "signup" ? (
           <div>
-            <Input placeholder="Mobile number" {...form.register("mobileNumber")} />
+            <Input placeholder="手机号码" {...form.register("mobileNumber")} />
             <p className="mt-2 text-xs text-[var(--warning)]">
               {form.formState.errors.mobileNumber?.message as string | undefined}
             </p>
@@ -190,7 +190,7 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
           <div>
             <Input
               type="password"
-              placeholder={variant === "updatePassword" ? "New password" : "Password"}
+              placeholder={variant === "updatePassword" ? "新密码" : "密码"}
               {...form.register("password")}
             />
             <p className="mt-2 text-xs text-[var(--warning)]">
@@ -203,7 +203,7 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
           <div>
             <Input
               type="password"
-              placeholder="Confirm new password"
+              placeholder="确认新密码"
               {...form.register("confirmPassword")}
             />
             <p className="mt-2 text-xs text-[var(--warning)]">
@@ -214,10 +214,7 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
 
         {variant === "signup" ? (
           <div>
-            <Input
-              placeholder="Preferred language (English first)"
-              {...form.register("preferredLanguage")}
-            />
+            <Input placeholder="偏好语言（默认英文）" {...form.register("preferredLanguage")} />
             <p className="mt-2 text-xs text-[var(--warning)]">
               {form.formState.errors.preferredLanguage?.message as string | undefined}
             </p>

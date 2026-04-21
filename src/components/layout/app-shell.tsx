@@ -11,11 +11,11 @@ import { cn } from "@/lib/utils";
 import type { AuthenticatedUser, NavItem, UserRole } from "@/types/domain";
 
 const memberBottomNavigation = [
-  { title: "Home", href: "/member/dashboard", icon: House },
-  { title: "Missions", href: "/member/missions", icon: Target },
-  { title: "Create", href: "/member/content-studio", icon: WandSparkles },
-  { title: "AI Coach", href: "/member/ai-coach", icon: Sparkles },
-  { title: "Profile", href: "/member/profile", icon: UserRound },
+  { title: "首页", href: "/member/dashboard", icon: House },
+  { title: "任务", href: "/member/missions", icon: Target },
+  { title: "创作", href: "/member/content-studio", icon: WandSparkles },
+  { title: "AI 教练", href: "/member/ai-coach", icon: Sparkles },
+  { title: "我的", href: "/member/profile", icon: UserRound },
 ] as const;
 
 function getInitials(displayName: string) {
@@ -48,7 +48,7 @@ export function AppShell({
               <Sparkles className="h-4 w-4" />
             </div>
             <div className="space-y-1">
-              <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Signed in as</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">当前身份</p>
               <p className="font-semibold text-[var(--foreground)]">{currentUser.displayName}</p>
               <p className="text-xs text-[var(--muted)]">{currentUser.email}</p>
             </div>
@@ -77,11 +77,11 @@ export function AppShell({
 
           <div className="mt-6 rounded-[28px] border border-[rgba(196,168,114,0.2)] bg-[linear-gradient(180deg,rgba(32,28,24,0.96),rgba(43,37,31,0.98))] p-5 text-white">
             <Badge className="mb-3 w-fit" variant="default">
-              AI-Ready Foundation
+              AI 架构就绪
             </Badge>
-            <p className="font-[family-name:var(--font-display)] text-2xl leading-none">Future integrations stay clean</p>
+            <p className="font-[family-name:var(--font-display)] text-2xl leading-none">后续接入依然保持清晰</p>
             <p className="mt-3 text-sm leading-6 text-white/72">
-              Supabase, AI Coach, concierge, poster generation, and proof validation are all separated behind typed service layers.
+              Supabase、AI 教练、AI 礼宾、海报生成与任务证明审核，已经通过清晰的类型化服务层隔离，方便后续继续扩展。
             </p>
           </div>
         </aside>
@@ -105,10 +105,10 @@ export function AppShell({
           <header className="panel hidden flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between lg:flex">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">
-                {role === "admin" ? "Admin Workspace" : "Member Workspace"}
+                {role === "admin" ? "管理工作台" : "会员工作台"}
               </p>
               <h1 className="font-[family-name:var(--font-display)] text-4xl leading-none text-[var(--foreground)]">
-                {role === "admin" ? "Operational control" : "Daily growth dashboard"}
+                {role === "admin" ? "平台运营总览" : "每日成长首页"}
               </h1>
             </div>
             <div className="flex flex-wrap items-center gap-3">
@@ -117,9 +117,9 @@ export function AppShell({
                 className={cn(buttonVariants({ variant: "secondary" }))}
               >
                 <Bell className="mr-2 h-4 w-4" />
-                {role === "admin" ? "Open review queue" : "View notifications"}
+                {role === "admin" ? "打开审核队列" : "查看通知"}
               </Link>
-              <Badge variant="neutral">{role === "admin" ? "Role: admin" : "Role: member"}</Badge>
+              <Badge variant="neutral">{role === "admin" ? "角色：管理员" : "角色：会员"}</Badge>
             </div>
           </header>
 

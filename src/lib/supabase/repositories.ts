@@ -4,7 +4,7 @@ import { missions as mockMissions, proofQueue, rewardMilestones } from "@/data/m
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/types";
-import type { Mission, ProofSubmission, RewardMilestone } from "@/types/domain";
+import type { Mission, ProofSubmission, RewardHistoryEntry, RewardMilestone } from "@/types/domain";
 
 export interface ProfileFormData {
   firstName: string;
@@ -23,7 +23,18 @@ export interface RewardOverview {
   nextMilestonePoints: number | null;
   progressPercent: number;
   milestones: RewardMilestone[];
+  history: RewardHistoryEntry[];
   source: "mock" | "supabase";
+}
+
+export interface MemberProofSubmissionSummary {
+  id: string;
+  platform: string;
+  socialUrl: string;
+  screenshotPath: string | null;
+  status: Database["public"]["Enums"]["submission_status"];
+  reviewNotes: string | null;
+  submittedAt: string;
 }
 
 const defaultProfile: Omit<ProfileFormData, "source"> = {
@@ -41,7 +52,6 @@ type MemberProfileRow = Database["public"]["Tables"]["member_profiles"]["Row"];
 type MissionRow = Database["public"]["Tables"]["missions"]["Row"];
 type MemberMissionRow = Database["public"]["Tables"]["member_missions"]["Row"];
 type RewardRow = Database["public"]["Tables"]["rewards"]["Row"];
-type MemberRewardRow = Database["public"]["Tables"]["member_rewards"]["Row"];
 type ProofSubmissionRow = Database["public"]["Tables"]["proof_submissions"]["Row"];
 type UserRow = Database["public"]["Tables"]["users"]["Row"];
 
@@ -137,35 +147,73 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
       nextMilestonePoints: 3000,
       progressPercent: 61,
       milestones: rewardMilestones,
+      history: mockMissions
+        .filter((mission) => mission.status === "completed")
+        .slice(0, 3)
+        .map((mission) => ({
+          id: mission.id,
+          title: mission.title,
+          detail: `Mission completion · ${mission.rewardItem}`,
+          points: mission.rewardPoints,
+          awardedAt: "Recently awarded",
+        })),
       source: "mock",
     };
   }
 
   try {
     const supabase = await createSupabaseServerClient();
-    const [{ data: rewardRows, error: rewardsError }, { data: rewardLedger, error: ledgerError }] =
+    const [{ data: rewardRows, error: rewardsError }, { data: completedMemberMissions, error: memberMissionError }] =
       await Promise.all([
         supabase.from("rewards").select("*").eq("status", "active").order("points_required"),
-        supabase.from("member_rewards").select("points_awarded").eq("user_id", userId),
+        supabase
+          .from("member_missions")
+          .select("mission_id, completed_at")
+          .eq("user_id", userId)
+          .eq("status", "completed")
+          .order("completed_at", { ascending: false }),
       ]);
 
     const rewards = (rewardRows as RewardRow[] | null) ?? null;
-    const rewardEntries = (rewardLedger as Pick<MemberRewardRow, "points_awarded">[] | null) ?? [];
+    const completedMissions =
+      (completedMemberMissions as Array<Pick<MemberMissionRow, "mission_id" | "completed_at">> | null) ?? [];
 
-    if (rewardsError || ledgerError || !rewards) {
+    if (rewardsError || memberMissionError || !rewards) {
       return {
         currentPoints: 1820,
         nextMilestonePoints: 3000,
         progressPercent: 61,
         milestones: rewardMilestones,
+        history: mockMissions
+          .filter((mission) => mission.status === "completed")
+          .slice(0, 3)
+          .map((mission) => ({
+            id: mission.id,
+            title: mission.title,
+            detail: `Mission completion · ${mission.rewardItem}`,
+            points: mission.rewardPoints,
+            awardedAt: "Recently awarded",
+          })),
         source: "mock",
       };
     }
 
-    const currentPoints = rewardEntries.reduce(
-      (total, reward) => total + reward.points_awarded,
-      0,
-    );
+    const missionIds = [...new Set(completedMissions.map((item) => item.mission_id))];
+    const { data: missionRows } = missionIds.length
+      ? await supabase.from("missions").select("id, title, reward_points, reward_item").in("id", missionIds)
+      : { data: [] };
+    const missionsById =
+      new Map(
+        (((missionRows as Array<Pick<MissionRow, "id" | "title" | "reward_points" | "reward_item">>) ?? [])).map(
+          (mission) => [mission.id, mission],
+        ),
+      );
+
+    const currentPoints = completedMissions.reduce((total, item) => {
+      const mission = missionsById.get(item.mission_id);
+      return total + (mission?.reward_points ?? 0);
+    }, 0);
+
     const nextMilestone = rewards.find((reward) => reward.points_required > currentPoints) ?? null;
     const previousMilestone =
       [...rewards].reverse().find((reward) => reward.points_required <= currentPoints) ?? null;
@@ -190,11 +238,25 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
             : "locked",
     }));
 
+    const history: RewardHistoryEntry[] = completedMissions.slice(0, 6).map((item) => {
+      const mission = missionsById.get(item.mission_id);
+      return {
+        id: `${item.mission_id}-${item.completed_at ?? "recent"}`,
+        title: mission?.title ?? "Mission completion",
+        detail: `Mission completion · ${mission?.reward_item ?? "Reward milestone"}`,
+        points: mission?.reward_points ?? 0,
+        awardedAt: item.completed_at
+          ? formatDistanceToNow(new Date(item.completed_at), { addSuffix: true })
+          : "Recently awarded",
+      };
+    });
+
     return {
       currentPoints,
       nextMilestonePoints: nextMilestone?.points_required ?? null,
       progressPercent: Math.max(0, Math.min(100, progressPercent)),
       milestones,
+      history,
       source: "supabase",
     };
   } catch (error) {
@@ -204,8 +266,75 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
       nextMilestonePoints: 3000,
       progressPercent: 61,
       milestones: rewardMilestones,
+      history: mockMissions
+        .filter((mission) => mission.status === "completed")
+        .slice(0, 3)
+        .map((mission) => ({
+          id: mission.id,
+          title: mission.title,
+          detail: `Mission completion · ${mission.rewardItem}`,
+          points: mission.rewardPoints,
+          awardedAt: "Recently awarded",
+        })),
       source: "mock",
     };
+  }
+}
+
+export async function getLatestMissionProofSubmission(
+  userId: string,
+  missionSlug: string,
+): Promise<MemberProofSubmissionSummary | null> {
+  if (!hasSupabaseEnv()) {
+    return missionSlug === "submit-first-post"
+      ? {
+          id: "mock-proof-submission",
+          platform: "Instagram",
+          socialUrl: "https://instagram.com/p/mock-tomei-post",
+          screenshotPath: null,
+          status: "pending",
+          reviewNotes: "Awaiting admin review.",
+          submittedAt: "Submitted recently",
+        }
+      : null;
+  }
+
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: mission } = await supabase.from("missions").select("id").eq("slug", missionSlug).maybeSingle();
+    const missionRow = mission as Pick<MissionRow, "id"> | null;
+
+    if (!missionRow) {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("proof_submissions")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("mission_id", missionRow.id)
+      .order("submitted_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const submission = (data as ProofSubmissionRow | null) ?? null;
+
+    if (error || !submission) {
+      return null;
+    }
+
+    return {
+      id: submission.id,
+      platform: submission.platform,
+      socialUrl: submission.social_url,
+      screenshotPath: submission.screenshot_path,
+      status: submission.status,
+      reviewNotes: submission.review_notes,
+      submittedAt: formatDistanceToNow(new Date(submission.submitted_at), { addSuffix: true }),
+    };
+  } catch (error) {
+    console.error("Failed to load mission proof submission", error);
+    return null;
   }
 }
 
@@ -266,6 +395,9 @@ export async function getProofReviewQueue(): Promise<ProofSubmission[]> {
       platform: submission.platform,
       submittedAt: formatDistanceToNow(new Date(submission.submitted_at), { addSuffix: true }),
       status: submission.status,
+      socialUrl: submission.social_url,
+      screenshotPath: submission.screenshot_path,
+      reviewNotes: submission.review_notes,
     }));
   } catch (error) {
     console.error("Failed to load proof review queue", error);

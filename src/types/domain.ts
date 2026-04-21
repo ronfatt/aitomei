@@ -57,6 +57,14 @@ export interface RewardMilestone {
   status: "locked" | "current" | "unlocked";
 }
 
+export interface RewardHistoryEntry {
+  id: string;
+  title: string;
+  detail: string;
+  points: number;
+  awardedAt: string;
+}
+
 export interface Campaign {
   id: string;
   title: string;
@@ -100,6 +108,9 @@ export interface ProofSubmission {
   platform: string;
   submittedAt: string;
   status: "pending" | "approved" | "needs_revision";
+  socialUrl?: string;
+  screenshotPath?: string | null;
+  reviewNotes?: string | null;
 }
 
 export interface ContentTemplate {

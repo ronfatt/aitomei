@@ -28,6 +28,25 @@ export interface Database {
           deleted_at: string | null;
           updated_at: string;
         };
+        Insert: {
+          id: string;
+          email: string;
+          role?: Database["public"]["Enums"]["app_role"];
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          deleted_at?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          role?: Database["public"]["Enums"]["app_role"];
+          status?: Database["public"]["Enums"]["record_status"];
+          created_at?: string;
+          deleted_at?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       member_profiles: {
         Row: {
@@ -45,6 +64,37 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
+        Insert: {
+          user_id: string;
+          first_name?: string | null;
+          last_name?: string | null;
+          display_name?: string | null;
+          mobile_number?: string | null;
+          preferred_locale?: string | null;
+          bio?: string | null;
+          photo_path?: string | null;
+          favorite_category?: string | null;
+          preferred_tone?: string | null;
+          profile_completion?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          first_name?: string | null;
+          last_name?: string | null;
+          display_name?: string | null;
+          mobile_number?: string | null;
+          preferred_locale?: string | null;
+          bio?: string | null;
+          photo_path?: string | null;
+          favorite_category?: string | null;
+          preferred_tone?: string | null;
+          profile_completion?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       missions: {
         Row: {

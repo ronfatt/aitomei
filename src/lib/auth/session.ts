@@ -24,11 +24,20 @@ export interface AuthContext {
   user: AuthenticatedUser | null;
 }
 
-export async function getAuthContext(roleHint: UserRole = "member"): Promise<AuthContext> {
+export function getRoleHomePath(role: UserRole) {
+  return role === "admin" ? "/admin/dashboard" : "/member/dashboard";
+}
+
+export async function getAuthContext(
+  roleHint: UserRole = "member",
+  options: { allowDemoFallback?: boolean } = {},
+): Promise<AuthContext> {
+  const allowDemoFallback = options.allowDemoFallback ?? true;
+
   if (!hasSupabaseEnv()) {
     return {
       mode: "demo",
-      user: demoUsers[roleHint],
+      user: allowDemoFallback ? demoUsers[roleHint] : null,
     };
   }
 
@@ -41,7 +50,27 @@ export async function getAuthContext(roleHint: UserRole = "member"): Promise<Aut
     return { mode: "supabase", user: null };
   }
 
-  const role = (user.user_metadata.role ?? "member") as UserRole;
+  const [{ data: userRow }, { data: profileRow }] = await Promise.all([
+    supabase.from("users").select("role").eq("id", user.id).maybeSingle(),
+    supabase
+      .from("member_profiles")
+      .select("display_name, first_name, last_name")
+      .eq("user_id", user.id)
+      .maybeSingle(),
+  ]);
+
+  const resolvedUserRow = userRow as { role?: UserRole } | null;
+  const resolvedProfileRow = profileRow as
+    | {
+        display_name?: string | null;
+        first_name?: string | null;
+        last_name?: string | null;
+      }
+    | null;
+  const role = (resolvedUserRow?.role ?? user.user_metadata.role ?? "member") as UserRole;
+  const profileDisplayName =
+    resolvedProfileRow?.display_name ??
+    [resolvedProfileRow?.first_name, resolvedProfileRow?.last_name].filter(Boolean).join(" ").trim();
 
   return {
     mode: "supabase",
@@ -50,9 +79,10 @@ export async function getAuthContext(roleHint: UserRole = "member"): Promise<Aut
       email: user.email ?? "",
       role,
       displayName:
-        user.user_metadata.display_name ??
-        user.user_metadata.first_name ??
-        user.email?.split("@")[0] ??
+        profileDisplayName ||
+        user.user_metadata.display_name ||
+        user.user_metadata.first_name ||
+        user.email?.split("@")[0] ||
         "TOMEI Member",
     },
   };
@@ -68,11 +98,21 @@ export async function requireRole(
   }
 
   if (context.user.role !== role) {
-    redirect(context.user.role === "admin" ? "/admin/dashboard" : "/member/dashboard");
+    redirect(getRoleHomePath(context.user.role));
   }
 
   return {
     mode: context.mode,
     user: context.user,
   };
+}
+
+export async function redirectAuthenticatedUser() {
+  const context = await getAuthContext("member", { allowDemoFallback: false });
+
+  if (!context.user) {
+    return;
+  }
+
+  redirect(getRoleHomePath(context.user.role));
 }

@@ -15,6 +15,7 @@ export default async function ProfilePage() {
         description="Profile data powers personalization across content generation, campaign recommendations, and learning guidance."
       />
       <ProfileForm
+        userId={auth.user.id}
         initialValues={{
           firstName: profile.firstName,
           lastName: profile.lastName,
@@ -24,6 +25,7 @@ export default async function ProfilePage() {
           favoriteCategory: profile.favoriteCategory,
           bio: profile.bio,
         }}
+        initialPhotoPath={profile.photoPath ?? null}
         source={profile.source}
       />
     </div>

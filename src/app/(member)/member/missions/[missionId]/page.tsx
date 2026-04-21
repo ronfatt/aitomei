@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
 
+import { MissionProofForm } from "@/components/app/mission-proof-form";
 import { PageHeader } from "@/components/app/page-header";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { requireRole } from "@/lib/auth/session";
-import { getMemberMissionBySlug } from "@/lib/supabase/repositories";
+import { getLatestMissionProofSubmission, getMemberMissionBySlug } from "@/lib/supabase/repositories";
 
 export default async function MissionDetailPage({
   params,
@@ -15,7 +14,10 @@ export default async function MissionDetailPage({
 }) {
   const auth = await requireRole("member");
   const { missionId } = await params;
-  const mission = await getMemberMissionBySlug(auth.user.id, missionId);
+  const [mission, latestSubmission] = await Promise.all([
+    getMemberMissionBySlug(auth.user.id, missionId),
+    getLatestMissionProofSubmission(auth.user.id, missionId),
+  ]);
 
   if (!mission) {
     notFound();
@@ -69,12 +71,9 @@ export default async function MissionDetailPage({
             This form is wired for the MVP review flow. Future AI-assisted proof validation can
             enrich the same submission record without changing the member experience.
           </p>
-          <form className="mt-6 space-y-4">
-            <Input placeholder="Social post URL" />
-            <Input placeholder="Platform (Instagram, TikTok, Facebook...)" />
-            <Input placeholder="Optional screenshot path / upload reference" />
-            <Button>Submit mission proof</Button>
-          </form>
+          <div className="mt-6">
+            <MissionProofForm missionSlug={mission.id} latestSubmission={latestSubmission} />
+          </div>
         </Card>
       </section>
     </div>

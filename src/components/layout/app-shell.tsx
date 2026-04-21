@@ -2,13 +2,26 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Sparkles } from "lucide-react";
+import { Bell, House, Sparkles, Target, UserRound, WandSparkles } from "lucide-react";
 
 import { BrandMark } from "@/components/layout/brand-mark";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { AuthenticatedUser, NavItem, UserRole } from "@/types/domain";
+
+const memberBottomNavigation = [
+  { title: "Home", href: "/member/dashboard", icon: House },
+  { title: "Missions", href: "/member/missions", icon: Target },
+  { title: "Create", href: "/member/content-studio", icon: WandSparkles },
+  { title: "AI Coach", href: "/member/ai-coach", icon: Sparkles },
+  { title: "Profile", href: "/member/profile", icon: UserRound },
+] as const;
+
+function getInitials(displayName: string) {
+  const parts = displayName.trim().split(/\s+/).filter(Boolean);
+  return parts.slice(0, 2).map((part) => part[0]?.toUpperCase() ?? "").join("") || "TM";
+}
 
 export function AppShell({
   role,
@@ -22,11 +35,12 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const initials = getInitials(currentUser.displayName);
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(237,223,198,0.45),transparent_36%),linear-gradient(180deg,#f8f3ec_0%,#f5efe8_48%,#f4eee7_100%)]">
-      <div className="mx-auto grid min-h-screen w-full max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6">
-        <aside className="panel relative overflow-hidden p-5 lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)]">
+      <div className="mx-auto min-h-screen w-full max-w-[1600px] px-4 py-4 lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-6 lg:px-6">
+        <aside className="panel relative hidden overflow-hidden p-5 lg:sticky lg:top-4 lg:block lg:h-[calc(100vh-2rem)]">
           <div className="absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(196,168,114,0.55),transparent)]" />
           <BrandMark href={role === "admin" ? "/admin/dashboard" : "/member/dashboard"} />
           <div className="mt-8 flex items-center gap-3 rounded-3xl border border-[rgba(196,168,114,0.22)] bg-[rgba(255,255,255,0.6)] px-4 py-3">
@@ -72,8 +86,23 @@ export function AppShell({
           </div>
         </aside>
 
-        <main className="space-y-6 pb-10">
-          <header className="panel flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
+        <main className="space-y-4 pb-24 lg:space-y-6 lg:pb-10">
+          <div className="panel flex items-center justify-between px-4 py-3 lg:hidden">
+            <BrandMark compact href={role === "admin" ? "/admin/dashboard" : "/member/dashboard"} />
+            <div className="flex items-center gap-2">
+              <Link
+                href={role === "admin" ? "/admin/proof-review" : "/member/notifications"}
+                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(196,168,114,0.18)] bg-white/78 text-[var(--foreground)] shadow-sm"
+              >
+                <Bell className="h-5 w-5" />
+              </Link>
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#d9b235,#c09517)] text-sm font-semibold text-white shadow-[0_14px_30px_rgba(185,140,28,0.22)]">
+                {initials}
+              </div>
+            </div>
+          </div>
+
+          <header className="panel hidden flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between lg:flex">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">
                 {role === "admin" ? "Admin Workspace" : "Member Workspace"}
@@ -83,16 +112,45 @@ export function AppShell({
               </h1>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <Link href={role === "admin" ? "/admin/proof-review" : "/member/notifications"} className={cn(buttonVariants({ variant: "secondary" }))}>
+              <Link
+                href={role === "admin" ? "/admin/proof-review" : "/member/notifications"}
+                className={cn(buttonVariants({ variant: "secondary" }))}
+              >
                 <Bell className="mr-2 h-4 w-4" />
                 {role === "admin" ? "Open review queue" : "View notifications"}
               </Link>
               <Badge variant="neutral">{role === "admin" ? "Role: admin" : "Role: member"}</Badge>
             </div>
           </header>
+
           {children}
         </main>
       </div>
+
+      {role === "member" ? (
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[rgba(196,168,114,0.14)] bg-[rgba(248,243,236,0.92)] px-4 py-3 backdrop-blur-xl lg:hidden">
+          <div className="mx-auto flex max-w-md items-center justify-between gap-2">
+            {memberBottomNavigation.map((item) => {
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium transition",
+                    active
+                      ? "bg-[rgba(196,168,114,0.14)] text-[var(--foreground)]"
+                      : "text-[var(--muted)]",
+                  )}
+                >
+                  <item.icon className={cn("h-4 w-4", active ? "text-[var(--gold-strong)]" : "text-[var(--muted)]")} />
+                  <span className="truncate">{item.title}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

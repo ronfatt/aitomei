@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   BookOpen,
-  Bot,
   CheckCircle2,
   Crown,
   FileImage,
@@ -11,9 +10,7 @@ import {
   PlayCircle,
   ShieldCheck,
   Sparkles,
-  Star,
   Target,
-  Trophy,
   WandSparkles,
 } from "lucide-react";
 
@@ -113,6 +110,24 @@ const platformSignals = [
   { label: "Premium Design", icon: Crown },
 ] as const;
 
+const storytellingLayers = [
+  {
+    title: "Campaign Portrait Stage",
+    detail:
+      "Large-format photography position for official festive campaigns, collection storytelling, and member-facing brand moments.",
+  },
+  {
+    title: "Macro Jewelry Detail",
+    detail:
+      "Close-up product photography stage for material detail, craftsmanship focus, and premium collection emphasis.",
+  },
+  {
+    title: "Retail Experience Story",
+    detail:
+      "Lifestyle or in-store imagery slot for trust, service, and brand-world atmosphere across the platform landing experience.",
+  },
+] as const;
+
 export default function LandingPage() {
   return (
     <div className="space-y-8 pb-8 lg:space-y-10">
@@ -152,7 +167,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[36px] border border-[rgba(196,168,114,0.2)] bg-[radial-gradient(circle_at_20%_20%,rgba(255,228,155,0.42),transparent_24%),radial-gradient(circle_at_74%_34%,rgba(255,214,110,0.28),transparent_18%),linear-gradient(145deg,#8d5d16_0%,#c49128_16%,#f1d08f_34%,#7b4d0f_58%,#d6ae4f_78%,#8d5d16_100%)] p-5 shadow-[0_24px_70px_rgba(122,78,17,0.28)] lg:p-7">
+        <div className="relative overflow-hidden rounded-[36px] border border-[rgba(196,168,114,0.2)] bg-[radial-gradient(circle_at_20%_20%,rgba(255,228,155,0.42),transparent_24%),radial-gradient(circle_at_74%_34%,rgba(255,214,110,0.28),transparent_18%),linear-gradient(145deg,#8d5d16_0%,#c49128_16%,#f1d08f_34%,#7b4d0f_58%,#d6ae4f_78%,#8d5d16_100%)] p-5 shadow-[0_24px_70px_rgba(122,78,17,0.28)] luxury-shimmer lg:p-7">
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.22),transparent_18%,rgba(81,45,10,0.22))]" />
           <div className="relative h-full min-h-[420px] rounded-[28px] border border-white/30 bg-[linear-gradient(180deg,rgba(255,247,228,0.18),rgba(125,77,13,0.22))] p-5 backdrop-blur-[1px] lg:p-7">
             <div className="grid h-full gap-4">
@@ -215,6 +230,71 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="grid gap-8 rounded-[38px] border border-white/60 bg-[linear-gradient(180deg,rgba(248,243,236,0.94),rgba(243,235,223,0.9))] px-6 py-10 shadow-[0_24px_80px_rgba(88,68,40,0.08)] lg:grid-cols-[0.82fr_1.18fr] lg:px-10 lg:py-12">
+        <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold-strong)]">Campaign Storytelling Layer</p>
+          <h2 className="font-[family-name:var(--font-display)] text-5xl leading-[0.96] tracking-[-0.05em] text-[var(--foreground)] lg:text-6xl">
+            Photo-Led Sections That Feel Like A Luxury Brand Site
+          </h2>
+          <p className="text-lg leading-9 text-[var(--muted)]">
+            The landing experience now reserves large editorial photography positions for real
+            campaign art, collection close-ups, and elevated brand-world storytelling instead of
+            generic dashboard decoration.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="editorial-photo-slot min-h-[260px] p-5">
+              <div className="relative z-10 flex h-full items-end">
+                <div className="rounded-[24px] border border-white/26 bg-white/16 px-4 py-3 text-white backdrop-blur-sm">
+                  <p className="text-xs uppercase tracking-[0.22em] text-white/72">Photography Slot</p>
+                  <p className="mt-2 text-xl font-semibold">Hero campaign image</p>
+                </div>
+              </div>
+            </div>
+            <div className="editorial-photo-slot luxury-float min-h-[220px] p-5">
+              <div className="relative z-10 flex h-full items-end justify-end">
+                <div className="rounded-[24px] border border-white/26 bg-white/16 px-4 py-3 text-white backdrop-blur-sm">
+                  <p className="text-xs uppercase tracking-[0.22em] text-white/72">Photography Slot</p>
+                  <p className="mt-2 text-xl font-semibold">Macro detail image</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          {storytellingLayers.map((item, index) => (
+            <div
+              key={item.title}
+              className="grid gap-5 rounded-[32px] border border-[rgba(224,210,191,0.8)] bg-white/82 p-6 shadow-[0_18px_60px_rgba(93,74,44,0.08)] transition duration-500 hover:-translate-y-1 lg:grid-cols-[110px_minmax(0,1fr)]"
+            >
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[linear-gradient(135deg,#d9b235,#c09517)] text-4xl font-semibold tracking-[-0.04em] text-white shadow-[0_18px_40px_rgba(185,140,28,0.2)]">
+                0{index + 1}
+              </div>
+              <div className="space-y-3">
+                <p className="text-xs uppercase tracking-[0.24em] text-[var(--gold-strong)]">
+                  Editorial Placement
+                </p>
+                <h3 className="text-3xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">
+                  {item.title}
+                </h3>
+                <p className="text-lg leading-9 text-[var(--muted)]">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+
+          <div className="rounded-[32px] border border-[rgba(196,168,114,0.2)] bg-[linear-gradient(180deg,rgba(45,35,23,0.98),rgba(58,45,31,0.98))] p-7 text-white shadow-[0_24px_70px_rgba(40,28,17,0.18)]">
+            <p className="text-xs uppercase tracking-[0.24em] text-[#e0bc54]">Luxury UX Principle</p>
+            <h3 className="mt-4 font-[family-name:var(--font-display)] text-4xl tracking-[-0.05em]">
+              Strong image hierarchy, soft motion, no clutter.
+            </h3>
+            <p className="mt-4 text-lg leading-9 text-[rgba(246,236,219,0.8)]">
+              The result is closer to an international jewelry campaign site with product-system
+              intelligence layered underneath, not a generic B2B software landing page.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section
         id="journey"
         className="rounded-[38px] border border-white/60 bg-[linear-gradient(180deg,rgba(248,243,236,0.95),rgba(245,237,226,0.92))] px-6 py-10 shadow-[0_24px_80px_rgba(88,68,40,0.08)] lg:px-10 lg:py-12"
@@ -236,7 +316,7 @@ export default function LandingPage() {
             {journeySteps.map((item) => (
               <Card
                 key={item.step}
-                className="rounded-[32px] border border-[rgba(224,210,191,0.85)] bg-white/86 p-8 text-center shadow-[0_18px_60px_rgba(93,74,44,0.1)]"
+                className="rounded-[32px] border border-[rgba(224,210,191,0.85)] bg-white/86 p-8 text-center shadow-[0_18px_60px_rgba(93,74,44,0.1)] transition duration-500 hover:-translate-y-1"
               >
                 <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-[linear-gradient(135deg,#d9b235,#c09517)] text-5xl font-semibold tracking-[-0.04em] text-white shadow-[0_22px_50px_rgba(185,140,28,0.24)]">
                   {item.step}
@@ -270,7 +350,7 @@ export default function LandingPage() {
           {aiCards.map((card) => (
             <div
               key={card.title}
-              className="rounded-[34px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.04))] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+              className="rounded-[34px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.04))] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-500 hover:-translate-y-1"
             >
               <div className="flex items-start gap-5">
                 <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#d9b235,#c09517)] text-white shadow-[0_20px_45px_rgba(185,140,28,0.22)]">
@@ -319,7 +399,7 @@ export default function LandingPage() {
           {capabilityCards.map((card) => (
             <Card
               key={card.title}
-              className="rounded-[32px] border border-[rgba(224,210,191,0.82)] bg-white/88 p-8 shadow-[0_18px_60px_rgba(93,74,44,0.08)]"
+              className="rounded-[32px] border border-[rgba(224,210,191,0.82)] bg-white/88 p-8 shadow-[0_18px_60px_rgba(93,74,44,0.08)] transition duration-500 hover:-translate-y-1"
             >
               <div className="flex h-24 w-24 items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#d9b235,#c09517)] text-white shadow-[0_18px_42px_rgba(185,140,28,0.22)]">
                 <card.icon className="h-10 w-10" />
@@ -366,7 +446,7 @@ export default function LandingPage() {
           ].map((metric) => (
             <Card
               key={metric.label}
-              className="rounded-[30px] border border-[rgba(224,210,191,0.82)] bg-white/88 p-6 shadow-[0_18px_55px_rgba(93,74,44,0.08)]"
+              className="rounded-[30px] border border-[rgba(224,210,191,0.82)] bg-white/88 p-6 shadow-[0_18px_55px_rgba(93,74,44,0.08)] transition duration-500 hover:-translate-y-1"
             >
               <p className="text-xs uppercase tracking-[0.24em] text-[var(--muted)]">{metric.label}</p>
               <p className="mt-5 font-[family-name:var(--font-display)] text-4xl tracking-[-0.04em] text-[var(--foreground)]">

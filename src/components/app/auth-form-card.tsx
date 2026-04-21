@@ -2,11 +2,27 @@
 
 import Link from "next/link";
 import { startTransition, useState } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { BrandMark } from "@/components/layout/brand-mark";
+import {
+  requestPasswordResetAction,
+  signInWithPasswordAction,
+  signUpWithPasswordAction,
+  updatePasswordAction,
+} from "@/features/auth/actions";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  signupSchema,
+  updatePasswordSchema,
+  type ForgotPasswordFormValues,
+  type LoginFormValues,
+  type SignupFormValues,
+  type UpdatePasswordFormValues,
+} from "@/features/auth/schemas";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -37,35 +53,38 @@ const authCopy = {
     eyebrow: "Recovery",
     title: "Reset your password securely",
     description:
-      "Enter your email address and the Supabase Auth flow can send a secure password reset link.",
+      "Enter your email address and Supabase Auth will send a secure recovery link to continue.",
     cta: "Send reset link",
     helper: "Remembered your password?",
     helperHref: "/login",
     helperLabel: "Back to login",
   },
+  updatePassword: {
+    eyebrow: "Account recovery",
+    title: "Create a new secure password",
+    description:
+      "Open this page from your recovery email and set a fresh password for your member workspace.",
+    cta: "Update password",
+    helper: "Back to sign in",
+    helperHref: "/login",
+    helperLabel: "Return to login",
+  },
 } as const;
 
 const schemas = {
-  login: z.object({
-    email: z.email("Enter a valid email address."),
-    password: z.string().min(8, "Password must be at least 8 characters."),
-  }),
-  signup: z.object({
-    firstName: z.string().min(2, "First name is required."),
-    lastName: z.string().min(2, "Last name is required."),
-    email: z.email("Enter a valid email address."),
-    mobileNumber: z.string().min(8, "Enter a valid mobile number."),
-    password: z.string().min(8, "Password must be at least 8 characters."),
-    preferredLanguage: z.string().min(2, "Preferred language is required."),
-  }),
-  forgot: z.object({
-    email: z.email("Enter a valid email address."),
-  }),
+  login: loginSchema,
+  signup: signupSchema,
+  forgot: forgotPasswordSchema,
+  updatePassword: updatePasswordSchema,
 } as const;
 
 export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
   const copy = authCopy[variant];
-  const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
+  const [feedback, setFeedback] = useState<{
+    status: "idle" | "success" | "error";
+    message?: string;
+  }>({ status: "idle" });
   const schema = schemas[variant];
 
   const form = useForm({
@@ -85,14 +104,38 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
               email: "",
               password: "",
             }
-          : {
-              email: "",
-            },
+          : variant === "forgot"
+            ? {
+                email: "",
+              }
+            : {
+                password: "",
+                confirmPassword: "",
+              },
   });
 
-  function onSubmit() {
-    startTransition(() => {
-      setSubmitted(true);
+  async function onSubmit(values: unknown) {
+    setFeedback({ status: "idle" });
+
+    startTransition(async () => {
+      const result =
+        variant === "login"
+          ? await signInWithPasswordAction(values as LoginFormValues)
+          : variant === "signup"
+            ? await signUpWithPasswordAction(values as SignupFormValues)
+            : variant === "forgot"
+              ? await requestPasswordResetAction(values as ForgotPasswordFormValues)
+              : await updatePasswordAction(values as UpdatePasswordFormValues);
+
+      setFeedback({
+        status: result.status,
+        message: result.message,
+      });
+
+      if (result.status === "success" && result.redirectTo) {
+        router.push(result.redirectTo);
+        router.refresh();
+      }
     });
   }
 
@@ -112,44 +155,82 @@ export function AuthFormCard({ variant }: { variant: keyof typeof authCopy }) {
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <Input placeholder="First name" {...form.register("firstName")} />
-              <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.firstName?.message as string | undefined}</p>
+              <p className="mt-2 text-xs text-[var(--warning)]">
+                {form.formState.errors.firstName?.message as string | undefined}
+              </p>
             </div>
             <div>
               <Input placeholder="Last name" {...form.register("lastName")} />
-              <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.lastName?.message as string | undefined}</p>
+              <p className="mt-2 text-xs text-[var(--warning)]">
+                {form.formState.errors.lastName?.message as string | undefined}
+              </p>
             </div>
           </div>
         ) : null}
-        <div>
-          <Input type="email" placeholder="Email address" {...form.register("email")} />
-          <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.email?.message as string | undefined}</p>
-        </div>
+
+        {variant !== "updatePassword" ? (
+          <div>
+            <Input type="email" placeholder="Email address" {...form.register("email")} />
+            <p className="mt-2 text-xs text-[var(--warning)]">
+              {form.formState.errors.email?.message as string | undefined}
+            </p>
+          </div>
+        ) : null}
+
         {variant === "signup" ? (
           <div>
             <Input placeholder="Mobile number" {...form.register("mobileNumber")} />
-            <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.mobileNumber?.message as string | undefined}</p>
+            <p className="mt-2 text-xs text-[var(--warning)]">
+              {form.formState.errors.mobileNumber?.message as string | undefined}
+            </p>
           </div>
         ) : null}
+
         {variant !== "forgot" ? (
           <div>
-            <Input type="password" placeholder="Password" {...form.register("password")} />
-            <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.password?.message as string | undefined}</p>
+            <Input
+              type="password"
+              placeholder={variant === "updatePassword" ? "New password" : "Password"}
+              {...form.register("password")}
+            />
+            <p className="mt-2 text-xs text-[var(--warning)]">
+              {form.formState.errors.password?.message as string | undefined}
+            </p>
           </div>
         ) : null}
+
+        {variant === "updatePassword" ? (
+          <div>
+            <Input
+              type="password"
+              placeholder="Confirm new password"
+              {...form.register("confirmPassword")}
+            />
+            <p className="mt-2 text-xs text-[var(--warning)]">
+              {form.formState.errors.confirmPassword?.message as string | undefined}
+            </p>
+          </div>
+        ) : null}
+
         {variant === "signup" ? (
           <div>
-            <Input placeholder="Preferred language (English first)" {...form.register("preferredLanguage")} />
-            <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.preferredLanguage?.message as string | undefined}</p>
+            <Input
+              placeholder="Preferred language (English first)"
+              {...form.register("preferredLanguage")}
+            />
+            <p className="mt-2 text-xs text-[var(--warning)]">
+              {form.formState.errors.preferredLanguage?.message as string | undefined}
+            </p>
           </div>
         ) : null}
-        <Button className="w-full" type="submit">
+
+        <Button className="w-full" type="submit" disabled={form.formState.isSubmitting}>
           {copy.cta}
         </Button>
-        {submitted ? (
-          <Badge className="w-fit" variant="success">
-            {variant === "forgot"
-              ? "Password reset request captured for Supabase integration"
-              : "Validated form ready for Supabase auth wiring"}
+
+        {feedback.status !== "idle" ? (
+          <Badge className="w-fit" variant={feedback.status === "success" ? "success" : "warning"}>
+            {feedback.message}
           </Badge>
         ) : null}
       </form>

@@ -7,9 +7,19 @@ export const publicNavigation: NavItem[] = [
     description: "See the member growth workflows and AI-enabled tools.",
   },
   {
-    title: "Missions",
-    href: "#missions",
+    title: "Journey",
+    href: "#journey",
     description: "Explore the premium member activation journey.",
+  },
+  {
+    title: "AI",
+    href: "#ai",
+    description: "Understand the AI Coach and concierge experience.",
+  },
+  {
+    title: "Capabilities",
+    href: "#capabilities",
+    description: "Review the member tools and content workflows.",
   },
   {
     title: "Admin",

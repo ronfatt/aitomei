@@ -58,8 +58,8 @@ const memberShellStyle = {
   "--button-primary-bg": "linear-gradient(135deg,#F2C86B,#D8B15B 38%,#B13A86 100%)",
   "--button-primary-text": "#1D0C19",
   "--button-primary-shadow": "0 18px 48px rgba(177,58,134,0.35)",
-  "--button-secondary-bg": "rgba(255,255,255,0.05)",
-  "--button-secondary-hover": "rgba(255,255,255,0.09)",
+  "--button-secondary-bg": "linear-gradient(180deg,rgba(70,24,56,0.92),rgba(40,14,34,0.96))",
+  "--button-secondary-hover": "linear-gradient(180deg,rgba(82,28,65,0.94),rgba(48,18,40,0.98))",
   "--button-secondary-border": "rgba(255,255,255,0.08)",
   "--button-secondary-text": "#F7F4F8",
   "--button-ghost-text": "#CDBFD0",
@@ -117,7 +117,7 @@ export function AppShell({
         <aside
           className={cn(
             "relative hidden overflow-hidden lg:sticky lg:top-4 lg:block lg:h-[calc(100vh-2rem)]",
-            isMember ? "rounded-[34px] border border-white/8 bg-[rgba(255,255,255,0.03)] p-5 backdrop-blur-xl" : "panel p-5",
+            isMember ? "rounded-[34px] border border-white/8 bg-[rgba(255,255,255,0.025)] p-5 backdrop-blur-xl" : "panel p-5",
           )}
         >
           <div
@@ -174,7 +174,7 @@ export function AppShell({
                     isMember
                       ? active
                         ? "border border-[rgba(242,200,107,0.18)] bg-[linear-gradient(135deg,rgba(177,58,134,0.18),rgba(255,255,255,0.07))] shadow-[0_16px_40px_rgba(5,0,9,0.22)]"
-                        : "border border-transparent bg-transparent hover:border-white/6 hover:bg-white/4"
+                        : "border border-transparent bg-transparent opacity-82 hover:opacity-100 hover:border-white/5 hover:bg-white/[0.025]"
                       : active
                         ? "bg-[linear-gradient(135deg,rgba(196,168,114,0.17),rgba(255,255,255,0.92))] shadow-[inset_0_0_0_1px_rgba(196,168,114,0.22)]"
                         : "hover:bg-white/70",
@@ -187,7 +187,7 @@ export function AppShell({
                           "mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl",
                           active
                             ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.18),rgba(177,58,134,0.26))] text-[var(--gold)]"
-                            : "bg-white/5 text-[var(--muted)]",
+                            : "bg-white/[0.035] text-[var(--muted)]",
                         )}
                       >
                         <Icon className="h-4 w-4" />
@@ -207,7 +207,7 @@ export function AppShell({
             className={cn(
               "mt-6 rounded-[30px] p-5",
               isMember
-                ? "border border-[rgba(242,200,107,0.12)] bg-[linear-gradient(180deg,rgba(76,17,56,0.6),rgba(21,8,20,0.92))] text-white shadow-[0_20px_50px_rgba(7,0,12,0.36)]"
+                ? "border border-[rgba(242,200,107,0.1)] bg-[linear-gradient(180deg,rgba(58,18,47,0.52),rgba(21,8,20,0.9))] text-white shadow-[0_14px_36px_rgba(7,0,12,0.28)]"
                 : "border border-[rgba(196,168,114,0.2)] bg-[linear-gradient(180deg,rgba(32,28,24,0.96),rgba(43,37,31,0.98))] text-white",
             )}
           >
@@ -224,7 +224,7 @@ export function AppShell({
             </p>
             <Link
               href={isMember ? "/member/ai-coach" : "/admin/ai-knowledge"}
-              className={cn(buttonVariants({ variant: "secondary" }), "mt-5 w-full justify-center")}
+              className={cn(buttonVariants({ variant: isMember ? "outline" : "secondary" }), "mt-5 w-full justify-center")}
             >
               {isMember ? "打开 AI 增长助理" : "查看 AI 知识库"}
             </Link>
@@ -261,15 +261,20 @@ export function AppShell({
             className={cn(
               "hidden flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between lg:flex",
               isMember
-                ? "rounded-[30px] border border-white/8 bg-[rgba(255,255,255,0.035)] backdrop-blur-xl"
+                ? "rounded-[30px] border border-white/8 bg-[rgba(255,255,255,0.045)] shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl"
                 : "panel",
             )}
           >
             <div>
-              <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">
+              <p className={cn("text-xs uppercase tracking-[0.22em]", isMember ? "text-white/80" : "text-[var(--muted)]")}>
                 {role === "admin" ? "管理工作台" : "会员工作台"}
               </p>
-              <h1 className="font-[family-name:var(--font-display)] text-4xl leading-none text-[var(--foreground)]">
+              <h1
+                className={cn(
+                  "font-[family-name:var(--font-display)] text-4xl leading-none",
+                  isMember ? "text-white" : "text-[var(--foreground)]",
+                )}
+              >
                 {role === "admin" ? "平台运营总览" : "每日成长首页"}
               </h1>
             </div>
@@ -278,24 +283,27 @@ export function AppShell({
               {isMember ? (
                 <Link
                   href="/member/content-studio"
-                  className="flex h-11 min-w-[220px] items-center gap-3 rounded-full border border-white/8 bg-white/5 px-4 text-sm text-[var(--muted)] transition hover:bg-white/8"
+                  className="flex h-11 min-w-[220px] items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 text-sm text-white/78 transition hover:bg-white/10 hover:text-white"
                 >
                   <Search className="h-4 w-4 text-[var(--gold)]" />
-                  快速进入任务、模板或创作工具
+                  搜索任务或创作入口
                 </Link>
               ) : null}
 
               <Link
                 href={role === "admin" ? "/admin/proof-review" : "/member/notifications"}
-                className={cn(buttonVariants({ variant: "secondary" }))}
+                className={cn(
+                  buttonVariants({ variant: "secondary" }),
+                  isMember ? "border-white/10 bg-white/6 text-white hover:bg-white/10" : "",
+                )}
               >
                 <Bell className="mr-2 h-4 w-4" />
                 {role === "admin" ? "打开审核队列" : "查看通知"}
               </Link>
 
               {isMember ? (
-                <div className="flex items-center gap-3 rounded-full border border-white/8 bg-white/5 px-2 py-2">
-                  <Badge variant="success">正常活跃</Badge>
+                <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-2 py-2">
+                  <Badge className="shadow-[0_0_0_1px_rgba(127,226,171,0.1)]" variant="success">今日活跃</Badge>
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[image:var(--button-primary-bg)] text-sm font-semibold text-[var(--button-primary-text)]">
                     {initials}
                   </div>

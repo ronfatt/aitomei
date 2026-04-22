@@ -26,54 +26,54 @@ export default async function OnboardingPage() {
 
   const onboardingSteps = [
     {
-      title: "Create account and verify login",
+      title: "创建账号并确认登录状态",
       status: auth.mode === "supabase" ? "done" : "current",
       detail:
         auth.mode === "supabase"
-          ? "Real Supabase authentication is active for this member account."
-          : "Demo mode is active until Supabase environment variables are configured.",
+          ? "这个会员账号已经接入真实 Supabase 身份验证。"
+          : "在完成 Supabase 环境配置前，当前仍使用 demo 模式。",
       href: "/login",
-      cta: "Open login",
+      cta: "打开登录",
     },
     {
-      title: "Complete profile and preferences",
+      title: "完善会员资料与偏好",
       status: profileComplete ? "done" : "current",
       detail:
         profile.source === "supabase"
-          ? "Your profile data is connected to member personalization and onboarding progress."
-          : "Save your profile to Supabase to activate real onboarding progress.",
+          ? "你的资料已经连接到会员个性化和新手引导进度中。"
+          : "将资料保存到 Supabase 后，才会启用真实的新手引导进度。",
       href: "/member/profile",
-      cta: "Complete profile",
+      cta: "完善资料",
     },
     {
-      title: "Upload profile photo",
+      title: "上传会员头像",
       status: hasPhoto ? "done" : profileComplete ? "current" : "upcoming",
       detail:
         hasPhoto
-          ? "Profile photo is attached and ready for content personalization."
-          : "A premium portrait unlocks better personalization and mission progression.",
+          ? "头像已上传，可用于个性化内容生成。"
+          : "上传清晰头像后，可解锁更完整的个性化与任务推进体验。",
       href: "/member/profile",
-      cta: "Upload photo",
+      cta: "上传头像",
     },
     {
-      title: "Generate your first poster",
+      title: "生成第一张专属海报",
       status: posterReady ? "done" : hasPhoto ? "current" : "upcoming",
       detail:
         posterMission?.status === "completed"
-          ? "Your first brand-safe poster flow has been completed."
-          : "This is the first major activation step for content participation.",
+          ? "你的第一条品牌安全海报流程已经完成。"
+          : "这是会员开始内容参与的第一个关键动作。",
       href: "/member/content-studio/poster-generator",
-      cta: "Open poster generator",
+      cta: "打开海报生成器",
     },
     {
-      title: "Submit your first social proof",
+      title: "提交第一条社媒证明",
       status: proofReady ? "current" : "upcoming",
       detail:
         proofReady
-          ? "You are ready to publish and submit your first campaign-aligned proof."
-          : "Proof submission unlocks the next layer of mission and reward progress.",
+          ? "你已经可以发布并提交第一条与活动相关的证明内容。"
+          : "提交证明后，才会继续解锁后续任务与奖励进度。",
       href: "/member/missions/submit-first-post",
-      cta: "Review mission",
+      cta: "查看任务",
     },
   ] as const;
 
@@ -85,12 +85,12 @@ export default async function OnboardingPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Onboarding Journey"
-        title="A polished first-run experience with real member progress"
-        description="The onboarding flow introduces the brand, unlocks the first mission, and now reflects live profile and mission readiness instead of static placeholders."
+        eyebrow="新手引导旅程"
+        title="真实连接会员进度的首次使用体验"
+        description="这套新手引导会带会员认识平台、解锁第一个任务，并根据真实资料与任务状态动态显示下一步。"
       />
       <Card className="p-6 lg:p-8">
-        <Badge className="w-fit">Current stage</Badge>
+        <Badge className="w-fit">当前阶段</Badge>
         <h2 className="mt-4 font-[family-name:var(--font-display)] text-4xl text-[var(--foreground)]">
           {currentStep.title}
         </h2>

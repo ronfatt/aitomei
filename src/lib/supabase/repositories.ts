@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
+import { zhCN } from "date-fns/locale";
 
 import { missions as mockMissions, proofQueue, rewardMilestones } from "@/data/mock-data";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
@@ -42,9 +43,9 @@ const defaultProfile: Omit<ProfileFormData, "source"> = {
   lastName: "Amirah",
   displayName: "Nur Amirah",
   mobileNumber: "+60 12-345 6789",
-  preferredTone: "Elegant and educational",
-  favoriteCategory: "Gold gifting",
-  bio: "I enjoy creating elegant social content and helping my audience discover gift-worthy jewelry collections.",
+  preferredTone: "优雅且具教育感",
+  favoriteCategory: "黄金送礼",
+  bio: "我喜欢创作优雅的社媒内容，也乐于帮助身边的人发现适合作为礼物的珠宝系列。",
   photoPath: null,
 };
 
@@ -153,9 +154,9 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
         .map((mission) => ({
           id: mission.id,
           title: mission.title,
-          detail: `Mission completion · ${mission.rewardItem}`,
+          detail: `任务完成 · ${mission.rewardItem}`,
           points: mission.rewardPoints,
-          awardedAt: "Recently awarded",
+          awardedAt: "最近发放",
         })),
       source: "mock",
     };
@@ -190,9 +191,9 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
           .map((mission) => ({
             id: mission.id,
             title: mission.title,
-            detail: `Mission completion · ${mission.rewardItem}`,
+            detail: `任务完成 · ${mission.rewardItem}`,
             points: mission.rewardPoints,
-            awardedAt: "Recently awarded",
+            awardedAt: "最近发放",
           })),
         source: "mock",
       };
@@ -229,7 +230,7 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
       title: reward.title,
       description: reward.description,
       requiredPoints: reward.points_required,
-      badge: reward.badge_name ?? "Milestone",
+      badge: reward.badge_name ?? "里程碑",
       status:
         currentPoints >= reward.points_required
           ? "unlocked"
@@ -242,12 +243,12 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
       const mission = missionsById.get(item.mission_id);
       return {
         id: `${item.mission_id}-${item.completed_at ?? "recent"}`,
-        title: mission?.title ?? "Mission completion",
-        detail: `Mission completion · ${mission?.reward_item ?? "Reward milestone"}`,
+        title: mission?.title ?? "任务完成",
+        detail: `任务完成 · ${mission?.reward_item ?? "奖励里程碑"}`,
         points: mission?.reward_points ?? 0,
         awardedAt: item.completed_at
-          ? formatDistanceToNow(new Date(item.completed_at), { addSuffix: true })
-          : "Recently awarded",
+          ? formatDistanceToNow(new Date(item.completed_at), { addSuffix: true, locale: zhCN })
+          : "最近发放",
       };
     });
 
@@ -272,9 +273,9 @@ export async function getRewardOverview(userId: string): Promise<RewardOverview>
         .map((mission) => ({
           id: mission.id,
           title: mission.title,
-          detail: `Mission completion · ${mission.rewardItem}`,
+          detail: `任务完成 · ${mission.rewardItem}`,
           points: mission.rewardPoints,
-          awardedAt: "Recently awarded",
+          awardedAt: "最近发放",
         })),
       source: "mock",
     };
@@ -293,8 +294,8 @@ export async function getLatestMissionProofSubmission(
           socialUrl: "https://instagram.com/p/mock-tomei-post",
           screenshotPath: null,
           status: "pending",
-          reviewNotes: "Awaiting admin review.",
-          submittedAt: "Submitted recently",
+          reviewNotes: "等待管理员审核中。",
+          submittedAt: "刚刚提交",
         }
       : null;
   }
@@ -330,7 +331,7 @@ export async function getLatestMissionProofSubmission(
       screenshotPath: submission.screenshot_path,
       status: submission.status,
       reviewNotes: submission.review_notes,
-      submittedAt: formatDistanceToNow(new Date(submission.submitted_at), { addSuffix: true }),
+      submittedAt: formatDistanceToNow(new Date(submission.submitted_at), { addSuffix: true, locale: zhCN }),
     };
   } catch (error) {
     console.error("Failed to load mission proof submission", error);
@@ -390,10 +391,10 @@ export async function getProofReviewQueue(): Promise<ProofSubmission[]> {
       memberName:
         nameByUserId.get(submission.user_id) ??
         emailByUserId.get(submission.user_id) ??
-        "TOMEI Member",
-      missionTitle: missionTitleById.get(submission.mission_id) ?? "Mission review",
+        "TOMEI 会员",
+      missionTitle: missionTitleById.get(submission.mission_id) ?? "任务审核",
       platform: submission.platform,
-      submittedAt: formatDistanceToNow(new Date(submission.submitted_at), { addSuffix: true }),
+      submittedAt: formatDistanceToNow(new Date(submission.submitted_at), { addSuffix: true, locale: zhCN }),
       status: submission.status,
       socialUrl: submission.social_url,
       screenshotPath: submission.screenshot_path,

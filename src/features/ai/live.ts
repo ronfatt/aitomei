@@ -16,6 +16,16 @@ interface GenerateAiCoachReplyInput {
   history?: AiCoachConversationTurn[];
 }
 
+interface AiCoachStreamingOptions {
+  sessionId?: string | null;
+  onReplyFinalized?: (payload: {
+    reply: string;
+    provider: "mock" | "openai";
+    model: string;
+    notice: string | null;
+  }) => Promise<void> | void;
+}
+
 const DEFAULT_OPENAI_MODEL = "gpt-4.1-mini";
 
 function getAiCoachProvider() {
@@ -264,7 +274,10 @@ export async function generateAiCoachReply(
   };
 }
 
-export async function createAiCoachStreamingResponse(input: GenerateAiCoachReplyInput) {
+export async function createAiCoachStreamingResponse(
+  input: GenerateAiCoachReplyInput,
+  options: AiCoachStreamingOptions = {},
+) {
   const normalizedMessage = input.message.trim();
   const context = inferAiCoachContext(normalizedMessage);
   const config = getAiCoachRuntimeConfig();
@@ -278,6 +291,7 @@ export async function createAiCoachStreamingResponse(input: GenerateAiCoachReply
 
       emit({
         type: "meta",
+        sessionId: options.sessionId ?? null,
         provider: config.hasOpenAiApiKey && config.provider === "openai" ? "openai" : "mock",
         model: config.hasOpenAiApiKey && config.provider === "openai" ? config.model : "local-demo",
         notice:
@@ -293,6 +307,7 @@ export async function createAiCoachStreamingResponse(input: GenerateAiCoachReply
           suggestedActions: ["先问产品定位", "再问信任基础", "最后问兑换方式"],
           provider: "mock",
           model: "local-demo",
+          sessionId: options.sessionId ?? null,
           notice: "问题为空，已返回默认引导。",
         });
         controller.close();
@@ -318,8 +333,19 @@ export async function createAiCoachStreamingResponse(input: GenerateAiCoachReply
         emit({
           type: "done",
           ...fallback,
+          sessionId: options.sessionId ?? null,
           notice: buildFallbackNotice(),
         });
+        try {
+          await options.onReplyFinalized?.({
+            reply: fallback.reply,
+            provider: "mock",
+            model: "local-demo",
+            notice: buildFallbackNotice(),
+          });
+        } catch (error) {
+          console.error("Failed to persist fallback AI reply", error);
+        }
         controller.close();
         return;
       }
@@ -413,12 +439,26 @@ export async function createAiCoachStreamingResponse(input: GenerateAiCoachReply
           }
         }
 
+        const finalizedReply = fullReply.trim();
+
+        try {
+          await options.onReplyFinalized?.({
+            reply: finalizedReply,
+            provider: "openai",
+            model: config.model,
+            notice: knowledge.sourceNote,
+          });
+        } catch (error) {
+          console.error("Failed to persist AI reply", error);
+        }
+
         emit({
           type: "done",
-          reply: fullReply.trim(),
+          reply: finalizedReply,
           suggestedActions: getAiCoachSuggestedActionsForMessage(normalizedMessage),
           provider: "openai",
           model: config.model,
+          sessionId: options.sessionId ?? null,
           notice: knowledge.sourceNote,
         });
         controller.close();

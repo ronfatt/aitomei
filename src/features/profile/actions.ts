@@ -18,7 +18,7 @@ export interface ProfileActionState {
 }
 
 const profilePhotoSchema = z.object({
-  photoPath: z.string().min(1, "Photo path is required."),
+  photoPath: z.string().min(1, "缺少头像路径。"),
 });
 
 type MemberProfileRow = Database["public"]["Tables"]["member_profiles"]["Row"];
@@ -132,14 +132,14 @@ export async function saveMemberProfileAction(
   if (!parsed.success) {
     return {
       status: "error",
-      message: parsed.error.issues[0]?.message ?? "Please review your profile details.",
+      message: parsed.error.issues[0]?.message ?? "请检查你的会员资料。",
     };
   }
 
   if (!hasSupabaseEnv()) {
     return {
       status: "error",
-      message: "Supabase environment variables are missing. Add them to enable profile saving.",
+      message: "尚未配置 Supabase 环境变量，暂时无法保存资料。",
     };
   }
 
@@ -148,7 +148,7 @@ export async function saveMemberProfileAction(
   if (!userId) {
     return {
       status: "error",
-      message: "Your session expired. Please sign in again.",
+      message: "你的登录状态已过期，请重新登录。",
     };
   }
 
@@ -206,7 +206,7 @@ export async function saveMemberProfileAction(
 
   return {
     status: "success",
-    message: "Profile saved successfully.",
+    message: "会员资料保存成功。",
   };
 }
 
@@ -218,14 +218,14 @@ export async function saveMemberPhotoAction(input: {
   if (!parsed.success) {
     return {
       status: "error",
-      message: parsed.error.issues[0]?.message ?? "Photo upload could not be saved.",
+      message: parsed.error.issues[0]?.message ?? "头像上传信息无法保存。",
     };
   }
 
   if (!hasSupabaseEnv()) {
     return {
       status: "error",
-      message: "Supabase environment variables are missing. Add them to enable photo uploads.",
+      message: "尚未配置 Supabase 环境变量，暂时无法上传头像。",
     };
   }
 
@@ -234,7 +234,7 @@ export async function saveMemberPhotoAction(input: {
   if (!userId) {
     return {
       status: "error",
-      message: "Your session expired. Please sign in again.",
+      message: "你的登录状态已过期，请重新登录。",
     };
   }
 
@@ -300,6 +300,6 @@ export async function saveMemberPhotoAction(input: {
 
   return {
     status: "success",
-    message: "Profile photo uploaded successfully.",
+    message: "会员头像上传成功。",
   };
 }

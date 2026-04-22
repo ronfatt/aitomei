@@ -13,16 +13,16 @@ export interface ProofActionState {
 }
 
 const proofSubmissionSchema = z.object({
-  missionSlug: z.string().min(1, "Mission slug is required."),
-  platform: z.string().min(2, "Platform is required."),
-  socialUrl: z.url("Enter a valid social post URL."),
+  missionSlug: z.string().min(1, "缺少任务标识。"),
+  platform: z.string().min(2, "请填写平台。"),
+  socialUrl: z.url("请输入有效的社媒贴文链接。"),
   screenshotPath: z.string().optional(),
 });
 
 const proofReviewSchema = z.object({
-  proofSubmissionId: z.string().min(1, "Proof submission is required."),
+  proofSubmissionId: z.string().min(1, "缺少证明提交记录。"),
   outcome: z.enum(["approved", "needs_revision"]),
-  reviewNotes: z.string().min(4, "Add a short review note."),
+  reviewNotes: z.string().min(4, "请填写简短审核备注。"),
 });
 
 type UserRow = Database["public"]["Tables"]["users"]["Row"];
@@ -95,14 +95,14 @@ export async function submitMissionProofAction(input: {
   if (!parsed.success) {
     return {
       status: "error",
-      message: parsed.error.issues[0]?.message ?? "Please review your proof details.",
+      message: parsed.error.issues[0]?.message ?? "请检查你提交的证明信息。",
     };
   }
 
   if (!hasSupabaseEnv()) {
     return {
       status: "error",
-      message: "Supabase environment variables are missing. Add them to enable proof submissions.",
+      message: "尚未配置 Supabase 环境变量，暂时无法提交证明。",
     };
   }
 
@@ -111,7 +111,7 @@ export async function submitMissionProofAction(input: {
   if (!userId) {
     return {
       status: "error",
-      message: "Your session expired. Please sign in again.",
+      message: "你的登录状态已过期，请重新登录。",
     };
   }
 
@@ -125,7 +125,7 @@ export async function submitMissionProofAction(input: {
   if (!mission) {
     return {
       status: "error",
-      message: "Mission not found.",
+      message: "找不到对应任务。",
     };
   }
 
@@ -156,7 +156,7 @@ export async function submitMissionProofAction(input: {
   if (submissionError || !submission) {
     return {
       status: "error",
-      message: submissionError?.message ?? "Unable to submit your proof right now.",
+      message: submissionError?.message ?? "暂时无法提交证明，请稍后再试。",
     };
   }
 
@@ -186,8 +186,8 @@ export async function submitMissionProofAction(input: {
     {
       user_id: userId,
       type: "mission",
-      title: "Proof submitted for review",
-      body: `${mission.title} has been submitted and is awaiting admin review.`,
+      title: "任务证明已提交审核",
+      body: `${mission.title} 已提交，正在等待管理员审核。`,
     } as never,
   );
 
@@ -198,7 +198,7 @@ export async function submitMissionProofAction(input: {
 
   return {
     status: "success",
-    message: "Mission proof submitted successfully. Our team will review it shortly.",
+    message: "任务证明提交成功，我们会尽快完成审核。",
   };
 }
 
@@ -212,7 +212,7 @@ export async function reviewProofSubmissionAction(input: {
   if (!parsed.success) {
     return {
       status: "error",
-      message: parsed.error.issues[0]?.message ?? "Please review the moderation input.",
+      message: parsed.error.issues[0]?.message ?? "请检查审核输入内容。",
     };
   }
 

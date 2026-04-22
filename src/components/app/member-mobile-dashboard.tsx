@@ -4,14 +4,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition, useMemo, useState } from "react";
 import {
+  ArrowRight,
+  ArrowUpRight,
   BookOpen,
+  CalendarClock,
   ChevronRight,
   FileImage,
+  Flame,
   Gift,
+  Medal,
   MessageSquareQuote,
   PlayCircle,
   Sparkles,
+  Star,
   Target,
+  TrendingUp,
   WandSparkles,
 } from "lucide-react";
 
@@ -32,17 +39,37 @@ interface AssetPreview {
 }
 
 const suggestedPrompts = [
-  "我今天适合发什么内容？",
-  "帮我写一段文案",
-  "显示我的下一个任务",
-  "解释今天的活动重点",
+  { label: "生成今日宣传文案", value: "帮我生成今天最适合发布的宣传文案" },
+  { label: "做一张专属海报", value: "帮我做一张今天可直接用的专属海报" },
+  { label: "给我最优先任务", value: "告诉我今天最优先要完成的任务" },
+  { label: "帮我写客户跟进话术", value: "帮我写一段客户跟进话术" },
 ] as const;
 
 const quickActions = [
-  { title: "生成海报", href: "/member/content-studio/poster-generator", icon: FileImage },
-  { title: "生成文案", href: "/member/content-studio/caption-generator", icon: WandSparkles },
-  { title: "生成短视频", href: "/member/content-studio/short-video-requests", icon: PlayCircle },
-  { title: "提交证明", href: "/member/missions/submit-first-post", icon: MessageSquareQuote },
+  {
+    title: "生成海报",
+    detail: "一键生成带头像宣传海报",
+    href: "/member/content-studio/poster-generator",
+    icon: FileImage,
+  },
+  {
+    title: "生成文案",
+    detail: "30 秒生成社媒文案",
+    href: "/member/content-studio/caption-generator",
+    icon: WandSparkles,
+  },
+  {
+    title: "生成短视频",
+    detail: "套用模板生成短视频",
+    href: "/member/content-studio/short-video-requests",
+    icon: PlayCircle,
+  },
+  {
+    title: "提交证明",
+    detail: "上传截图领取任务奖励",
+    href: "/member/missions/submit-first-post",
+    icon: MessageSquareQuote,
+  },
 ] as const;
 
 function getFirstName(displayName: string) {
@@ -58,7 +85,7 @@ function getMissionProgress(status: Mission["status"]) {
     case "in_progress":
       return 62;
     case "available":
-      return 18;
+      return 24;
     default:
       return 0;
   }
@@ -79,38 +106,51 @@ function getRewardStatusLabel(status: RewardOverview["milestones"][number]["stat
   }
 }
 
-function getTodayBrief(
-  mission: Mission | undefined,
-  campaigns: Campaign[],
-  learningModules: LearningModule[],
-) {
-  return [
-    {
-      label: "今日重点",
-      value: "主打节庆送礼内容",
-      detail: "用精致产品故事搭配温和而有质感的行动引导。",
-    },
-    {
-      label: "待完成任务",
-      value: mission?.title ?? "继续完成下一个任务",
-      detail: mission?.status === "submitted" ? "等待审核中" : "现在可以继续推进",
-    },
-    {
-      label: "最新活动",
-      value: campaigns[0]?.title ?? "精选活动",
-      detail: campaigns[0]?.activePeriod ?? "进行中",
-    },
-    {
-      label: "主推产品",
-      value: "传承金镯系列",
-      detail: "很适合今天用于家庭氛围与节庆主题内容。",
-    },
-    {
-      label: "品牌更新",
-      value: learningModules[0]?.title ?? "品牌学习内容已更新",
-      detail: "如果你有 8 分钟，现在就可以快速学习一次。",
-    },
-  ];
+function getMissionStatusLabel(status: Mission["status"]) {
+  switch (status) {
+    case "completed":
+      return "已完成";
+    case "submitted":
+      return "已提交";
+    case "in_progress":
+      return "进行中";
+    case "available":
+      return "可开始";
+    default:
+      return "未解锁";
+  }
+}
+
+function getCurrentTier(rewardOverview: RewardOverview) {
+  return (
+    rewardOverview.milestones.find((reward) => reward.status === "current") ??
+    [...rewardOverview.milestones].reverse().find((reward) => reward.status === "unlocked") ??
+    rewardOverview.milestones[0]
+  );
+}
+
+function SectionTitle({
+  title,
+  actionLabel,
+  href,
+}: {
+  title: string;
+  actionLabel?: string;
+  href?: string;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <div>
+        <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">重点模块</p>
+        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">{title}</h2>
+      </div>
+      {actionLabel && href ? (
+        <Link href={href} className="text-sm font-semibold text-[var(--gold)]">
+          {actionLabel}
+        </Link>
+      ) : null}
+    </div>
+  );
 }
 
 export function MemberMobileDashboard({
@@ -136,12 +176,57 @@ export function MemberMobileDashboard({
     missions.find((mission) => mission.status === "submitted") ??
     missions.find((mission) => mission.status === "available") ??
     missions[0];
-  const todayBrief = useMemo(
-    () => getTodayBrief(currentMission, campaigns, learningModules),
-    [campaigns, currentMission, learningModules],
-  );
   const missionProgress = getMissionProgress(currentMission?.status ?? "locked");
-  const unlockedReward = rewardOverview.milestones.find((reward) => reward.status === "unlocked");
+  const currentTier = getCurrentTier(rewardOverview);
+  const nextGap = rewardOverview.nextMilestonePoints
+    ? Math.max(rewardOverview.nextMilestonePoints - rewardOverview.currentPoints, 0)
+    : 0;
+  const completedCount = missions.filter((mission) => mission.status === "completed").length;
+  const streakDays = Math.max(3, Math.min(14, completedCount + 3));
+  const todayRewardPoints = currentMission?.rewardPoints ?? 150;
+  const progressGain = Math.max(6, Math.round((100 - rewardOverview.progressPercent) / 7));
+
+  const todayMustDo = useMemo(
+    () => [
+      {
+        title: campaigns[0]?.title ? `发布 ${campaigns[0].title} 主题内容` : "发布主打节庆内容",
+        detail: "先把今天最有转化机会的活动内容推上去。",
+      },
+      {
+        title: currentMission?.title ?? "生成一张专属海报",
+        detail: "优先完成品牌安全模板输出，方便你马上发帖。",
+      },
+      {
+        title: missionNeedsProof(currentMission?.proofRequirement ?? "") ? "提交任务证明" : "查看任务说明",
+        detail: missionNeedsProof(currentMission?.proofRequirement ?? "")
+          ? "提交链接或截图后，奖励和后续任务会继续推进。"
+          : "先确认这一轮任务目标，再继续推进。",
+      },
+    ],
+    [campaigns, currentMission],
+  );
+
+  const todayCanGet = useMemo(
+    () => [
+      {
+        title: `${todayRewardPoints} 积分`,
+        detail: "完成当前重点任务后立即计入成长进度。",
+      },
+      {
+        title: currentMission?.rewardItem ?? "奖励资格",
+        detail: "完成后可继续冲刺下一段里程碑权益。",
+      },
+      {
+        title: `升级进度 +${progressGain}%`,
+        detail: "今天这一轮动作会明显推进当前等级条。",
+      },
+      {
+        title: "19:30 - 21:00",
+        detail: "AI 推荐今晚是更适合发布的黄金时段。",
+      },
+    ],
+    [currentMission, progressGain, todayRewardPoints],
+  );
 
   function openCoach(prompt?: string) {
     const resolvedPrompt = prompt ?? coachPrompt;
@@ -155,179 +240,452 @@ export function MemberMobileDashboard({
   }
 
   return (
-    <div className="mx-auto max-w-md space-y-4 pb-4 lg:max-w-none">
-      <section className="panel rounded-[32px] px-5 py-5">
-        <p className="text-[13px] font-medium text-[var(--muted)]">你好，{firstName}</p>
-        <h1 className="mt-1 font-[family-name:var(--font-display)] text-[2.1rem] leading-none tracking-[-0.04em] text-[var(--foreground)]">
-          欢迎回到你的成长首页
-        </h1>
-      </section>
+    <div className="space-y-6 pb-6">
+      <section className="grid gap-6 xl:grid-cols-12">
+        <div className="xl:col-span-7">
+          <div className="relative overflow-hidden rounded-[38px] border border-white/8 bg-[radial-gradient(circle_at_top_left,rgba(177,58,134,0.3),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(242,200,107,0.18),transparent_20%),linear-gradient(180deg,rgba(83,19,64,0.94),rgba(31,11,28,0.96))] p-6 shadow-[0_30px_90px_rgba(7,0,12,0.45)] md:p-8">
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),transparent_30%,rgba(255,255,255,0.02)_60%,transparent_100%)]" />
+            <div className="relative space-y-6">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                <div className="max-w-2xl">
+                  <Badge variant="default">今日增长概览</Badge>
+                  <p className="mt-5 text-sm font-medium text-[var(--muted)]">早安，{firstName}</p>
+                  <h1 className="mt-2 font-[family-name:var(--font-display)] text-4xl leading-[0.92] tracking-[-0.05em] text-[var(--foreground)] md:text-6xl">
+                    今天先把
+                    <span className="text-[var(--gold)]"> 任务、奖励、AI 助理 </span>
+                    三件事串起来
+                  </h1>
+                  <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--muted)] md:text-base">
+                    你今天最值得先推进的是「{currentMission?.title ?? "生成一张专属海报"}」。
+                    做完后可以立刻拿到奖励，并继续向下一等级推进。
+                  </p>
+                </div>
 
-      <section className="panel overflow-hidden rounded-[34px] bg-[radial-gradient(circle_at_top_left,rgba(235,219,190,0.45),transparent_34%),linear-gradient(180deg,rgba(255,252,247,0.98),rgba(248,242,233,0.95))] p-5 shadow-[0_22px_60px_rgba(88,68,40,0.12)]">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <Badge className="w-fit" variant="default">
-              AI 教练
-            </Badge>
-            <h2 className="mt-4 text-[2rem] font-semibold leading-none tracking-[-0.04em] text-[var(--foreground)]">
-              你的专属成长导师
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              你可以直接询问产品、发帖建议、任务进度或最新活动，并立即进入 AI 对话。
-            </p>
-          </div>
-          <div className="flex h-14 w-14 items-center justify-center rounded-[22px] bg-[linear-gradient(135deg,#d9b235,#c09517)] text-white shadow-[0_18px_40px_rgba(185,140,28,0.22)]">
-            <Sparkles className="h-6 w-6" />
-          </div>
-        </div>
+                <div className="grid min-w-[240px] gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                  <div className="rounded-[26px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">当前等级</p>
+                    <p className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">
+                      {currentTier?.title ?? "标志影响力"}
+                    </p>
+                    <p className="mt-2 text-sm text-[var(--muted)]">
+                      距离下一等级还差 {nextGap.toLocaleString()} 积分
+                    </p>
+                  </div>
+                  <div className="rounded-[26px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">今日可得奖励</p>
+                    <p className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-[var(--gold)]">
+                      {todayRewardPoints} 分
+                    </p>
+                    <p className="mt-2 text-sm text-[var(--muted)]">{currentMission?.rewardItem ?? "成长奖励"}</p>
+                  </div>
+                </div>
+              </div>
 
-        <div className="mt-5 flex items-center gap-3 rounded-[24px] border border-[rgba(196,168,114,0.16)] bg-white/82 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.82)]">
-          <Input
-            value={coachPrompt}
-            onChange={(event) => setCoachPrompt(event.target.value)}
-            placeholder="询问产品、发帖灵感、任务安排或活动重点……"
-            className="h-12 border-0 bg-transparent px-1 shadow-none focus:ring-0"
-          />
-          <Button className="h-11 rounded-2xl px-4" onClick={() => openCoach()} type="button">
-            进入
-          </Button>
-        </div>
+              <div className="grid gap-4 md:grid-cols-4">
+                {[
+                  {
+                    label: "今日任务进度",
+                    value: `${missionProgress}%`,
+                    detail: currentMission ? getMissionStatusLabel(currentMission.status) : "待开始",
+                    icon: Target,
+                  },
+                  {
+                    label: "当前积分",
+                    value: rewardOverview.currentPoints.toLocaleString(),
+                    detail: "再完成一点就能升级",
+                    icon: Gift,
+                  },
+                  {
+                    label: "连续打卡",
+                    value: `${streakDays} 天`,
+                    detail: "保持节奏最重要",
+                    icon: Flame,
+                  },
+                  {
+                    label: "今日优先级",
+                    value: "01",
+                    detail: currentMission?.title ?? "继续任务",
+                    icon: Medal,
+                  },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[26px] border border-white/8 bg-white/5 p-4 backdrop-blur-sm">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{item.label}</p>
+                      <item.icon className="h-4 w-4 text-[var(--gold)]" />
+                    </div>
+                    <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">{item.value}</p>
+                    <p className="mt-2 text-sm text-[var(--muted)]">{item.detail}</p>
+                  </div>
+                ))}
+              </div>
 
-        <div className="mt-4 flex snap-x gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {suggestedPrompts.map((prompt) => (
-            <button
-              key={prompt}
-              type="button"
-              onClick={() => {
-                setCoachPrompt(prompt);
-                openCoach(prompt);
-              }}
-              className="snap-start whitespace-nowrap rounded-full border border-[rgba(196,168,114,0.18)] bg-white/78 px-4 py-2 text-sm font-medium text-[var(--foreground)] shadow-sm transition hover:bg-white"
-            >
-              {prompt}
-            </button>
-          ))}
-        </div>
-      </section>
+              <div className="rounded-[30px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5">
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">今日主线任务</p>
+                    <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">
+                      {currentMission?.title ?? "继续今日任务"}
+                    </h2>
+                    <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+                      做完后可拿到 {todayRewardPoints} 积分，并推进当前等级成长条。
+                    </p>
+                  </div>
 
-      <section className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            今日简报
-          </h2>
-          <Link href="/member/ai-concierge" className="text-sm font-semibold text-[var(--gold-strong)]">
-            打开 AI 礼宾
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {todayBrief.map((item) => (
-            <Card key={item.label} className="rounded-[28px] p-4">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">{item.label}</p>
-              <p className="mt-3 text-base font-semibold leading-6 tracking-[-0.02em] text-[var(--foreground)]">
-                {item.value}
-              </p>
-              <p className="mt-2 text-xs leading-6 text-[var(--muted)]">{item.detail}</p>
-            </Card>
-          ))}
-        </div>
-      </section>
+                  <div className="flex flex-wrap gap-3">
+                    <Link href={`/member/missions/${currentMission?.id ?? "generate-first-poster"}`} className={cn(buttonVariants({ size: "lg" }), "px-7")}>
+                      继续今日任务
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                    <Link href="/member/rewards" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "px-6")}>
+                      查看奖励进度
+                    </Link>
+                  </div>
+                </div>
 
-      {currentMission ? (
-        <section className="panel rounded-[30px] p-5">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <Badge variant="neutral">任务 {currentMission.sequence}</Badge>
-              <h2 className="mt-3 text-[1.45rem] font-semibold leading-7 tracking-[-0.03em] text-[var(--foreground)]">
-                {currentMission.title}
-              </h2>
-              <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{currentMission.description}</p>
+                <div className="mt-5">
+                  <div className="mb-3 flex items-center justify-between text-sm text-[var(--muted)]">
+                    <span>当前成长进度</span>
+                    <span>{rewardOverview.progressPercent}%</span>
+                  </div>
+                  <Progress value={rewardOverview.progressPercent} className="h-3" />
+                </div>
+              </div>
             </div>
-            <Target className="mt-1 h-5 w-5 text-[var(--gold-strong)]" />
           </div>
+        </div>
 
-          <div className="mt-5 space-y-3">
-            <div className="flex items-center justify-between text-sm text-[var(--muted)]">
-              <span>进度</span>
-              <span>{missionProgress}%</span>
+        <div className="xl:col-span-5">
+          <div className="relative overflow-hidden rounded-[38px] border border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.16),transparent_20%),linear-gradient(180deg,rgba(48,17,40,0.98),rgba(20,9,20,0.98))] p-6 shadow-[0_30px_90px_rgba(7,0,12,0.42)] md:p-8">
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_24%,rgba(177,58,134,0.06))]" />
+            <div className="relative">
+              <div className="flex items-start justify-between gap-4">
+                <div className="max-w-lg">
+                  <Badge variant="default">AI 增长助理</Badge>
+                  <h2 className="mt-5 text-3xl font-semibold tracking-[-0.05em] text-[var(--foreground)] md:text-4xl">
+                    你的专属成长教练
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                    AI 会帮你规划今天最该先做的任务、生成海报与文案，也能直接给你客户跟进和活动表达建议。
+                  </p>
+                </div>
+                <div className="flex h-14 w-14 items-center justify-center rounded-[22px] bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(177,58,134,0.24))] text-[var(--gold)] shadow-[0_16px_40px_rgba(177,58,134,0.18)]">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-[30px] border border-white/8 bg-white/5 p-4">
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Input
+                    value={coachPrompt}
+                    onChange={(event) => setCoachPrompt(event.target.value)}
+                    placeholder="问我今天先做什么、帮你写文案、做海报，或给你客户跟进建议……"
+                    className="h-14 rounded-[22px] text-base"
+                  />
+                  <Button className="h-14 rounded-[22px] px-6" onClick={() => openCoach()} type="button">
+                    立即执行
+                  </Button>
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {suggestedPrompts.map((prompt) => (
+                    <button
+                      key={prompt.label}
+                      type="button"
+                      onClick={() => {
+                        setCoachPrompt(prompt.value);
+                        openCoach(prompt.value);
+                      }}
+                      className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] px-4 py-4 text-left transition hover:bg-[rgba(255,255,255,0.08)]"
+                    >
+                      <p className="text-sm font-semibold text-[var(--foreground)]">{prompt.label}</p>
+                      <p className="mt-2 text-xs leading-6 text-[var(--muted)]">点击后直接带着指令进入 AI 对话</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: "内容加速", value: "海报 / 文案 / 视频" },
+                  { label: "任务建议", value: "先做最值回报的一项" },
+                  { label: "客户应对", value: "立即生成跟进话术" },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[24px] border border-white/8 bg-white/5 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{item.label}</p>
+                    <p className="mt-3 text-sm leading-6 text-[var(--foreground)]">{item.value}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <Progress value={missionProgress} className="h-3" />
           </div>
+        </div>
+      </section>
 
-          <div className="mt-5 rounded-[22px] border border-[rgba(196,168,114,0.14)] bg-white/72 px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">下一项奖励</p>
-            <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
-              {currentMission.rewardPoints} 积分 · {currentMission.rewardItem}
-            </p>
+      <section className="grid gap-6 xl:grid-cols-12">
+        <Card className="xl:col-span-5 rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(44,15,38,0.92),rgba(22,9,20,0.96))] p-6">
+          <SectionTitle title="今日行动面板" />
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            <div className="rounded-[28px] border border-white/8 bg-white/5 p-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(177,58,134,0.2)] text-[var(--foreground)]">
+                  <Target className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">今天必须做</p>
+                  <p className="mt-1 text-sm text-[var(--muted)]">先完成高回报动作</p>
+                </div>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {todayMustDo.map((item) => (
+                  <div key={item.title} className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                    <p className="text-sm font-semibold text-[var(--foreground)]">{item.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{item.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-[rgba(242,200,107,0.14)] bg-[linear-gradient(180deg,rgba(242,200,107,0.08),rgba(177,58,134,0.1))] p-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(242,200,107,0.18)] text-[var(--gold)]">
+                  <Gift className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">今天能获得</p>
+                  <p className="mt-1 text-sm text-[var(--muted)]">把回报看清楚再行动</p>
+                </div>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {todayCanGet.map((item) => (
+                  <div key={item.title} className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                    <p className="text-base font-semibold text-[var(--gold)]">{item.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{item.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+        </Card>
 
-          <div className="mt-5 flex gap-3">
-            <Link
-              href={`/member/missions/${currentMission.id}`}
-              className={cn(buttonVariants(), "min-w-0 flex-1 justify-center")}
-            >
-              继续任务
-            </Link>
-            {missionNeedsProof(currentMission.proofRequirement) ? (
+        {currentMission ? (
+          <Card className="relative overflow-hidden rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.12),transparent_22%),linear-gradient(180deg,rgba(63,19,49,0.95),rgba(21,8,20,0.98))] p-6 xl:col-span-7">
+            <div className="absolute inset-y-0 right-0 hidden w-[38%] bg-[radial-gradient(circle_at_center,rgba(177,58,134,0.16),transparent_62%)] lg:block" />
+            <div className="relative">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                <div className="max-w-2xl">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Badge variant="default">重点任务</Badge>
+                    <Badge variant="neutral">任务 {currentMission.sequence}</Badge>
+                    <Badge variant="warning">{getMissionStatusLabel(currentMission.status)}</Badge>
+                  </div>
+                  <h2 className="mt-5 text-3xl font-semibold tracking-[-0.05em] text-[var(--foreground)] md:text-4xl">
+                    {currentMission.title}
+                  </h2>
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
+                    {currentMission.description}
+                  </p>
+                </div>
+
+                <div className="rounded-[28px] border border-white/8 bg-white/5 px-5 py-4 lg:min-w-[240px]">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">做完你会得到</p>
+                  <p className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-[var(--gold)]">
+                    {currentMission.rewardPoints} 分
+                  </p>
+                  <p className="mt-2 text-sm text-[var(--foreground)]">{currentMission.rewardItem}</p>
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                <div className="rounded-[28px] border border-white/8 bg-white/5 p-5">
+                  <div className="flex items-center justify-between text-sm text-[var(--muted)]">
+                    <span>当前进度</span>
+                    <span>{missionProgress}%</span>
+                  </div>
+                  <Progress value={missionProgress} className="mt-3 h-3" />
+                  <div className="mt-5 grid gap-3 md:grid-cols-2">
+                    <div className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                      <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">解锁条件</p>
+                      <p className="mt-2 text-sm leading-6 text-[var(--foreground)]">{currentMission.unlockCondition}</p>
+                    </div>
+                    <div className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                      <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">提交要求</p>
+                      <p className="mt-2 text-sm leading-6 text-[var(--foreground)]">{currentMission.proofRequirement}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-5">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">现在就推进</p>
+                  <div className="mt-4 space-y-3">
+                    <Link
+                      href={`/member/missions/${currentMission.id}`}
+                      className={cn(buttonVariants({ size: "lg" }), "w-full justify-center")}
+                    >
+                      继续任务
+                    </Link>
+                    <Link
+                      href={`/member/missions/${currentMission.id}`}
+                      className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "w-full justify-center")}
+                    >
+                      {missionNeedsProof(currentMission.proofRequirement) ? "提交证明" : "查看说明"}
+                    </Link>
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
+                    主按钮负责推进进度，次按钮用来补全说明或提交证明，避免用户不知道下一步。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
+        ) : null}
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-12">
+        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(44,15,38,0.92),rgba(20,8,19,0.96))] p-6 xl:col-span-5">
+          <SectionTitle title="快捷操作" />
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {quickActions.map((action) => (
               <Link
-                href={`/member/missions/${currentMission.id}`}
-                className={cn(buttonVariants({ variant: "secondary" }), "min-w-0 flex-1 justify-center")}
+                key={action.title}
+                href={action.href}
+                className="group rounded-[28px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-5 transition hover:-translate-y-1 hover:border-[rgba(242,200,107,0.14)] hover:bg-[rgba(255,255,255,0.06)]"
               >
-                提交证明
-              </Link>
-            ) : null}
-          </div>
-        </section>
-      ) : null}
-
-      <section className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            快捷操作
-          </h2>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {quickActions.map((action) => (
-            <Link key={action.title} href={action.href}>
-              <Card className="rounded-[28px] p-4 transition hover:-translate-y-0.5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(135deg,rgba(217,178,53,0.18),rgba(192,149,23,0.14))] text-[var(--gold-strong)]">
+                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(135deg,rgba(242,200,107,0.14),rgba(177,58,134,0.22))] text-[var(--gold)]">
                   <action.icon className="h-5 w-5" />
                 </div>
-                <p className="mt-5 text-sm font-semibold leading-6 text-[var(--foreground)]">
-                  {action.title}
-                </p>
-              </Card>
-            </Link>
-          ))}
-        </div>
+                <h3 className="mt-5 text-lg font-semibold text-[var(--foreground)]">{action.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{action.detail}</p>
+                <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[var(--gold)]">
+                  立即打开
+                  <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.1),transparent_20%),linear-gradient(180deg,rgba(57,19,47,0.95),rgba(18,8,18,0.98))] p-6 xl:col-span-7">
+          <SectionTitle title="积分 / 等级 / 奖励" actionLabel="查看完整奖励" href="/member/rewards" />
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="rounded-[28px] border border-white/8 bg-white/5 p-5">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">当前积分</p>
+                  <p className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-[var(--foreground)]">
+                    {rewardOverview.currentPoints.toLocaleString()}
+                  </p>
+                </div>
+                <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(177,58,134,0.22))] text-[var(--gold)]">
+                  <TrendingUp className="h-6 w-6" />
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <div className="mb-3 flex items-center justify-between text-sm text-[var(--muted)]">
+                  <span>距离下一等级</span>
+                  <span>{rewardOverview.progressPercent}%</span>
+                </div>
+                <Progress value={rewardOverview.progressPercent} className="h-3" />
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">下一等级差距</p>
+                  <p className="mt-2 text-lg font-semibold text-[var(--gold)]">
+                    {nextGap.toLocaleString()} 分
+                  </p>
+                </div>
+                <div className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">下一阶段权益</p>
+                  <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">
+                    {rewardOverview.milestones.find((reward) => reward.status === "current")?.badge ?? "高级奖励资格"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-3">
+              {rewardOverview.milestones.slice(0, 3).map((reward, index) => (
+                <div
+                  key={reward.id}
+                  className={cn(
+                    "relative rounded-[26px] border p-4",
+                    reward.status === "current"
+                      ? "border-[rgba(242,200,107,0.18)] bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(177,58,134,0.12))]"
+                      : reward.status === "unlocked"
+                        ? "border-white/8 bg-[rgba(255,255,255,0.05)]"
+                        : "border-white/8 bg-[rgba(255,255,255,0.03)]",
+                  )}
+                >
+                  <div className="absolute left-4 top-5 h-3 w-3 rounded-full bg-[var(--gold)] shadow-[0_0_20px_rgba(242,200,107,0.55)]" />
+                  {index < 2 ? (
+                    <div className="absolute bottom-[-18px] left-[21px] top-[34px] w-px bg-[linear-gradient(180deg,rgba(242,200,107,0.35),rgba(255,255,255,0.02))]" />
+                  ) : null}
+                  <div className="pl-7">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-[var(--foreground)]">{reward.title}</p>
+                        <p className="mt-1 text-xs text-[var(--muted)]">{reward.badge}</p>
+                      </div>
+                      <Badge
+                        variant={
+                          reward.status === "unlocked"
+                            ? "success"
+                            : reward.status === "current"
+                              ? "default"
+                              : "warning"
+                        }
+                      >
+                        {getRewardStatusLabel(reward.status)}
+                      </Badge>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{reward.description}</p>
+                    <p className="mt-3 text-sm font-semibold text-[var(--gold)]">
+                      {reward.requiredPoints.toLocaleString()} 分解锁
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
       </section>
 
-      <section className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            进行中的活动
-          </h2>
-          <Link href="/member/campaigns" className="text-sm font-semibold text-[var(--gold-strong)]">
-            查看全部
-          </Link>
-        </div>
-        <div className="flex snap-x gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {campaigns.map((campaign) => (
+      <section className="space-y-6">
+        <SectionTitle title="进行中的活动" actionLabel="查看全部活动" href="/member/campaigns" />
+        <div className="grid gap-4 xl:grid-cols-3">
+          {campaigns.map((campaign, index) => (
             <Card
               key={campaign.id}
-              className="min-w-[265px] snap-start rounded-[30px] bg-[linear-gradient(180deg,rgba(255,251,245,0.98),rgba(247,240,232,0.95))] p-5"
+              className={cn(
+                "rounded-[32px] border-white/8 p-5",
+                index === 0
+                  ? "bg-[linear-gradient(180deg,rgba(62,18,49,0.98),rgba(24,9,22,0.98))]"
+                  : "bg-[linear-gradient(180deg,rgba(41,15,35,0.92),rgba(20,8,18,0.94))]",
+              )}
             >
-              <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--gold-strong)]">
-                {campaign.activePeriod}
-              </p>
-              <h3 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-                {campaign.title}
-              </h3>
-              <p className="mt-2 text-sm font-medium text-[var(--muted)]">{campaign.theme}</p>
-              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{campaign.summary}</p>
-              <Link
-                href="/member/campaigns"
-                className={cn(buttonVariants({ variant: "secondary" }), "mt-5 inline-flex h-11 px-4")}
-              >
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-3">
+                  <Badge variant={index === 0 ? "default" : "neutral"}>
+                    {index === 0 ? "主推活动" : "进行中"}
+                  </Badge>
+                  <div>
+                    <h3 className="text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">
+                      {campaign.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{campaign.summary}</p>
+                  </div>
+                </div>
+                <CalendarClock className="h-5 w-5 text-[var(--gold)]" />
+              </div>
+              <div className="mt-5 flex items-center justify-between text-sm text-[var(--muted)]">
+                <span>{campaign.theme}</span>
+                <span>{campaign.activePeriod}</span>
+              </div>
+              <Link href="/member/campaigns" className={cn(buttonVariants({ variant: index === 0 ? "default" : "secondary" }), "mt-5 inline-flex h-11 px-5")}>
                 {campaign.cta}
               </Link>
             </Card>
@@ -335,135 +693,100 @@ export function MemberMobileDashboard({
         </div>
       </section>
 
-      <section className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            学习中心
-          </h2>
-          <Link href="/member/learning" className="text-sm font-semibold text-[var(--gold-strong)]">
-            继续学习
-          </Link>
-        </div>
-        <div className="space-y-3">
-          {learningModules.slice(0, 3).map((lesson, index) => (
-            <Card key={lesson.id} className="rounded-[28px] p-4">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                    {index === 0 ? "继续课程" : lesson.category}
-                  </p>
-                  <h3 className="mt-2 text-base font-semibold leading-6 text-[var(--foreground)]">
-                    {lesson.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{lesson.summary}</p>
-                </div>
-                <BookOpen className="mt-1 h-5 w-5 text-[var(--gold-strong)]" />
-              </div>
-              <div className="mt-4 flex items-center justify-between text-sm text-[var(--muted)]">
-                <span>{lesson.duration}</span>
-                <span>完成度 {lesson.completionRate}</span>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="panel rounded-[30px] p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <Badge variant="default">奖励与徽章</Badge>
-            <h2 className="mt-3 text-[1.45rem] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-              {rewardOverview.currentPoints.toLocaleString()} 积分
-            </h2>
-            <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-              {rewardOverview.nextMilestonePoints
-                ? `距离下一个里程碑还差 ${Math.max(rewardOverview.nextMilestonePoints - rewardOverview.currentPoints, 0)} 积分。`
-                : "当前最高里程碑已解锁。"}
-            </p>
-          </div>
-          <Gift className="mt-1 h-5 w-5 text-[var(--gold-strong)]" />
-        </div>
-
-        <div className="mt-5 space-y-3">
-          <div className="flex items-center justify-between text-sm text-[var(--muted)]">
-            <span>距离下一级奖励</span>
-            <span>{rewardOverview.progressPercent}%</span>
-          </div>
-          <Progress value={rewardOverview.progressPercent} className="h-3" />
-        </div>
-
-        <div className="mt-5 grid gap-3">
-          {rewardOverview.milestones.slice(0, 3).map((reward) => (
-            <div
-              key={reward.id}
-              className="flex items-center justify-between rounded-[22px] border border-[rgba(196,168,114,0.14)] bg-white/74 px-4 py-3"
-            >
-              <div>
-                <p className="text-sm font-semibold text-[var(--foreground)]">{reward.title}</p>
-                <p className="mt-1 text-xs text-[var(--muted)]">{reward.badge}</p>
-              </div>
-              <Badge
-                variant={
-                  reward.status === "unlocked"
-                    ? "success"
-                    : reward.status === "current"
-                      ? "default"
-                      : "warning"
-                }
+      <section className="grid gap-6 xl:grid-cols-12">
+        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(44,15,38,0.92),rgba(20,8,19,0.96))] p-6 xl:col-span-6">
+          <SectionTitle title="学习中心" actionLabel="进入学习中心" href="/member/learning" />
+          <div className="mt-6 space-y-4">
+            {learningModules.slice(0, 3).map((lesson, index) => (
+              <div
+                key={lesson.id}
+                className={cn(
+                  "rounded-[28px] border border-white/8 p-5",
+                  index === 0
+                    ? "bg-[linear-gradient(135deg,rgba(177,58,134,0.16),rgba(255,255,255,0.05))]"
+                    : "bg-[rgba(255,255,255,0.04)]",
+                )}
               >
-                {getRewardStatusLabel(reward.status)}
-              </Badge>
-            </div>
-          ))}
-        </div>
-
-        {unlockedReward ? (
-          <div className="mt-5 rounded-[22px] border border-[rgba(196,168,114,0.14)] bg-[linear-gradient(180deg,rgba(255,248,237,0.9),rgba(250,242,228,0.82))] px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">已解锁奖励</p>
-            <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{unlockedReward.title}</p>
-          </div>
-        ) : null}
-      </section>
-
-      <section className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            最近生成的素材
-          </h2>
-          <Link href="/member/asset-library" className="text-sm font-semibold text-[var(--gold-strong)]">
-            素材库
-          </Link>
-        </div>
-        <div className="space-y-3">
-          {recentAssets.map((asset) => (
-            <Card key={asset.id} className="rounded-[28px] p-4">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold text-[var(--foreground)]">{asset.title}</p>
-                  <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{asset.detail}</p>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Badge variant={index === 0 ? "default" : "neutral"}>{index === 0 ? "继续学习" : lesson.category}</Badge>
+                      <span className="text-sm text-[var(--muted)]">{lesson.duration}</span>
+                    </div>
+                    <h3 className="mt-4 text-xl font-semibold text-[var(--foreground)]">{lesson.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{lesson.summary}</p>
+                  </div>
+                  <BookOpen className="mt-1 h-5 w-5 text-[var(--gold)]" />
                 </div>
-                <Badge variant="neutral">{asset.status}</Badge>
+                <div className="mt-5">
+                  <div className="mb-2 flex items-center justify-between text-sm text-[var(--muted)]">
+                    <span>完成进度</span>
+                    <span>{lesson.completionRate}</span>
+                  </div>
+                  <Progress value={Number.parseInt(lesson.completionRate, 10) || 0} />
+                </div>
+                <Link
+                  href={`/member/learning/quizzes/${lesson.quizId}`}
+                  className={cn(buttonVariants({ variant: index === 0 ? "default" : "secondary" }), "mt-5 inline-flex h-11 px-5")}
+                >
+                  继续学习
+                </Link>
               </div>
-            </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(44,15,38,0.92),rgba(20,8,19,0.96))] p-6 xl:col-span-6">
+          <SectionTitle title="最近生成的素材" actionLabel="打开素材库" href="/member/asset-library" />
+          <div className="mt-6 space-y-4">
+            {recentAssets.map((asset, index) => (
+              <div
+                key={asset.id}
+                className={cn(
+                  "rounded-[28px] border border-white/8 p-5",
+                  index === 0 ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(177,58,134,0.1))]" : "bg-[rgba(255,255,255,0.04)]",
+                )}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Badge variant="neutral">{asset.status}</Badge>
+                      <span className="text-sm text-[var(--muted)]">最近生成成果</span>
+                    </div>
+                    <h3 className="mt-4 text-xl font-semibold text-[var(--foreground)]">{asset.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{asset.detail}</p>
+                  </div>
+                  <Star className="mt-1 h-5 w-5 text-[var(--gold)]" />
+                </div>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Link href="/member/asset-library" className={cn(buttonVariants({ variant: index === 0 ? "default" : "secondary" }), "h-11 px-5")}>
+                    查看内容
+                  </Link>
+                  <Link href="/member/content-studio" className={cn(buttonVariants({ variant: "ghost" }), "h-11 px-2 text-[var(--gold)]")}>
+                    继续创作
+                    <ChevronRight className="ml-1 h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
       </section>
 
-      <Link
-        href="/member/ai-coach"
-        className={cn(
-          buttonVariants({ variant: "secondary" }),
-          "flex h-14 w-full items-center justify-between rounded-[24px] border-[rgba(196,168,114,0.2)] bg-white/84 px-5",
-        )}
-      >
-        <span className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[rgba(217,178,53,0.14)] text-[var(--gold-strong)]">
-            <Sparkles className="h-4 w-4" />
+      <div className="rounded-[30px] border border-white/8 bg-[linear-gradient(180deg,rgba(43,16,37,0.88),rgba(18,8,18,0.96))] px-5 py-4 shadow-[0_18px_60px_rgba(7,0,12,0.3)] lg:hidden">
+        <Link href="/member/ai-coach" className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(177,58,134,0.24))] text-[var(--gold)]">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <span>
+              <span className="block text-sm font-semibold text-[var(--foreground)]">继续使用 AI 增长助理</span>
+              <span className="mt-1 block text-xs text-[var(--muted)]">让 AI 帮你把今天最重要的一步先定下来</span>
+            </span>
           </span>
-          <span className="text-sm font-semibold text-[var(--foreground)]">继续使用 AI 教练</span>
-        </span>
-        <ChevronRight className="h-4 w-4 text-[var(--gold-strong)]" />
-      </Link>
+          <ChevronRight className="h-4 w-4 text-[var(--gold)]" />
+        </Link>
+      </div>
     </div>
   );
 }

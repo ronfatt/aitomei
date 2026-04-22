@@ -10,9 +10,9 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Member Profile"
-        title="Member identity and promotion preferences"
-        description="Profile data powers personalization across content generation, campaign recommendations, and learning guidance."
+        eyebrow="会员资料"
+        title="会员身份信息与推广偏好"
+        description="会员资料会驱动内容生成个性化、活动推荐与学习引导等关键体验。"
       />
       <ProfileForm
         userId={auth.user.id}

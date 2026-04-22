@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const proofFormSchema = z.object({
-  platform: z.string().min(2, "Platform is required."),
-  socialUrl: z.url("Enter a valid social post URL."),
+  platform: z.string().min(2, "请填写平台。"),
+  socialUrl: z.url("请输入有效的社媒贴文链接。"),
   screenshotPath: z.string().optional(),
 });
 
@@ -66,7 +66,7 @@ export function MissionProofForm({
       {latestSubmission ? (
         <div className="rounded-[24px] border border-[rgba(196,168,114,0.18)] bg-white/72 p-4">
           <div className="flex flex-wrap items-center gap-3">
-            <Badge variant="neutral">Latest submission</Badge>
+            <Badge variant="neutral">最近一次提交</Badge>
             <Badge
               variant={
                 latestSubmission.status === "approved"
@@ -76,15 +76,19 @@ export function MissionProofForm({
                     : "default"
               }
             >
-              {latestSubmission.status.replace("_", " ")}
+              {latestSubmission.status === "approved"
+                ? "已通过"
+                : latestSubmission.status === "needs_revision"
+                  ? "需修改"
+                  : "待审核"}
             </Badge>
           </div>
           <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-            Submitted {latestSubmission.submittedAt} via {latestSubmission.platform}.
+            已于 {latestSubmission.submittedAt} 通过 {latestSubmission.platform} 提交。
           </p>
           {latestSubmission.reviewNotes ? (
             <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-              Admin note: {latestSubmission.reviewNotes}
+              审核备注：{latestSubmission.reviewNotes}
             </p>
           ) : null}
         </div>
@@ -92,21 +96,21 @@ export function MissionProofForm({
 
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <div>
-          <Input placeholder="Social post URL" {...form.register("socialUrl")} />
+          <Input placeholder="社媒贴文链接" {...form.register("socialUrl")} />
           <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.socialUrl?.message}</p>
         </div>
         <div>
-          <Input placeholder="Platform (Instagram, TikTok, Facebook...)" {...form.register("platform")} />
+          <Input placeholder="平台（Instagram、TikTok、Facebook...）" {...form.register("platform")} />
           <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.platform?.message}</p>
         </div>
         <div>
-          <Input placeholder="Optional screenshot path / upload reference" {...form.register("screenshotPath")} />
+          <Input placeholder="可选截图路径 / 上传引用" {...form.register("screenshotPath")} />
           <p className="mt-2 text-xs text-[var(--muted)]">
-            Screenshot upload storage can be connected next through the `proof-screenshots` bucket.
+            下一步可把截图上传能力接到 `proof-screenshots` bucket。
           </p>
         </div>
         <Button type="submit" disabled={form.formState.isSubmitting}>
-          Submit mission proof
+          提交任务证明
         </Button>
         {feedback.status !== "idle" ? (
           <Badge className="w-fit" variant={feedback.status === "success" ? "success" : "warning"}>

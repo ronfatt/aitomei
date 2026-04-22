@@ -32,77 +32,27 @@ export const memberNavigation: NavItem[] = [
   {
     title: "首页",
     href: "/member/dashboard",
-    description: "你的每日成长与互动总览。",
-  },
-  {
-    title: "新手引导",
-    href: "/member/onboarding",
-    description: "为新会员准备的引导式启用流程。",
-  },
-  {
-    title: "个人资料",
-    href: "/member/profile",
-    description: "个人品牌资料与推广偏好设置。",
+    description: "查看今日目标、奖励进度与 AI 建议。",
   },
   {
     title: "任务",
     href: "/member/missions",
-    description: "带证明提交机制的阶段式成长任务。",
-  },
-  {
-    title: "奖励",
-    href: "/member/rewards",
-    description: "积分、徽章、里程碑与奖励进度。",
+    description: "聚焦今天要推进的任务与证明提交。",
   },
   {
     title: "内容创作中心",
     href: "/member/content-studio",
-    description: "海报、文案与短视频个性化工具。",
-  },
-  {
-    title: "素材库",
-    href: "/member/asset-library",
-    description: "已生成素材与可随时分享的内容。",
-  },
-  {
-    title: "AI 教练",
-    href: "/member/ai-coach",
-    description: "品牌学习导师与推广建议助手。",
-  },
-  {
-    title: "AI 礼宾",
-    href: "/member/ai-concierge",
-    description: "每日活动、产品与提醒助理。",
-  },
-  {
-    title: "活动",
-    href: "/member/campaigns",
-    description: "当前活动、挑战与参与指引。",
-  },
-  {
-    title: "资讯",
-    href: "/member/news",
-    description: "品牌更新与重要通知。",
-  },
-  {
-    title: "产品",
-    href: "/member/products",
-    description: "珠宝产品亮点与推荐引导。",
+    description: "快速生成海报、文案、短视频与证明内容。",
   },
   {
     title: "学习中心",
     href: "/member/learning",
-    description: "微课程、品牌模块与测验。",
+    description: "继续课程、测验与品牌表达训练。",
   },
   {
-    title: "通知",
-    href: "/member/notifications",
-    description: "任务提醒与系统动态。",
-  },
-  {
-    title: "设置",
-    href: "/member/settings",
-    description: "偏好设置、隐私与多语言准备。",
+    title: "我的",
+    href: "/member/profile",
+    description: "管理资料、奖励、通知与个人成长偏好。",
   },
 ];
 

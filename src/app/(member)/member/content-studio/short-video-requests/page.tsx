@@ -8,33 +8,36 @@ export default function ShortVideoRequestsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Short Video Requests"
-        title="Queue member-personalized short-form campaign videos"
-        description="The MVP treats video generation as an abstracted request pipeline so future render engines can be integrated without changing the member experience."
+        eyebrow="短视频请求"
+        title="提交会员个性化短视频活动请求"
+        description="MVP 把视频生成为抽象化请求管线，后续可接真实渲染引擎，而不需要改动会员体验。"
       />
       <section className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
-        <Card className="p-6">
-          <Badge variant="neutral">Queue request</Badge>
+        <Card className="border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(42,15,35,0.92),rgba(22,9,20,0.96))] p-6 shadow-[0_24px_80px_rgba(5,3,8,0.28)]">
+          <Badge variant="neutral">加入队列</Badge>
           <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-            This flow stays template-based and brand-controlled, with no freeform scene editing in the MVP.
+            这条流程会维持模板化与品牌可控，不开放自由场景编辑。
           </p>
           <form className="mt-6 space-y-4">
-            <Input placeholder="Official template video" />
-            <Input placeholder="Member display name" />
-            <Input placeholder="Member code or CTA" />
-            <Input placeholder="End card note" />
-            <Button>Queue video personalization</Button>
+            <Input placeholder="官方模板视频名称" />
+            <Input placeholder="会员展示名称" />
+            <Input placeholder="会员编号或 CTA" />
+            <Input placeholder="结尾卡文案" />
+            <Button>加入视频个性化队列</Button>
           </form>
         </Card>
-        <Card className="p-6">
-          <Badge variant="warning">Queue status</Badge>
+        <Card className="border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(75,17,56,0.32),rgba(22,9,20,0.96))] p-6 shadow-[0_24px_80px_rgba(5,3,8,0.28)]">
+          <Badge variant="warning">队列状态</Badge>
           <div className="mt-4 space-y-4">
             {[
-              "Request accepted and assigned to the render queue.",
-              "ETA target remains under 24 hours for MVP operations.",
-              "Finished assets save to asset history and the generated-assets bucket for download.",
+              "请求已接收，并已分配到渲染队列中。",
+              "MVP 阶段的目标交付时间维持在 24 小时内。",
+              "完成后的素材会保存到素材历史与 generated-assets bucket 中，方便下载。",
             ].map((line) => (
-              <div key={line} className="rounded-[24px] border border-[var(--border)] bg-white/70 p-4 text-sm leading-6 text-[var(--muted)]">
+              <div
+                key={line}
+                className="rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] p-4 text-sm leading-6 text-[var(--muted)]"
+              >
                 {line}
               </div>
             ))}

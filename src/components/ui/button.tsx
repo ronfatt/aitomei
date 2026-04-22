@@ -9,12 +9,13 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[linear-gradient(135deg,var(--gold-strong),var(--gold))] px-5 py-2.5 text-white shadow-[0_18px_40px_rgba(143,110,56,0.24)] hover:brightness-105",
+          "bg-[image:var(--button-primary-bg,linear-gradient(135deg,var(--gold-strong),var(--gold)))] px-5 py-2.5 text-[var(--button-primary-text,white)] shadow-[var(--button-primary-shadow,0_18px_40px_rgba(143,110,56,0.24))] hover:brightness-105",
         secondary:
-          "border border-[var(--border)] bg-white/70 px-5 py-2.5 text-[var(--foreground)] hover:bg-white",
-        ghost: "px-4 py-2 text-[var(--muted)] hover:bg-white/80 hover:text-[var(--foreground)]",
+          "border px-5 py-2.5 text-[var(--button-secondary-text,var(--foreground))] [border-color:var(--button-secondary-border,var(--border))] [background:var(--button-secondary-bg,rgba(255,255,255,0.7))] hover:[background:var(--button-secondary-hover,white)]",
+        ghost:
+          "px-4 py-2 text-[var(--button-ghost-text,var(--muted))] hover:[background:var(--button-ghost-hover,rgba(255,255,255,0.8))] hover:text-[var(--foreground)]",
         outline:
-          "border border-[var(--gold-soft)] bg-transparent px-5 py-2.5 text-[var(--gold-strong)] hover:bg-[rgba(196,168,114,0.08)]",
+          "border bg-transparent px-5 py-2.5 text-[var(--button-outline-text,var(--gold-strong))] [border-color:var(--button-outline-border,var(--gold-soft))] hover:[background:var(--button-outline-hover,rgba(196,168,114,0.08))]",
       },
       size: {
         default: "h-11",

@@ -26,13 +26,13 @@ export function PublicHeader() {
             href="/api/demo-login?role=member"
             className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "rounded-full")}
           >
-            Member
+            会员端
           </Link>
           <Link
             href="/api/demo-login?role=admin"
             className={cn(buttonVariants({ size: "sm" }), "rounded-full")}
           >
-            Admin
+            管理端
           </Link>
         </div>
       </div>

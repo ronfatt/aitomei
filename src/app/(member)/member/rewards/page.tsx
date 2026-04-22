@@ -6,6 +6,17 @@ import { Progress } from "@/components/ui/progress";
 import { requireRole } from "@/lib/auth/session";
 import { getRewardOverview } from "@/lib/supabase/repositories";
 
+function getRewardStatusLabel(status: string) {
+  switch (status) {
+    case "unlocked":
+      return "已解锁";
+    case "current":
+      return "当前阶段";
+    default:
+      return "未解锁";
+  }
+}
+
 export default async function RewardsPage() {
   const auth = await requireRole("member");
   const rewardOverview = await getRewardOverview(auth.user.id);
@@ -13,21 +24,21 @@ export default async function RewardsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Rewards Engine"
-        title="Points, badges, and premium milestones"
-        description="The rewards system is intentionally simple for MVP launch while preserving clean extensibility for future redemption catalogs and tiering."
+        eyebrow="奖励系统"
+        title="积分、徽章与高端里程碑"
+        description="奖励系统在 MVP 阶段保持简单清晰，同时保留后续扩展兑换目录与分层体系的能力。"
       />
       <Card className="p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <Badge variant="default">Current position</Badge>
+            <Badge variant="default">当前进度</Badge>
             <h2 className="mt-3 font-[family-name:var(--font-display)] text-4xl text-[var(--foreground)]">
-              {rewardOverview.currentPoints.toLocaleString()} points
+              {rewardOverview.currentPoints.toLocaleString()} 分
             </h2>
             <p className="mt-2 text-sm text-[var(--muted)]">
               {rewardOverview.nextMilestonePoints
-                ? `${Math.max(rewardOverview.nextMilestonePoints - rewardOverview.currentPoints, 0)} points remaining to unlock the next milestone.`
-                : "Top milestone unlocked. Keep participating to maintain momentum."}
+                ? `距离下一个里程碑还差 ${Math.max(rewardOverview.nextMilestonePoints - rewardOverview.currentPoints, 0)} 分。`
+                : "最高里程碑已经解锁，继续参与以维持成长动能。"}
             </p>
           </div>
           <div className="w-full max-w-sm">
@@ -37,8 +48,8 @@ export default async function RewardsPage() {
       </Card>
       {rewardOverview.milestones.length === 0 ? (
         <EmptyState
-          title="No reward milestones configured"
-          description="Once active reward milestones are published, members will see progress and badge unlocks here."
+          title="暂未配置奖励里程碑"
+          description="当奖励里程碑发布后，会员就能在这里看到进度与徽章解锁情况。"
         />
       ) : (
         <div className="space-y-4">
@@ -54,12 +65,12 @@ export default async function RewardsPage() {
                         : "warning"
                   }
                 >
-                  {reward.status}
+                  {getRewardStatusLabel(reward.status)}
                 </Badge>
                 <h2 className="mt-4 text-2xl font-semibold text-[var(--foreground)]">{reward.title}</h2>
                 <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{reward.description}</p>
                 <p className="mt-4 text-sm text-[var(--gold-strong)]">
-                  {reward.requiredPoints} points · {reward.badge}
+                  {reward.requiredPoints} 分 · {reward.badge}
                 </p>
               </Card>
             ))}
@@ -68,16 +79,16 @@ export default async function RewardsPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <Badge variant="neutral">Reward history</Badge>
+                <Badge variant="neutral">奖励记录</Badge>
                 <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
-                  Recent point activity
+                  最近积分动态
                 </h2>
               </div>
             </div>
 
             {rewardOverview.history.length === 0 ? (
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                Complete missions to start building your visible reward history.
+                完成任务后，这里就会开始累积你的奖励记录。
               </p>
             ) : (
               <div className="mt-6 grid gap-4">
@@ -91,7 +102,7 @@ export default async function RewardsPage() {
                       <p className="mt-1 text-sm leading-7 text-[var(--muted)]">{entry.detail}</p>
                     </div>
                     <div className="text-sm text-[var(--muted)] lg:text-right">
-                      <p className="font-semibold text-[var(--gold-strong)]">+{entry.points} pts</p>
+                      <p className="font-semibold text-[var(--gold-strong)]">+{entry.points} 分</p>
                       <p className="mt-1">{entry.awardedAt}</p>
                     </div>
                   </div>

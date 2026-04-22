@@ -121,14 +121,14 @@ export function ProfileForm({
     if (!hasSupabaseEnv()) {
       setUploadState({
         status: "error",
-        message: "Supabase environment variables are missing. Add them to enable photo uploads.",
+        message: "尚未配置 Supabase 环境变量，暂时无法上传头像。",
       });
       return;
     }
 
     setUploadState({
       status: "uploading",
-      message: "Uploading your profile photo...",
+      message: "正在上传你的头像...",
     });
 
     const supabase = createSupabaseBrowserClient();
@@ -174,12 +174,12 @@ export function ProfileForm({
       <Card className="p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <Badge variant="default">Profile completion</Badge>
-            <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">{completion}% complete</h2>
+            <Badge variant="default">资料完成度</Badge>
+            <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">{completion}% 已完成</h2>
             <p className="mt-2 text-sm text-[var(--muted)]">
               {source === "supabase"
-                ? "Loaded from Supabase member profile data."
-                : "Showing local MVP fallback data until Supabase is configured."}
+                ? "当前资料已从 Supabase 会员档案中读取。"
+                : "在 Supabase 完成配置前，当前显示的是本地 MVP 演示资料。"}
             </p>
           </div>
           <div className="w-44">
@@ -189,27 +189,27 @@ export function ProfileForm({
 
         <form className="mt-6 grid gap-4 md:grid-cols-2" onSubmit={form.handleSubmit(onSubmit)}>
           <div>
-            <Input placeholder="First name" {...form.register("firstName")} />
+            <Input placeholder="名字" {...form.register("firstName")} />
             <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.firstName?.message}</p>
           </div>
           <div>
-            <Input placeholder="Last name" {...form.register("lastName")} />
+            <Input placeholder="姓氏" {...form.register("lastName")} />
             <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.lastName?.message}</p>
           </div>
           <div>
-            <Input placeholder="Preferred display name" {...form.register("displayName")} />
+            <Input placeholder="对外显示名称" {...form.register("displayName")} />
             <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.displayName?.message}</p>
           </div>
           <div>
-            <Input placeholder="Mobile number" {...form.register("mobileNumber")} />
+            <Input placeholder="手机号码" {...form.register("mobileNumber")} />
             <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.mobileNumber?.message}</p>
           </div>
           <div>
-            <Input placeholder="Preferred content tone" {...form.register("preferredTone")} />
+            <Input placeholder="偏好内容语气" {...form.register("preferredTone")} />
             <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.preferredTone?.message}</p>
           </div>
           <div>
-            <Input placeholder="Favorite product category" {...form.register("favoriteCategory")} />
+            <Input placeholder="偏好产品类别" {...form.register("favoriteCategory")} />
             <p className="mt-2 text-xs text-[var(--warning)]">{form.formState.errors.favoriteCategory?.message}</p>
           </div>
           <div className="md:col-span-2">
@@ -218,7 +218,7 @@ export function ProfileForm({
           </div>
           <div className="md:col-span-2 flex flex-wrap items-center gap-3">
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              Save profile updates
+              保存资料更新
             </Button>
             {saveState.status !== "idle" ? (
               <Badge variant={saveState.status === "success" ? "success" : "warning"}>
@@ -230,7 +230,7 @@ export function ProfileForm({
       </Card>
 
       <Card className="p-6">
-        <Badge variant="neutral">Profile photo</Badge>
+        <Badge variant="neutral">会员头像</Badge>
         <div className="mt-4 rounded-[28px] border border-dashed border-[var(--border)] bg-[rgba(255,255,255,0.78)] p-5">
           <div className="flex flex-col items-center gap-5 text-center">
             <div
@@ -247,19 +247,19 @@ export function ProfileForm({
             >
               {!photoPath ? (
                 <div className="rounded-2xl bg-white/78 px-4 py-2 text-left shadow-sm">
-                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--gold-strong)]">Photo Slot</p>
-                  <p className="mt-1 text-sm font-medium text-[var(--foreground)]">Ready for premium member portrait</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--gold-strong)]">头像展示位</p>
+                  <p className="mt-1 text-sm font-medium text-[var(--foreground)]">准备放入高质感会员肖像</p>
                 </div>
               ) : null}
             </div>
 
             <div className="space-y-2">
-              <p className="font-semibold text-[var(--foreground)]">Profile image upload</p>
+              <p className="font-semibold text-[var(--foreground)]">头像上传</p>
               <p className="text-sm leading-7 text-[var(--muted)]">
-                Uploading a clear portrait supports personalized posters, onboarding completion, and member identity surfaces.
+                上传清晰头像后，可用于个性化海报、新手引导完成度与会员身份展示等场景。
               </p>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">
-                Supabase Storage bucket: profile-uploads
+                Supabase Storage bucket：profile-uploads
               </p>
             </div>
 
@@ -278,7 +278,7 @@ export function ProfileForm({
               disabled={uploadState.status === "uploading"}
             >
               <UploadCloud className="mr-2 h-4 w-4" />
-              {uploadState.status === "uploading" ? "Uploading..." : "Upload profile photo"}
+              {uploadState.status === "uploading" ? "上传中..." : "上传会员头像"}
             </Button>
 
             {uploadState.status !== "idle" ? (

@@ -71,17 +71,19 @@ a {
 }
 
 .panel {
-  border: 1px solid rgba(220, 207, 190, 0.85);
-  background: linear-gradient(180deg, rgba(255, 251, 245, 0.92), rgba(255, 255, 255, 0.7));
+  border: 1px solid var(--panel-border, rgba(220, 207, 190, 0.85));
+  background: var(--panel-bg, linear-gradient(180deg, rgba(255, 251, 245, 0.92), rgba(255, 255, 255, 0.7)));
   border-radius: 32px;
-  box-shadow:
+  box-shadow: var(
+    --panel-shadow,
     0 30px 80px rgba(77, 60, 39, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    inset 0 1px 0 rgba(255, 255, 255, 0.8)
+  );
 }
 
 .panel-muted {
-  border: 1px solid rgba(220, 207, 190, 0.72);
-  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid var(--panel-muted-border, rgba(220, 207, 190, 0.72));
+  background: var(--panel-muted-bg, rgba(255, 255, 255, 0.52));
   border-radius: 28px;
 }
 

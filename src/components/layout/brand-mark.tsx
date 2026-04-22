@@ -24,7 +24,7 @@ export function BrandMark({
             TOMEI
           </p>
           <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--muted)]">
-            Member Growth Platform
+            会员成长平台
           </p>
         </div>
       ) : null}

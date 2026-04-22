@@ -1,6 +1,8 @@
 import { FeaturePage } from "@/components/app/feature-page";
+import { MediaSampleCard } from "@/components/app/media-sample-card";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { newsSampleResources } from "@/data/member-samples";
 import { newsItems } from "@/data/mock-data";
 import { memberPageContent } from "@/data/page-content";
 
@@ -19,6 +21,19 @@ export default function NewsPage() {
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.summary}</p>
           </Card>
         ))}
+      </section>
+      <section className="space-y-4">
+        <div className="px-1">
+          <h2 className="text-xl font-semibold text-[var(--foreground)]">本周资讯配套资料</h2>
+          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+            资讯页除了文字通知，也可以同步出现活动视频封面、产品资料与内部参考文件。
+          </p>
+        </div>
+        <div className="grid gap-4 lg:grid-cols-2">
+          {newsSampleResources.map((sample) => (
+            <MediaSampleCard key={sample.title} {...sample} />
+          ))}
+        </div>
       </section>
     </div>
   );

@@ -17,25 +17,25 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const valuePillars = [
-  { icon: WandSparkles, label: "Personalized Marketing Tools" },
-  { icon: Sparkles, label: "AI Coach & Concierge" },
-  { icon: Target, label: "Missions & Rewards" },
-  { icon: BookOpen, label: "Learning Center" },
-  { icon: Bot, label: "Campaign Tracking" },
+  { icon: WandSparkles, label: "个性化营销工具" },
+  { icon: Sparkles, label: "AI 教练与 AI 礼宾" },
+  { icon: Target, label: "任务与奖励" },
+  { icon: BookOpen, label: "学习中心" },
+  { icon: Bot, label: "活动追踪" },
 ] as const;
 
 const intelligenceCards = [
   {
     icon: Sparkles,
-    label: "AI Coach",
-    value: "Daily Guidance",
-    note: "Professional, supportive, mentor-like recommendations for products, posts, and campaigns.",
+    label: "AI 教练",
+    value: "每日引导",
+    note: "为产品理解、发帖方向与活动表达提供更专业、更支持式的导师建议。",
   },
   {
     icon: MessageSquareQuote,
-    label: "AI Concierge",
-    value: "Proactive Daily Cards",
-    note: "Today’s focus, featured product, pending mission reminders, and latest announcements.",
+    label: "AI 礼宾",
+    value: "主动式每日卡片",
+    note: "在对话开始前，就先给出今日重点、主推产品、待办任务与最新公告。",
   },
 ] as const;
 
@@ -47,29 +47,29 @@ export function LandingHero() {
       <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(380px,0.95fr)] lg:items-center">
         <div className="space-y-8 luxury-fade-lift">
           <Badge className="w-fit rounded-full border border-[rgba(196,168,114,0.22)] bg-white/76 px-8 py-3 text-base normal-case tracking-[-0.02em] text-[var(--gold-strong)] shadow-[0_14px_35px_rgba(143,110,56,0.08)]">
-            AI-Powered Member Ecosystem
+            AI 驱动的会员成长生态
           </Badge>
 
           <div className="space-y-5">
             <p className="text-xs uppercase tracking-[0.32em] text-[var(--gold-strong)]">
-              {appConfig.company} Malaysia
+              {appConfig.company} 马来西亚
             </p>
             <h1 className="max-w-5xl font-[family-name:var(--font-display)] text-5xl leading-[0.9] tracking-[-0.055em] text-[var(--foreground)] sm:text-6xl lg:text-[6.9rem]">
-              Empowering Every Member to Grow with{" "}
+              让每一位会员都能与{" "}
               <span className="bg-[linear-gradient(180deg,#d7b02f,#b88b13)] bg-clip-text text-transparent">
                 TOMEI
               </span>
+              {" "}一起持续成长
             </h1>
             <p className="max-w-3xl text-lg leading-9 text-[var(--muted)] lg:text-[1.9rem] lg:leading-[1.6]">
-              The premium AI-powered growth platform designed for modern jewelry members.
-              Personalized marketing tools, elegant mission progress, concierge assistance, and
-              campaign-ready learning in one refined ecosystem.
+              这是专为现代珠宝会员打造的高端 AI 成长平台。把个性化营销工具、优雅的任务进度、
+              AI 礼宾协助与面向活动的学习流程，整合进同一个精致而统一的生态里。
             </p>
           </div>
 
           <div className="flex flex-wrap gap-4">
             <Link href="/signup" className={cn(buttonVariants({ size: "lg" }), "h-16 px-9 text-xl")}>
-              Request Demo
+              进入演示
               <ArrowRight className="ml-3 h-5 w-5" />
             </Link>
             <Link
@@ -80,36 +80,36 @@ export function LandingHero() {
               )}
             >
               <Play className="mr-3 h-5 w-5" />
-              Watch Overview
+              查看总览
             </Link>
           </div>
 
           <div className="grid gap-4 pt-4 sm:grid-cols-2 xl:grid-cols-3">
             <div className="rounded-[28px] border border-[rgba(196,168,114,0.16)] bg-white/74 p-5 shadow-[0_14px_38px_rgba(94,73,41,0.07)] transition duration-500 hover:-translate-y-1">
-              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">Mission Ladder</p>
+              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">任务阶梯</p>
               <p className="mt-4 font-[family-name:var(--font-display)] text-5xl tracking-[-0.04em] text-[var(--foreground)]">
                 {missions.length}
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                Progressive missions from onboarding to campaign finale.
+                从新手启用到活动终章，形成清晰递进的成长旅程。
               </p>
             </div>
             <div className="rounded-[28px] border border-[rgba(196,168,114,0.16)] bg-white/74 p-5 shadow-[0_14px_38px_rgba(94,73,41,0.07)] transition duration-500 hover:-translate-y-1">
-              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">Learning Modules</p>
+              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">学习模块</p>
               <p className="mt-4 font-[family-name:var(--font-display)] text-5xl tracking-[-0.04em] text-[var(--foreground)]">
                 {learningModules.length}
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                Brand fluency, product education, and guided AI support.
+                强化品牌表达、产品教育与 AI 引导式辅助。
               </p>
             </div>
             <div className="rounded-[28px] border border-[rgba(196,168,114,0.16)] bg-white/74 p-5 shadow-[0_14px_38px_rgba(94,73,41,0.07)] transition duration-500 hover:-translate-y-1 sm:col-span-2 xl:col-span-1">
-              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">Live Campaigns</p>
+              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">进行中活动</p>
               <p className="mt-4 font-[family-name:var(--font-display)] text-5xl tracking-[-0.04em] text-[var(--foreground)]">
                 {campaigns.length}
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                Brand-approved participation prompts and always-on visibility.
+                让会员随时看见品牌核准的活动重点与参与方向。
               </p>
             </div>
           </div>
@@ -120,14 +120,13 @@ export function LandingHero() {
             <div className="editorial-photo-slot luxury-shimmer min-h-[370px] p-6 lg:min-h-[470px]">
               <div className="relative z-10 flex h-full flex-col justify-between">
                 <div className="max-w-[220px] rounded-[24px] border border-white/26 bg-white/16 px-4 py-3 text-white backdrop-blur-sm">
-                  <p className="text-xs uppercase tracking-[0.24em] text-white/72">Brand Photography Slot</p>
-                  <p className="mt-2 text-xl font-semibold tracking-[-0.03em]">Hero campaign portrait</p>
+                  <p className="text-xs uppercase tracking-[0.24em] text-white/72">品牌摄影展示位</p>
+                  <p className="mt-2 text-xl font-semibold tracking-[-0.03em]">活动主视觉摄影位</p>
                 </div>
                 <div className="max-w-[260px] rounded-[24px] border border-white/26 bg-[rgba(73,42,8,0.2)] px-4 py-4 text-white backdrop-blur-sm">
-                  <p className="text-sm font-medium text-[#fff0be]">Premium member storytelling</p>
+                  <p className="text-sm font-medium text-[#fff0be]">高端会员内容叙事</p>
                   <p className="mt-2 text-sm leading-7 text-white/82">
-                    Designed to hold official campaign photography, collection portraits, or festive
-                    brand-led creative.
+                    这里用于承接官方活动摄影、系列形象照与节庆主题品牌创意画面。
                   </p>
                 </div>
               </div>
@@ -137,8 +136,8 @@ export function LandingHero() {
               <div className="editorial-photo-slot luxury-float min-h-[180px] p-5">
                 <div className="relative z-10 flex h-full items-end">
                   <div className="rounded-[22px] border border-white/28 bg-white/18 px-4 py-3 text-white backdrop-blur-sm">
-                    <p className="text-xs uppercase tracking-[0.22em] text-white/72">Macro Detail Slot</p>
-                    <p className="mt-2 text-lg font-semibold">Jewelry close-up frame</p>
+                    <p className="text-xs uppercase tracking-[0.22em] text-white/72">细节特写展示位</p>
+                    <p className="mt-2 text-lg font-semibold">珠宝微距特写</p>
                   </div>
                 </div>
               </div>

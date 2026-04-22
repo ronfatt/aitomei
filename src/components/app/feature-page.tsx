@@ -24,16 +24,19 @@ export function FeaturePage({ content }: { content: FeaturePageContent }) {
       </section>
       <section className="grid gap-4">
         {content.sections.map((section) => (
-          <Card key={section.title} className="p-6">
-            <CardHeader className="max-w-3xl">
+          <Card
+            key={section.title}
+            className="overflow-hidden border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(42,15,35,0.92),rgba(22,9,20,0.96))] p-6 shadow-[0_24px_80px_rgba(5,3,8,0.34)]"
+          >
+            <CardHeader className="max-w-3xl p-0">
               <CardTitle>{section.title}</CardTitle>
               <CardDescription>{section.description}</CardDescription>
             </CardHeader>
-            <CardContent className="mt-6 grid gap-4 lg:grid-cols-2">
+            <CardContent className="mt-6 grid gap-4 p-0 lg:grid-cols-2">
               {section.items.map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-[28px] border border-[var(--border)] bg-white/70 p-5 shadow-[0_20px_50px_rgba(63,51,36,0.06)]"
+                  className="rounded-[28px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.03))] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.18)]"
                 >
                   {item.eyebrow ? (
                     <Badge className="mb-3 w-fit" variant="neutral">
@@ -50,7 +53,7 @@ export function FeaturePage({ content }: { content: FeaturePageContent }) {
         ))}
       </section>
       {content.actions && content.actions.length > 1 ? (
-        <div className="panel flex flex-wrap gap-3 p-5">
+        <div className="panel flex flex-wrap gap-3 border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(75,17,56,0.38),rgba(42,15,35,0.58))] p-5">
           {content.actions.slice(1).map((action) => (
             <Link key={action.href} href={action.href} className={cn(buttonVariants({ variant: "secondary" }))}>
               {action.label}

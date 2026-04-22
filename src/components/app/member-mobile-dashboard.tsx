@@ -247,44 +247,39 @@ export function MemberMobileDashboard({
           <div className="relative overflow-hidden rounded-[38px] border border-white/8 bg-[radial-gradient(circle_at_top_left,rgba(177,58,134,0.26),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(242,200,107,0.14),transparent_20%),linear-gradient(180deg,rgba(83,19,64,0.94),rgba(31,11,28,0.96))] p-6 shadow-[0_30px_90px_rgba(7,0,12,0.45)] md:p-8">
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),transparent_30%,rgba(255,255,255,0.02)_60%,transparent_100%)]" />
             <div className="relative space-y-6">
-              <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_220px] xl:items-start">
-                <div className="max-w-[720px]">
+              <div className="grid gap-5 xl:grid-cols-[minmax(0,1.58fr)_minmax(240px,0.92fr)] xl:items-start">
+                <div className="max-w-[760px]">
                   <Badge variant="default">今日增长概览</Badge>
                   <p className="mt-6 text-sm font-medium text-[var(--muted)]">早安，{firstName}</p>
-                  <div className="mt-4 max-w-[13ch] space-y-3">
-                    <p className="text-base font-medium tracking-[-0.03em] text-[var(--foreground)]/80 md:text-lg">
-                      今天先把
-                    </p>
-                    <h1 className="font-[family-name:var(--font-display)] text-[2.65rem] leading-[0.94] tracking-[-0.055em] text-[var(--gold)] md:text-[3.45rem] xl:text-[3.9rem]">
-                      任务、奖励、
-                      <br />
-                      AI 助理
+                  <div className="mt-4 max-w-[22ch] space-y-3">
+                    <h1
+                      className="text-balance font-[family-name:var(--font-display)] font-semibold leading-[0.94] tracking-[-0.045em] text-[var(--foreground)]"
+                      style={{ fontSize: "clamp(2.55rem, 4.8vw, 4.4rem)" }}
+                    >
+                      先把今天最重要的三件事做了
                     </h1>
-                    <p className="text-[1.85rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[var(--foreground)]/94 md:text-[2.15rem]">
-                      三件事串起来
+                    <p className="max-w-[52ch] text-sm leading-7 text-[var(--muted)] md:text-base">
+                      完成任务、领取奖励、调用 AI 助理，直接推进你的成长进度。
                     </p>
                   </div>
-                  <p className="mt-6 max-w-[560px] text-sm leading-7 text-[var(--muted)] md:text-base">
-                    今天先推进一项主任务，拿到奖励，再让 AI 帮你把接下来的动作排顺。
-                  </p>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1 xl:pt-2">
-                  <div className="rounded-[26px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1 xl:pt-3">
+                  <div className="rounded-[24px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">当前等级</p>
-                    <p className="mt-3 text-[1.75rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[var(--foreground)]">
+                    <p className="mt-2.5 text-[1.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[var(--foreground)]">
                       {currentTier?.title ?? "标志影响力"}
                     </p>
-                    <p className="mt-2 text-sm text-[var(--muted)]">
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                       距离下一等级还差 {nextGap.toLocaleString()} 积分
                     </p>
                   </div>
-                  <div className="rounded-[26px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
+                  <div className="rounded-[24px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">今日可得奖励</p>
-                    <p className="mt-3 text-[1.9rem] font-semibold leading-none tracking-[-0.045em] text-[var(--gold)]">
+                    <p className="mt-2.5 text-[1.75rem] font-semibold leading-none tracking-[-0.045em] text-[var(--gold)]">
                       {todayRewardPoints} 分
                     </p>
-                    <p className="mt-2 text-sm text-[var(--muted)]">{currentMission?.rewardItem ?? "成长奖励"}</p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{currentMission?.rewardItem ?? "成长奖励"}</p>
                   </div>
                 </div>
               </div>
@@ -294,7 +289,7 @@ export function MemberMobileDashboard({
                   <div className="min-w-0">
                     <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">今日主任务</p>
                     <h2 className="mt-2 text-[2rem] font-semibold tracking-[-0.045em] text-[var(--foreground)]">
-                      {currentMission?.title ?? "继续今日任务"}
+                      {currentMission?.title ?? "生成第一张专属海报"}
                     </h2>
                     <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
                       做完后拿到 {todayRewardPoints} 积分，并继续推进当前等级。
@@ -340,13 +335,13 @@ export function MemberMobileDashboard({
                     icon: Medal,
                   },
                 ].map((item) => (
-                  <div key={item.label} className="rounded-[26px] border border-white/8 bg-white/[0.04] p-4 backdrop-blur-sm">
+                  <div key={item.label} className="flex min-h-[156px] flex-col rounded-[26px] border border-white/8 bg-white/[0.04] p-4 backdrop-blur-sm">
                     <div className="flex items-center justify-between">
                       <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{item.label}</p>
                       <item.icon className="h-4 w-4 text-[var(--gold)]" />
                     </div>
                     <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">{item.value}</p>
-                    <p className="mt-2 text-sm text-[var(--muted)]">{item.detail}</p>
+                    <p className="mt-auto pt-3 text-sm leading-6 text-[var(--muted)]">{item.detail}</p>
                   </div>
                 ))}
               </div>

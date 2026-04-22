@@ -247,30 +247,32 @@ export function MemberMobileDashboard({
           <div className="relative overflow-hidden rounded-[38px] border border-white/8 bg-[radial-gradient(circle_at_top_left,rgba(177,58,134,0.26),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(242,200,107,0.14),transparent_20%),linear-gradient(180deg,rgba(83,19,64,0.94),rgba(31,11,28,0.96))] p-6 shadow-[0_30px_90px_rgba(7,0,12,0.45)] md:p-8">
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),transparent_30%,rgba(255,255,255,0.02)_60%,transparent_100%)]" />
             <div className="relative space-y-6">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                <div className="max-w-2xl">
+              <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_220px] xl:items-start">
+                <div className="max-w-[720px]">
                   <Badge variant="default">今日增长概览</Badge>
-                  <p className="mt-5 text-sm font-medium text-[var(--muted)]">早安，{firstName}</p>
-                  <div className="mt-3 space-y-1">
-                    <p className="text-lg font-medium tracking-[-0.03em] text-[var(--foreground)]/82 md:text-xl">
+                  <p className="mt-6 text-sm font-medium text-[var(--muted)]">早安，{firstName}</p>
+                  <div className="mt-4 max-w-[13ch] space-y-3">
+                    <p className="text-base font-medium tracking-[-0.03em] text-[var(--foreground)]/80 md:text-lg">
                       今天先把
                     </p>
-                    <h1 className="font-[family-name:var(--font-display)] text-[2.6rem] leading-[0.94] tracking-[-0.05em] text-[var(--foreground)] md:text-[4.5rem]">
-                      <span className="whitespace-nowrap text-[var(--gold)]">任务、奖励、AI 助理</span>
+                    <h1 className="font-[family-name:var(--font-display)] text-[2.65rem] leading-[0.94] tracking-[-0.055em] text-[var(--gold)] md:text-[3.45rem] xl:text-[3.9rem]">
+                      任务、奖励、
+                      <br />
+                      AI 助理
                     </h1>
-                    <p className="text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]/92 md:text-[2rem]">
+                    <p className="text-[1.85rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[var(--foreground)]/94 md:text-[2.15rem]">
                       三件事串起来
                     </p>
                   </div>
-                  <p className="mt-5 max-w-xl text-sm leading-7 text-[var(--muted)] md:text-base">
+                  <p className="mt-6 max-w-[560px] text-sm leading-7 text-[var(--muted)] md:text-base">
                     今天先推进一项主任务，拿到奖励，再让 AI 帮你把接下来的动作排顺。
                   </p>
                 </div>
 
-                <div className="grid min-w-[240px] gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1 xl:pt-2">
                   <div className="rounded-[26px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">当前等级</p>
-                    <p className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">
+                    <p className="mt-3 text-[1.75rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[var(--foreground)]">
                       {currentTier?.title ?? "标志影响力"}
                     </p>
                     <p className="mt-2 text-sm text-[var(--muted)]">
@@ -279,7 +281,7 @@ export function MemberMobileDashboard({
                   </div>
                   <div className="rounded-[26px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">今日可得奖励</p>
-                    <p className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-[var(--gold)]">
+                    <p className="mt-3 text-[1.9rem] font-semibold leading-none tracking-[-0.045em] text-[var(--gold)]">
                       {todayRewardPoints} 分
                     </p>
                     <p className="mt-2 text-sm text-[var(--muted)]">{currentMission?.rewardItem ?? "成长奖励"}</p>
@@ -288,10 +290,10 @@ export function MemberMobileDashboard({
               </div>
 
               <div className="rounded-[30px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5">
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="min-w-0">
                     <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">今日主任务</p>
-                    <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">
+                    <h2 className="mt-2 text-[2rem] font-semibold tracking-[-0.045em] text-[var(--foreground)]">
                       {currentMission?.title ?? "继续今日任务"}
                     </h2>
                     <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
@@ -299,12 +301,12 @@ export function MemberMobileDashboard({
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-3">
-                    <Link href={`/member/missions/${currentMission?.id ?? "generate-first-poster"}`} className={cn(buttonVariants({ size: "lg" }), "px-7")}>
+                  <div className="flex flex-wrap gap-3 lg:justify-end">
+                    <Link href={`/member/missions/${currentMission?.id ?? "generate-first-poster"}`} className={cn(buttonVariants({ size: "lg" }), "px-7 whitespace-nowrap")}>
                       继续今日任务
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
-                    <Link href="/member/rewards" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "px-6")}>
+                    <Link href="/member/rewards" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "px-6 whitespace-nowrap !text-white")}>
                       查看奖励
                     </Link>
                   </div>
@@ -379,14 +381,14 @@ export function MemberMobileDashboard({
               </div>
 
               <div className="mt-6 rounded-[30px] border border-white/8 bg-white/[0.05] p-4">
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Input
-                    value={coachPrompt}
-                    onChange={(event) => setCoachPrompt(event.target.value)}
-                    placeholder="问我今天先做什么，或直接让我生成文案、海报、客户跟进话术"
-                    className="h-14 rounded-[22px] text-base"
-                  />
-                  <Button className="h-14 rounded-[22px] px-6" onClick={() => openCoach()} type="button">
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Input
+                      value={coachPrompt}
+                      onChange={(event) => setCoachPrompt(event.target.value)}
+                      placeholder="问我今天先做什么，或直接让我生成文案、海报、客户跟进话术"
+                      className="h-14 rounded-[22px] text-base"
+                    />
+                  <Button className="h-14 rounded-[22px] px-6 text-white" onClick={() => openCoach()} type="button">
                     开始协助
                   </Button>
                 </div>

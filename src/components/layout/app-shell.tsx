@@ -283,7 +283,7 @@ export function AppShell({
               {isMember ? (
                 <Link
                   href="/member/content-studio"
-                  className="flex h-11 min-w-[220px] items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 text-sm text-white/78 transition hover:bg-white/10 hover:text-white"
+                  className="flex h-11 min-w-[220px] items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 text-sm !text-white/85 transition hover:bg-white/10 hover:!text-white"
                 >
                   <Search className="h-4 w-4 text-[var(--gold)]" />
                   搜索任务或创作入口
@@ -294,7 +294,7 @@ export function AppShell({
                 href={role === "admin" ? "/admin/proof-review" : "/member/notifications"}
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
-                  isMember ? "border-white/10 bg-white/6 text-white hover:bg-white/10" : "",
+                  isMember ? "border-white/10 bg-white/6 !text-white hover:bg-white/10" : "",
                 )}
               >
                 <Bell className="mr-2 h-4 w-4" />

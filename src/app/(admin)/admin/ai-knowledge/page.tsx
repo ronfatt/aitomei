@@ -12,7 +12,7 @@ export default async function AdminAiKnowledgePage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="AI 知识库"
-        title="GoldNow AI 回答资料管理"
+        title="Aurex Legacy AI 回答资料管理"
         description="这一页先用本地知识仓作为 MVP 管理入口，已经把来源文件、核心事实卡片与客户追问脚本拆开。后续可直接替换为 Supabase 表与后台 CRUD。"
       />
 

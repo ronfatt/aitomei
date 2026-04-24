@@ -23,7 +23,7 @@ export default function GlobalError({
           <Card className="p-8 text-center">
             <p className="eyebrow">Platform interruption</p>
             <h1 className="mt-4 font-[family-name:var(--font-display)] text-5xl text-[var(--foreground)]">
-              Something interrupted the TOMEI experience
+              Something interrupted the Aurex Legacy experience
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)]">
               We hit an unexpected error while preparing the platform. The reset action retries the current view without forcing the member to restart their journey.

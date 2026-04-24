@@ -96,8 +96,8 @@ export const missions: Mission[] = [
   {
     id: "brand-introduction-lesson",
     sequence: 6,
-    title: "完成 TOMEI 品牌入门课程",
-    description: "了解品牌故事、定位，以及会员应如何对外表达品牌语言。",
+    title: "完成 Aurex Legacy 品牌入门课程",
+    description: "了解品牌故事、资产定位，以及会员应如何对外表达 Aurex Legacy 语言。",
     type: "learning",
     status: "available",
     rewardPoints: 120,
@@ -171,8 +171,8 @@ export const rewardMilestones: RewardMilestone[] = [
   },
   {
     id: "milestone-2",
-    title: "标志影响力",
-    description: "解锁高级内容模板与优先活动邀请。",
+    title: "Legacy Signature",
+    description: "解锁高级内容模板、优先活动邀请与核心礼遇资格。",
     requiredPoints: 1500,
     badge: "臻选会籍",
     status: "current",
@@ -189,27 +189,27 @@ export const rewardMilestones: RewardMilestone[] = [
 
 export const campaigns: Campaign[] = [
   {
-    id: "raya-radiance",
-    title: "Raya 臻彩金辉 2026",
-    theme: "节庆优雅",
-    activePeriod: "2026 年 4 月 20 日 - 5 月 31 日",
-    summary: "以家庭节庆与黄金送礼为主轴，打造更有温度的品牌内容叙事。",
-    cta: "生成节庆海报",
+    id: "heritage-launch",
+    title: "Heritage Launch Collection",
+    theme: "文化珠宝资产",
+    activePeriod: "2026 年 4 月 24 日 - 6 月 30 日",
+    summary: "以高端文化金章与礼赠级珠宝组合，建立更适合高净值沟通的黑金叙事。",
+    cta: "生成黑金海报",
   },
   {
-    id: "bridal-signatures",
-    title: "婚嫁经典系列",
-    theme: "婚嫁与承诺",
+    id: "founder-circle-preview",
+    title: "Founder Circle Preview",
+    theme: "高端会籍",
     activePeriod: "长期进行中",
-    summary: "聚焦经典婚嫁珠宝，搭配推荐话术与见证型内容提示。",
-    cta: "查看活动简报",
+    summary: "聚焦黑卡会籍、私人珠宝顾问与闭门活动邀约的话术预热。",
+    cta: "查看会籍简报",
   },
   {
-    id: "daily-gold-story",
-    title: "每日黄金灵感",
+    id: "digital-provenance-story",
+    title: "Digital Provenance Story",
     theme: "教育型内容",
     activePeriod: "持续进行中",
-    summary: "通过简单提示与 AI 文案辅助，鼓励会员每天持续输出产品教育内容。",
+    summary: "用更容易成交的方式讲清楚编号证书、溯源逻辑与未来资产接口。",
     cta: "查看今日提示",
   },
 ];
@@ -218,15 +218,15 @@ export const newsItems: NewsItem[] = [
   {
     id: "notice-1",
     category: "活动",
-    title: "Raya 活动全新社媒素材已上线",
-    summary: "新的海报版式与短视频结尾卡片现已在内容中心开放使用。",
+    title: "Aurex Legacy 黑金主视觉素材已上线",
+    summary: "新的黑金海报版式、落地页主视觉和高端话术模板现已开放使用。",
     publishedAt: "今天",
   },
   {
     id: "notice-2",
     category: "培训",
-    title: "品牌故事微课程已更新",
-    summary: "入门课程现已加入新的高端定位表述与测验提示。",
+    title: "品牌资产化课程已更新",
+    summary: "入门课程现已加入 Luxury Heritage、Digital Provenance 与 RWA Optionality 的表达方式。",
     publishedAt: "2 天前",
   },
   {
@@ -241,48 +241,48 @@ export const newsItems: NewsItem[] = [
 export const products: ProductHighlight[] = [
   {
     id: "product-1",
-    name: "Celestial 黄金吊坠",
-    category: "黄金珠宝",
-    story: "轻盈百搭，适合日常佩戴、送礼与层次搭配。",
-    priceRange: "RM 899 - RM 1,299",
-    spotlight: "适合做日常优雅感与送礼主题内容。",
+    name: "Heritage Gold Plaque",
+    category: "文化金章",
+    story: "适合礼赠、纪念与编号收藏场景，强调身份与故事价值。",
+    priceRange: "RM 1,880 - RM 3,800",
+    spotlight: "适合做高端礼赠、文化收藏与企业家客户沟通内容。",
   },
   {
     id: "product-2",
-    name: "Promise 钻石戒指",
-    category: "钻石珠宝",
-    story: "现代感承诺戒设计，适用于纪念日、订婚前奏与重要时刻。",
-    priceRange: "RM 2,600 - RM 4,800",
-    spotlight: "适合浪漫、向往感强的内容方向，并可搭配专业教育型文案。",
+    name: "Signature Legacy Pack",
+    category: "会员权益套组",
+    story: "把金章、珠宝权益值与会员礼遇组合成核心成交方案。",
+    priceRange: "RM 5,800 - RM 12,800",
+    spotlight: "适合讲清楚长期账户价值、升级礼遇与私享服务逻辑。",
   },
   {
     id: "product-3",
-    name: "Heritage 传承金镯系列",
-    category: "节庆系列",
-    story: "温润黄金手镯，适合家庭聚会、节庆穿搭与传承礼赠内容。",
-    priceRange: "RM 1,800 - RM 3,500",
-    spotlight: "非常适合节庆活动视觉与家庭情感叙事。",
+    name: "Founder Circle Black Card",
+    category: "顶层会籍",
+    story: "连到私人珠宝顾问、闭门活动与全球礼遇网络的高端会籍结构。",
+    priceRange: "私享邀约制",
+    spotlight: "适合面向高净值客户与圈层邀约场景进行沟通。",
   },
 ];
 
 export const learningModules: LearningModule[] = [
   {
     id: "brand-story",
-    title: "TOMEI 品牌故事",
+    title: "Aurex Legacy 品牌故事",
     category: "品牌基础",
     duration: "8 分钟",
     completionRate: "92%",
     quizId: "brand-story-quiz",
-    summary: "了解品牌叙事、信任线索与高级沟通核心表达。",
+    summary: "了解 Luxury Heritage、会员资产逻辑与高端沟通核心表达。",
   },
   {
     id: "gold-basics",
-    title: "会员黄金珠宝基础",
+    title: "文化金章与数字确权基础",
     category: "产品知识",
     duration: "12 分钟",
     completionRate: "84%",
     quizId: "gold-basics-quiz",
-    summary: "掌握品类、送礼场景，以及如何更有信心地介绍品质价值。",
+    summary: "掌握文化金章、编号证书与礼赠场景，以及如何更有信心地介绍 provenance 价值。",
   },
   {
     id: "luxury-social",
@@ -325,7 +325,7 @@ export const proofQueue: ProofSubmission[] = [
 export const contentTemplates: ContentTemplate[] = [
   {
     id: "template-1",
-    title: "象牙金调签名海报",
+    title: "黑金签名主视觉海报",
     format: "poster",
     audience: "节庆与送礼",
     lastUpdated: "18 Apr 2026",
@@ -339,7 +339,7 @@ export const contentTemplates: ContentTemplate[] = [
   },
   {
     id: "template-3",
-    title: "30 秒活动结尾卡视频模板",
+    title: "30 秒黑卡邀约视频模板",
     format: "video",
     audience: "短视频创作者",
     lastUpdated: "15 Apr 2026",
@@ -349,20 +349,20 @@ export const contentTemplates: ContentTemplate[] = [
 export const recentGeneratedAssets = [
   {
     id: "asset-1",
-    title: "Raya 活动海报",
-    detail: "已套用官方节庆海报模板，并加入会员照片与行动引导。",
+    title: "Heritage Launch 黑金海报",
+    detail: "已套用官方黑金海报模板，并加入会员头像与高端行动引导。",
     status: "已交付",
   },
   {
     id: "asset-2",
-    title: "高端 Instagram 文案",
-    detail: "为节庆送礼主题自动生成的产品教育型文案。",
+    title: "Founder Circle WhatsApp 跟进文案",
+    detail: "为高净值客户生成的私享邀约型跟进话术。",
     status: "已保存",
   },
   {
     id: "asset-3",
-    title: "活动结尾卡短视频",
-    detail: "官方短视频模板已排队，并附带会员专属结尾卡文案。",
+    title: "Digital Provenance 讲解短视频",
+    detail: "官方短视频模板已排队，并附带编号证书讲解结尾卡。",
     status: "排队中",
   },
 ] as const;
@@ -371,19 +371,19 @@ export const memberActivities: ActivityItem[] = [
   {
     id: "activity-1",
     title: "海报请求已完成",
-    detail: "你的 Raya 活动海报已经可以在素材库中查看。",
+    detail: "你的 Heritage Launch 黑金海报已经可以在素材库中查看。",
     when: "18 分钟前",
   },
   {
     id: "activity-2",
     title: "活动提醒",
-    detail: "今日黄金灵感提示已更新，可开始准备今天的内容。",
+    detail: "今日 Digital Provenance 提示已更新，可开始准备今天的内容。",
     when: "1 小时前",
   },
   {
     id: "activity-3",
     title: "课程已完成",
-    detail: "你已完成《TOMEI 品牌故事》，并获得 120 积分。",
+    detail: "你已完成《Aurex Legacy 品牌故事》，并获得 120 积分。",
     when: "昨天",
   },
 ];
@@ -398,7 +398,7 @@ export const adminActivity: ActivityItem[] = [
   {
     id: "admin-activity-2",
     title: "高表现活动",
-    detail: "Raya 活动在本周带来了最高的海报请求转化。",
+    detail: "Heritage Launch 在本周带来了最高的海报请求转化。",
     when: "今天",
   },
   {

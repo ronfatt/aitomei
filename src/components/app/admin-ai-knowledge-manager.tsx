@@ -297,7 +297,7 @@ export function AdminAiKnowledgeManager({ overview }: { overview: AiKnowledgeAdm
         <div className="px-1">
           <h2 className="text-xl font-semibold text-[var(--foreground)]">核心知识卡</h2>
           <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-            这些内容会直接影响 AI 对 GoldNow 核心事实的解释方式。
+            这些内容会直接影响 AI 对 Aurex Legacy 核心事实的解释方式。
           </p>
         </div>
         <div className="grid gap-4 lg:grid-cols-2">

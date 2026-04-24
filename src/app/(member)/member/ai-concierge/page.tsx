@@ -8,16 +8,16 @@ export default function AiConciergePage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="AI 礼宾"
-        title="GoldNow 主动提示中心"
-        description="在你还没开始对话前，AI 礼宾会先把 demo 最常用、最容易打动客户的 GoldNow 重点整理给你。"
+        title="Aurex Legacy 主动提示中心"
+        description="在你还没开始对话前，AI 礼宾会先把 demo 最常用、最容易打动客户的 Aurex Legacy 重点整理给你。"
       />
       <section className="grid gap-4 lg:grid-cols-3">
         {[
-          ["今日最该先讲", "GoldNow 不是虚拟概念黄金，而是有真实黄金支持、可数字化持有、可兑换实体黄金。"],
-          ["客户最容易记住的点", "从 0.1 克就能开始，这个门槛非常适合 demo 时先抛出来。"],
-          ["Shariah 重点", "真实资产支持、无利息、无保证回报，这三个关键词最值得主动说。"],
-          ["信任基础", "Tomei 成立于 1968 年，是马来西亚上市黄金与珠宝集团，并有 60+ 零售网点。"],
-          ["兑换卖点", "用户可在 App 管理黄金，并到 Tomei 门店兑换与领取实体黄金。"],
+          ["今日最该先讲", "Aurex Legacy 不是普通珠宝零售，而是文化珠宝资产、会员权益账户与数字确权的组合生态。"],
+          ["客户最容易记住的点", "它同时踩中 Luxury Brand、Membership Economy、Asset Digitization 和 RWA Optionality 四条资本语言。"],
+          ["会员重点", "先讲清楚 Privilege Account：不是一次性卖货，而是长期权益与服务关系。"],
+          ["信任基础", "它的设计逻辑是用真实商品、会员体系和可审计的编号证书，去承接长期品牌价值。"],
+          ["成交切口", "先从 Heritage Gold Plaque 或 Signature Legacy Pack 讲起，更容易进入高端礼赠与身份表达场景。"],
           ["当前知识来源", goldnowKnowledgeSourceNote],
         ].map(([title, detail]) => (
           <Card key={title} className="p-6">

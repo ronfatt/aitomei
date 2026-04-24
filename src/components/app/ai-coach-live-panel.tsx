@@ -81,9 +81,9 @@ const SAVED_SNIPPETS_KEY = "tomei.ai_coach.saved_snippets.v1";
 const DEFAULT_SUGGESTED_ACTIONS = ["先讲一句人话定义", "再讲真实黄金支持", "最后补实体兑换"];
 
 const welcomeQuickQuestions = [
-  "一句话介绍 GoldNow",
+  "一句话介绍 Aurex Legacy",
   "这是不是 MLM？",
-  "为什么符合 Shariah？",
+  "它的会员权益怎么讲？",
   "帮我写跟进话术",
   "模拟客户追问",
   "生成 demo 讲解话术",
@@ -92,19 +92,19 @@ const welcomeQuickQuestions = [
 const commonScenarios = [
   {
     title: "一句话介绍",
-    prompt: "请用一句人话介绍 GoldNow by Tomei，语气专业但自然。",
+    prompt: "请用一句人话介绍 Aurex Legacy，语气专业但自然。",
   },
   {
     title: "20 秒讲解",
-    prompt: "请把 GoldNow 讲成 20 秒销售介绍，突出真实黄金支持与 Tomei 信任基础。",
+    prompt: "请把 Aurex Legacy 讲成 20 秒销售介绍，突出文化珠宝资产、会员权益与数字确权。",
   },
   {
     title: "WhatsApp 跟进",
-    prompt: "请生成一段 WhatsApp 跟进文案，邀请客户继续了解 GoldNow。",
+    prompt: "请生成一段 WhatsApp 跟进文案，邀请客户继续了解 Aurex Legacy。",
   },
   {
     title: "Demo 开场白",
-    prompt: "请帮我生成一段适合 demo 开场的 GoldNow 讲解话术，控制在 30 秒内。",
+    prompt: "请帮我生成一段适合 demo 开场的 Aurex Legacy 讲解话术，控制在 30 秒内。",
   },
 ] as const;
 
@@ -328,7 +328,7 @@ function buildSourceSummary(
 
   return [
     {
-      label: "GoldNow FAQ",
+      label: "Aurex FAQ",
       detail: `${Math.min(knowledgeCards.length, 3)} 条核心产品知识`,
     },
     {
@@ -923,12 +923,12 @@ export function AiCoachLivePanel({
 
   return (
     <section className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
-      <Card className="flex min-h-[78vh] flex-col overflow-hidden border-[rgba(255,255,255,0.08)] bg-[radial-gradient(circle_at_top_left,rgba(177,58,134,0.18),transparent_28%),linear-gradient(180deg,rgba(42,15,35,0.98),rgba(18,7,15,0.99))] p-0 shadow-[0_34px_120px_rgba(5,3,8,0.36)]">
+      <Card className="flex min-h-[78vh] flex-col overflow-hidden border-[rgba(255,255,255,0.08)] bg-[radial-gradient(circle_at_top_left,rgba(242,200,107,0.14),transparent_26%),linear-gradient(180deg,rgba(18,15,12,0.98),rgba(8,7,6,0.99))] p-0 shadow-[0_34px_120px_rgba(0,0,0,0.36)]">
         <div className="border-b border-[rgba(255,255,255,0.08)] px-5 py-5 sm:px-6">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="default">GoldNow AI 教练</Badge>
+                <Badge variant="default">Aurex AI 教练</Badge>
                 <Badge variant="neutral">在线</Badge>
                 <Badge variant="neutral">已连接知识库</Badge>
                 <Badge variant="neutral">销售教练模式</Badge>
@@ -938,7 +938,7 @@ export function AiCoachLivePanel({
               </div>
               <div>
                 <h1 className="font-[family-name:var(--font-display)] text-4xl tracking-[-0.04em] text-[var(--foreground)]">
-                  GoldNow AI 教练
+                  Aurex AI 教练
                 </h1>
                 <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--muted)]">
                   随时问我产品介绍、客户异议、跟进话术或 demo 场景。
@@ -1001,7 +1001,7 @@ export function AiCoachLivePanel({
                   className={cn("flex gap-3", isAssistant ? "justify-start" : "justify-end")}
                 >
                   {isAssistant ? (
-                    <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[rgba(216,177,91,0.18)] bg-[linear-gradient(180deg,rgba(242,200,107,0.14),rgba(177,58,134,0.18))] text-[var(--gold-strong)]">
+                    <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[rgba(216,177,91,0.18)] bg-[linear-gradient(180deg,rgba(242,200,107,0.14),rgba(255,255,255,0.04))] text-[var(--gold-strong)]">
                       <Bot className="size-4" />
                     </div>
                   ) : null}
@@ -1011,7 +1011,7 @@ export function AiCoachLivePanel({
                       "max-w-[88%] rounded-[28px] border px-4 py-4 shadow-[0_14px_30px_rgba(0,0,0,0.14)] sm:max-w-[78%]",
                       isAssistant
                         ? "border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.03))]"
-                        : "border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(177,58,134,0.18),rgba(255,255,255,0.04))]",
+                        : "border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(242,200,107,0.12),rgba(255,255,255,0.04))]",
                     )}
                   >
                     <div className="mb-2 flex items-center justify-between gap-3">
@@ -1145,13 +1145,13 @@ export function AiCoachLivePanel({
           ) : (
             <div className="space-y-5">
               <div className="flex gap-3">
-                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[rgba(216,177,91,0.18)] bg-[linear-gradient(180deg,rgba(242,200,107,0.14),rgba(177,58,134,0.18))] text-[var(--gold-strong)]">
+                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[rgba(216,177,91,0.18)] bg-[linear-gradient(180deg,rgba(242,200,107,0.14),rgba(255,255,255,0.04))] text-[var(--gold-strong)]">
                   <Bot className="size-4" />
                 </div>
                 <div className="max-w-[88%] rounded-[28px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.03))] px-4 py-4 shadow-[0_14px_30px_rgba(0,0,0,0.14)] sm:max-w-[78%]">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--gold-strong)]">AI 教练</p>
                   <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">
-                    早安。今天你可以直接问我 GoldNow 怎么介绍、客户异议怎么回，或者让我帮你写 WhatsApp 跟进话术。
+                    早安。今天你可以直接问我 Aurex Legacy 怎么介绍、客户异议怎么回，或者让我帮你写 WhatsApp 跟进话术。
                   </p>
                 </div>
               </div>
@@ -1173,7 +1173,7 @@ export function AiCoachLivePanel({
 
           {isLoading && !latestAssistantMessage ? (
             <div className="flex gap-3">
-              <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[rgba(216,177,91,0.18)] bg-[linear-gradient(180deg,rgba(242,200,107,0.14),rgba(177,58,134,0.18))] text-[var(--gold-strong)]">
+              <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[rgba(216,177,91,0.18)] bg-[linear-gradient(180deg,rgba(242,200,107,0.14),rgba(255,255,255,0.04))] text-[var(--gold-strong)]">
                 <Bot className="size-4" />
               </div>
               <div className="rounded-[28px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-4 py-4">
@@ -1198,7 +1198,7 @@ export function AiCoachLivePanel({
               <Textarea
                 value={prompt}
                 onChange={(event) => setPrompt(event.target.value)}
-                placeholder="问我 GoldNow 怎么介绍 / 问我客户异议怎么回应 / 让我帮你写跟进话术"
+                placeholder="问我 Aurex Legacy 怎么介绍 / 问我客户异议怎么回应 / 让我帮你写跟进话术"
                 className="min-h-24 border-none bg-transparent px-0 py-0 text-sm shadow-none placeholder:text-[var(--muted)]/75 focus:ring-0"
               />
               <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-[rgba(255,255,255,0.08)] pt-3">
@@ -1305,7 +1305,7 @@ export function AiCoachLivePanel({
                 className="rounded-[20px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-4 py-3"
               >
                 <div className="flex items-center gap-2">
-                  {item.label === "GoldNow FAQ" ? <DatabaseZap className="size-4 text-[var(--gold)]" /> : null}
+                  {item.label === "Aurex FAQ" ? <DatabaseZap className="size-4 text-[var(--gold)]" /> : null}
                   {item.label === "Shariah FAQ" ? <ShieldCheck className="size-4 text-[var(--gold)]" /> : null}
                   {item.label === "Demo 脚本" ? <Sparkles className="size-4 text-[var(--gold)]" /> : null}
                   {item.label === "销售异议库" ? <Languages className="size-4 text-[var(--gold)]" /> : null}

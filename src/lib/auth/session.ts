@@ -5,20 +5,20 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import type { AuthenticatedUser, UserRole } from "@/types/domain";
 
-export const DEMO_ROLE_COOKIE = "tomei_demo_role";
+export const DEMO_ROLE_COOKIE = "aurex_legacy_demo_role";
 
 const demoUsers: Record<UserRole, AuthenticatedUser> = {
   member: {
     id: "demo-member",
-    email: "member.demo@tomei-growth.local",
+    email: "member.demo@aurex-legacy.local",
     role: "member",
     displayName: "Nur Amirah",
   },
   admin: {
     id: "demo-admin",
-    email: "admin.demo@tomei-growth.local",
+    email: "admin.demo@aurex-legacy.local",
     role: "admin",
-    displayName: "Platform Admin",
+    displayName: "Aurex Legacy Admin",
   },
 };
 
@@ -95,12 +95,12 @@ export async function getAuthContext(
       id: user.id,
       email: user.email ?? "",
       role,
-      displayName:
+        displayName:
         profileDisplayName ||
         user.user_metadata.display_name ||
         user.user_metadata.first_name ||
         user.email?.split("@")[0] ||
-        "TOMEI Member",
+        "Aurex Legacy Member",
     },
   };
 }

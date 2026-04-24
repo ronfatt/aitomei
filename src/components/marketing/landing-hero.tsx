@@ -1,14 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  BookOpen,
-  Bot,
-  MessageSquareQuote,
-  Play,
-  Sparkles,
-  Target,
-  WandSparkles,
-} from "lucide-react";
+import { ArrowRight, BookOpen, Gem, ShieldCheck, Star, Users } from "lucide-react";
 
 import { appConfig } from "@/config/app";
 import { campaigns, learningModules, missions } from "@/data/mock-data";
@@ -16,164 +8,168 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const valuePillars = [
-  { icon: WandSparkles, label: "个性化营销工具" },
-  { icon: Sparkles, label: "AI 教练与 AI 礼宾" },
-  { icon: Target, label: "任务与奖励" },
-  { icon: BookOpen, label: "学习中心" },
-  { icon: Bot, label: "活动追踪" },
+const platformTiles = [
+  {
+    title: "Heritage Gold Plaque",
+    detail: "限量编号、定制故事与高端礼赠价值。",
+    accent: "High Jewelry",
+  },
+  {
+    title: "Privilege Account",
+    detail: "把会员权益、消费额度与升级礼遇沉淀成长期关系。",
+    accent: "Membership",
+  },
+  {
+    title: "Digital Provenance",
+    detail: "绑定唯一编号证书，支撑溯源、防伪与未来资产接口。",
+    accent: "Provenance",
+  },
+  {
+    title: "Global Club",
+    detail: "连到活动邀请、私享服务、优先购买与跨区域权益网络。",
+    accent: "Maison",
+  },
 ] as const;
 
-const intelligenceCards = [
-  {
-    icon: Sparkles,
-    label: "AI 教练",
-    value: "每日引导",
-    note: "为产品理解、发帖方向与活动表达提供更专业、更支持式的导师建议。",
-  },
-  {
-    icon: MessageSquareQuote,
-    label: "AI 礼宾",
-    value: "主动式每日卡片",
-    note: "在对话开始前，就先给出今日重点、主推产品、待办任务与最新公告。",
-  },
+const trustSignals = [
+  { icon: Gem, title: "文化珠宝资产", detail: "高端收藏、礼赠与传承叙事。" },
+  { icon: Users, title: "会员权益账户", detail: "从单次成交升级为账户制关系。" },
+  { icon: ShieldCheck, title: "数字确权体系", detail: "记录 provenance、编号与审计基础。" },
+  { icon: BookOpen, title: "资本故事接口", detail: "为未来 RWA 与国际治理预留基础设施。" },
 ] as const;
 
 export function LandingHero() {
   return (
-    <section className="relative overflow-hidden rounded-[44px] border border-white/70 bg-[radial-gradient(circle_at_top_left,rgba(234,216,183,0.36),transparent_24%),radial-gradient(circle_at_86%_18%,rgba(196,168,114,0.18),transparent_22%),linear-gradient(180deg,rgba(255,251,245,0.98),rgba(247,240,232,0.94))] px-6 py-8 shadow-[0_34px_100px_rgba(86,66,39,0.12)] lg:px-10 lg:py-10">
-      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.16),transparent_20%,rgba(255,255,255,0.06)_42%,transparent_56%)]" />
+    <section className="relative overflow-hidden rounded-[44px] border border-[rgba(216,177,91,0.12)] bg-[radial-gradient(circle_at_18%_18%,rgba(216,177,91,0.12),transparent_18%),linear-gradient(180deg,#050505_0%,#080706_46%,#0b0908_100%)] px-6 py-6 shadow-[0_40px_120px_rgba(0,0,0,0.45)] lg:px-7 lg:py-7">
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.04),transparent_16%,rgba(216,177,91,0.04)_48%,transparent_62%)]" />
 
-      <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(380px,0.95fr)] lg:items-center">
-        <div className="space-y-8 luxury-fade-lift">
-          <Badge className="w-fit rounded-full border border-[rgba(196,168,114,0.22)] bg-white/76 px-8 py-3 text-base normal-case tracking-[-0.02em] text-[var(--gold-strong)] shadow-[0_14px_35px_rgba(143,110,56,0.08)]">
-            AI 驱动的会员成长生态
-          </Badge>
-
-          <div className="space-y-5">
-            <p className="text-xs uppercase tracking-[0.32em] text-[var(--gold-strong)]">
-              {appConfig.company} 马来西亚
-            </p>
-            <h1 className="max-w-5xl font-[family-name:var(--font-display)] text-5xl leading-[0.9] tracking-[-0.055em] text-[var(--foreground)] sm:text-6xl lg:text-[6.9rem]">
-              让每一位会员都能与{" "}
-              <span className="bg-[linear-gradient(180deg,#d7b02f,#b88b13)] bg-clip-text text-transparent">
-                TOMEI
-              </span>
-              {" "}一起持续成长
-            </h1>
-            <p className="max-w-3xl text-lg leading-9 text-[var(--muted)] lg:text-[1.9rem] lg:leading-[1.6]">
-              这是专为现代珠宝会员打造的高端 AI 成长平台。把个性化营销工具、优雅的任务进度、
-              AI 礼宾协助与面向活动的学习流程，整合进同一个精致而统一的生态里。
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            <Link href="/signup" className={cn(buttonVariants({ size: "lg" }), "h-16 px-9 text-xl")}>
-              进入演示
-              <ArrowRight className="ml-3 h-5 w-5" />
-            </Link>
-            <Link
-              href="/member/dashboard"
-              className={cn(
-                buttonVariants({ variant: "secondary", size: "lg" }),
-                "h-16 border-[rgba(196,168,114,0.42)] bg-white/80 px-9 text-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]",
-              )}
-            >
-              <Play className="mr-3 h-5 w-5" />
-              查看总览
-            </Link>
-          </div>
-
-          <div className="grid gap-4 pt-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div className="rounded-[28px] border border-[rgba(196,168,114,0.16)] bg-white/74 p-5 shadow-[0_14px_38px_rgba(94,73,41,0.07)] transition duration-500 hover:-translate-y-1">
-              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">任务阶梯</p>
-              <p className="mt-4 font-[family-name:var(--font-display)] text-5xl tracking-[-0.04em] text-[var(--foreground)]">
-                {missions.length}
-              </p>
-              <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                从新手启用到活动终章，形成清晰递进的成长旅程。
-              </p>
-            </div>
-            <div className="rounded-[28px] border border-[rgba(196,168,114,0.16)] bg-white/74 p-5 shadow-[0_14px_38px_rgba(94,73,41,0.07)] transition duration-500 hover:-translate-y-1">
-              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">学习模块</p>
-              <p className="mt-4 font-[family-name:var(--font-display)] text-5xl tracking-[-0.04em] text-[var(--foreground)]">
-                {learningModules.length}
-              </p>
-              <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                强化品牌表达、产品教育与 AI 引导式辅助。
-              </p>
-            </div>
-            <div className="rounded-[28px] border border-[rgba(196,168,114,0.16)] bg-white/74 p-5 shadow-[0_14px_38px_rgba(94,73,41,0.07)] transition duration-500 hover:-translate-y-1 sm:col-span-2 xl:col-span-1">
-              <p className="text-xs uppercase tracking-[0.26em] text-[var(--muted)]">进行中活动</p>
-              <p className="mt-4 font-[family-name:var(--font-display)] text-5xl tracking-[-0.04em] text-[var(--foreground)]">
-                {campaigns.length}
-              </p>
-              <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                让会员随时看见品牌核准的活动重点与参与方向。
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative grid gap-5 lg:pl-4">
-          <div className="grid gap-5 sm:grid-cols-[1.08fr_0.92fr]">
-            <div className="editorial-photo-slot luxury-shimmer min-h-[370px] p-6 lg:min-h-[470px]">
-              <div className="relative z-10 flex h-full flex-col justify-between">
-                <div className="max-w-[220px] rounded-[24px] border border-white/26 bg-white/16 px-4 py-3 text-white backdrop-blur-sm">
-                  <p className="text-xs uppercase tracking-[0.24em] text-white/72">品牌摄影展示位</p>
-                  <p className="mt-2 text-xl font-semibold tracking-[-0.03em]">活动主视觉摄影位</p>
-                </div>
-                <div className="max-w-[260px] rounded-[24px] border border-white/26 bg-[rgba(73,42,8,0.2)] px-4 py-4 text-white backdrop-blur-sm">
-                  <p className="text-sm font-medium text-[#fff0be]">高端会员内容叙事</p>
-                  <p className="mt-2 text-sm leading-7 text-white/82">
-                    这里用于承接官方活动摄影、系列形象照与节庆主题品牌创意画面。
-                  </p>
-                </div>
+      <div className="relative grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+        <div className="flex min-h-[720px] flex-col rounded-[34px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(13,11,9,0.96),rgba(7,6,5,0.94))] px-8 py-8 lg:px-10 lg:py-10">
+          <div className="flex items-center gap-4 text-[rgba(242,227,198,0.62)]">
+            <div className="space-y-2 pr-2">
+              <p className="text-sm tracking-[0.28em] text-[var(--gold)]">01</p>
+              <div className="space-y-2 py-2">
+                <span className="block h-2 w-2 rounded-full bg-[var(--gold)]" />
+                <span className="block h-2 w-2 rounded-full bg-white/18" />
+                <span className="block h-2 w-2 rounded-full bg-white/18" />
+                <span className="block h-2 w-2 rounded-full bg-white/18" />
+                <span className="block h-2 w-2 rounded-full bg-white/18" />
               </div>
+              <p className="text-sm tracking-[0.28em] text-[rgba(242,227,198,0.54)]">05</p>
             </div>
 
-            <div className="space-y-5">
-              <div className="editorial-photo-slot luxury-float min-h-[180px] p-5">
-                <div className="relative z-10 flex h-full items-end">
-                  <div className="rounded-[22px] border border-white/28 bg-white/18 px-4 py-3 text-white backdrop-blur-sm">
-                    <p className="text-xs uppercase tracking-[0.22em] text-white/72">细节特写展示位</p>
-                    <p className="mt-2 text-lg font-semibold">珠宝微距特写</p>
-                  </div>
+            <div className="space-y-7">
+              <Badge className="w-fit rounded-full border border-[rgba(216,177,91,0.18)] bg-[rgba(216,177,91,0.08)] px-6 py-2 text-sm normal-case tracking-[0.02em] text-[var(--gold)]">
+                Global Luxury Heritage Assets Platform
+              </Badge>
+
+              <div className="space-y-5">
+                <p className="text-xs uppercase tracking-[0.34em] text-[rgba(242,227,198,0.58)]">
+                  {appConfig.company}
+                </p>
+                <h1 className="font-[family-name:var(--font-display)] text-[clamp(3.7rem,8vw,7.1rem)] leading-[0.9] tracking-[-0.06em] text-[rgba(233,194,117,0.98)]">
+                  TIMELESS
+                  <br />
+                  HERITAGE
+                  <br />
+                  ASSET VALUE
+                </h1>
+                <div className="flex items-center gap-4 text-[rgba(242,227,198,0.56)]">
+                  <span className="h-px w-20 bg-[linear-gradient(90deg,rgba(216,177,91,0.95),rgba(216,177,91,0.1))]" />
+                  <Star className="h-3.5 w-3.5 text-[var(--gold)]" />
                 </div>
+                <p className="max-w-[34rem] text-lg leading-9 text-[rgba(242,227,198,0.74)]">
+                  以高端文化金章、珠宝消费权益、数字确权证书与全球会员网络，重新定义奢侈消费品的长期资产关系。
+                </p>
               </div>
-              <div className="rounded-[30px] border border-white/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.88),rgba(252,248,242,0.84))] p-5 shadow-[0_32px_90px_rgba(86,66,39,0.16)] backdrop-blur-sm">
-                {intelligenceCards.map((card) => (
+
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/api/demo-login?role=member"
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "h-14 rounded-none border border-[rgba(216,177,91,0.42)] bg-transparent px-8 text-[0.95rem] font-medium tracking-[0.2em] text-[var(--gold)] shadow-none hover:bg-[rgba(216,177,91,0.08)]",
+                  )}
+                >
+                  DISCOVER MEMBER
+                </Link>
+                <Link
+                  href="/member/dashboard"
+                  className={cn(
+                    buttonVariants({ variant: "secondary", size: "lg" }),
+                    "h-14 rounded-none border border-white/10 bg-[rgba(255,255,255,0.03)] px-8 text-[0.95rem] font-medium tracking-[0.18em] text-[rgba(245,234,214,0.88)] hover:bg-[rgba(255,255,255,0.06)]",
+                  )}
+                >
+                  VIEW DASHBOARD
+                  <ArrowRight className="ml-3 h-4 w-4" />
+                </Link>
+              </div>
+
+              <div className="grid gap-4 pt-6 sm:grid-cols-3">
+                {[
+                  { label: "任务路径", value: `${missions.length}`, detail: "从启用到黑卡成长闭环" },
+                  { label: "活跃模块", value: `${learningModules.length}`, detail: "知识、AI 与会员礼遇协同" },
+                  { label: "当前主题", value: `${campaigns.length}`, detail: "围绕活动与收藏叙事持续更新" },
+                ].map((item) => (
                   <div
-                    key={card.label}
-                    className="rounded-[24px] border border-[rgba(196,168,114,0.14)] bg-white/76 px-4 py-4 shadow-[0_14px_40px_rgba(94,73,41,0.08)] first:mb-4"
+                    key={item.label}
+                    className="rounded-[24px] border border-[rgba(216,177,91,0.12)] bg-[rgba(255,255,255,0.02)] p-4"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] bg-[linear-gradient(135deg,#d6af33,#bb8f15)] text-white shadow-[0_18px_35px_rgba(185,140,28,0.28)]">
-                        <card.icon className="h-7 w-7" />
-                      </div>
-                      <div className="min-w-0 flex-1 pt-1">
-                        <p className="text-base font-medium text-[var(--gold-strong)]">{card.label}</p>
-                        <p className="text-[1.45rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--foreground)]">
-                          {card.value}
-                        </p>
-                        <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{card.note}</p>
-                      </div>
-                    </div>
+                    <p className="text-[11px] uppercase tracking-[0.24em] text-[rgba(242,227,198,0.48)]">
+                      {item.label}
+                    </p>
+                    <p className="mt-4 font-[family-name:var(--font-display)] text-4xl tracking-[-0.05em] text-white">
+                      {item.value}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-[rgba(242,227,198,0.6)]">{item.detail}</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         </div>
+
+        <div className="grid gap-6">
+          <div className="relative min-h-[720px] overflow-hidden rounded-[34px] border border-[rgba(216,177,91,0.12)] bg-black">
+            <Image
+              src="/brand/aurex-legacy-hero-reference.png"
+              alt="Aurex Legacy 黑金珠宝主视觉"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(270deg,rgba(0,0,0,0.08),rgba(0,0,0,0.12)_24%,rgba(0,0,0,0.78)_100%)]" />
+            <div className="absolute inset-x-0 bottom-0 grid gap-px bg-[rgba(216,177,91,0.14)] md:grid-cols-4">
+              {platformTiles.map((tile) => (
+                <div
+                  key={tile.title}
+                  className="bg-[linear-gradient(180deg,rgba(8,7,6,0.92),rgba(8,7,6,0.86))] p-5 backdrop-blur-sm"
+                >
+                  <p className="text-[11px] uppercase tracking-[0.24em] text-[var(--gold)]">{tile.accent}</p>
+                  <h3 className="mt-4 font-[family-name:var(--font-display)] text-[1.6rem] tracking-[-0.04em] text-[rgba(245,234,214,0.94)]">
+                    {tile.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[rgba(242,227,198,0.66)]">{tile.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="relative mt-10 grid gap-8 border-t border-[rgba(196,168,114,0.14)] pt-8 sm:grid-cols-2 xl:grid-cols-5">
-        {valuePillars.map((item) => (
-          <div key={item.label} className="flex flex-col items-center gap-4 text-center luxury-fade-lift">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border border-[rgba(196,168,114,0.16)] bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.92),rgba(244,236,223,0.84))] text-[var(--gold)] shadow-[0_20px_40px_rgba(143,110,56,0.08)]">
-              <item.icon className="h-10 w-10" />
+      <div className="relative mt-8 grid gap-4 border-t border-[rgba(216,177,91,0.1)] pt-6 xl:grid-cols-4">
+        {trustSignals.map((item) => (
+          <div
+            key={item.title}
+            className="flex items-start gap-4 rounded-[24px] border border-[rgba(216,177,91,0.1)] bg-[rgba(255,255,255,0.02)] p-4"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(216,177,91,0.18)] text-[var(--gold)]">
+              <item.icon className="h-5 w-5" />
             </div>
-            <p className="text-lg font-medium tracking-[-0.02em] text-[var(--muted)]">{item.label}</p>
+            <div>
+              <p className="text-sm uppercase tracking-[0.18em] text-[rgba(245,234,214,0.82)]">{item.title}</p>
+              <p className="mt-2 text-sm leading-6 text-[rgba(242,227,198,0.58)]">{item.detail}</p>
+            </div>
           </div>
         ))}
       </div>

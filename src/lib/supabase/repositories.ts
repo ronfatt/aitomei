@@ -391,7 +391,7 @@ export async function getProofReviewQueue(): Promise<ProofSubmission[]> {
       memberName:
         nameByUserId.get(submission.user_id) ??
         emailByUserId.get(submission.user_id) ??
-        "TOMEI 会员",
+        "Aurex Legacy 会员",
       missionTitle: missionTitleById.get(submission.mission_id) ?? "任务审核",
       platform: submission.platform,
       submittedAt: formatDistanceToNow(new Date(submission.submitted_at), { addSuffix: true, locale: zhCN }),

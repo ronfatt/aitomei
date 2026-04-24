@@ -244,12 +244,12 @@ export function MemberMobileDashboard({
     <div className="space-y-6 pb-6">
       <section className="grid gap-6 xl:grid-cols-12">
         <div className="xl:col-span-7">
-          <div className="relative overflow-hidden rounded-[38px] border border-white/8 bg-[radial-gradient(circle_at_top_left,rgba(177,58,134,0.26),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(242,200,107,0.14),transparent_20%),linear-gradient(180deg,rgba(83,19,64,0.94),rgba(31,11,28,0.96))] p-6 shadow-[0_30px_90px_rgba(7,0,12,0.45)] md:p-8">
+          <div className="relative overflow-hidden rounded-[38px] border border-white/8 bg-[radial-gradient(circle_at_top_left,rgba(242,200,107,0.14),transparent_24%),radial-gradient(circle_at_85%_18%,rgba(255,255,255,0.04),transparent_18%),linear-gradient(180deg,rgba(18,15,12,0.98),rgba(8,7,6,0.98))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.45)] md:p-8">
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),transparent_30%,rgba(255,255,255,0.02)_60%,transparent_100%)]" />
             <div className="relative space-y-6">
               <div className="grid gap-5 xl:grid-cols-[minmax(0,1.58fr)_minmax(240px,0.92fr)] xl:items-start">
                 <div className="max-w-[760px]">
-                  <Badge variant="default">今日增长概览</Badge>
+                  <Badge variant="default">Aurex 今日增长概览</Badge>
                   <p className="mt-6 text-sm font-medium text-[var(--muted)]">早安，{firstName}</p>
                   <div className="mt-4 max-w-[22ch] space-y-3">
                     <h1
@@ -259,7 +259,7 @@ export function MemberMobileDashboard({
                       先把今天最重要的三件事做了
                     </h1>
                     <p className="max-w-[52ch] text-sm leading-7 text-[var(--muted)] md:text-base">
-                      完成任务、领取奖励、调用 AI 助理，直接推进你的成长进度。
+                      先推进主任务、拿到奖励，再让 AI 帮你排好接下来的客户与内容节奏。
                     </p>
                   </div>
                 </div>
@@ -268,7 +268,7 @@ export function MemberMobileDashboard({
                   <div className="rounded-[24px] border border-white/8 bg-white/6 p-4 backdrop-blur-sm">
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">当前等级</p>
                     <p className="mt-2.5 text-[1.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-[var(--foreground)]">
-                      {currentTier?.title ?? "标志影响力"}
+                      {currentTier?.title ?? "Legacy Signature"}
                     </p>
                     <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                       距离下一等级还差 {nextGap.toLocaleString()} 积分
@@ -292,7 +292,7 @@ export function MemberMobileDashboard({
                       {currentMission?.title ?? "生成第一张专属海报"}
                     </h2>
                     <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                      做完后拿到 {todayRewardPoints} 积分，并继续推进当前等级。
+                      做完后拿到 {todayRewardPoints} 积分，并继续推进你的 Aurex Legacy 会籍进度。
                     </p>
                   </div>
 
@@ -350,12 +350,12 @@ export function MemberMobileDashboard({
         </div>
 
         <div className="xl:col-span-5">
-          <div className="relative overflow-hidden rounded-[38px] border border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.14),transparent_20%),linear-gradient(180deg,rgba(48,17,40,0.98),rgba(20,9,20,0.98))] p-6 shadow-[0_30px_90px_rgba(7,0,12,0.42)] md:p-8">
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_24%,rgba(177,58,134,0.06))]" />
+          <div className="relative overflow-hidden rounded-[38px] border border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.14),transparent_18%),linear-gradient(180deg,rgba(17,14,11,0.98),rgba(8,7,6,0.98))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.42)] md:p-8">
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent_24%,rgba(242,200,107,0.04))]" />
             <div className="relative">
               <div className="flex items-start justify-between gap-4">
                 <div className="max-w-lg">
-                  <Badge variant="default">AI 教练</Badge>
+                  <Badge variant="default">Aurex AI Concierge</Badge>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {["已连接品牌知识库", "已载入今日任务上下文", "可生成海报 / 文案 / 话术"].map((item) => (
                       <span key={item} className="rounded-full border border-white/8 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium text-[var(--muted)]">
@@ -364,13 +364,13 @@ export function MemberMobileDashboard({
                     ))}
                   </div>
                   <h2 className="mt-5 text-3xl font-semibold tracking-[-0.05em] text-[var(--foreground)] md:text-4xl">
-                    AI 正在协助你推进今天的增长动作
+                    AI 正在协助你推进今天的 Aurex Legacy 动作
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                    直接发起一句指令，AI 会帮你安排优先级、生成内容，或给出客户跟进建议。
+                    直接发起一句指令，AI 会帮你安排优先级、生成内容，或给出更适合高端客户沟通的跟进建议。
                   </p>
                 </div>
-                <div className="flex h-14 w-14 items-center justify-center rounded-[22px] bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(177,58,134,0.24))] text-[var(--gold)] shadow-[0_16px_40px_rgba(177,58,134,0.18)]">
+                <div className="flex h-14 w-14 items-center justify-center rounded-[22px] bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(255,255,255,0.04))] text-[var(--gold)] shadow-[0_16px_40px_rgba(216,177,91,0.12)]">
                   <Sparkles className="h-6 w-6" />
                 </div>
               </div>
@@ -410,10 +410,10 @@ export function MemberMobileDashboard({
               </div>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                {[
+                  {[
                   { label: "AI 推荐", value: "内容加速：海报 / 文案 / 视频" },
-                  { label: "AI 推荐", value: "任务建议：先做最直接见回报的一项" },
-                  { label: "AI 推荐", value: "客户应对：立即生成跟进话术" },
+                  { label: "AI 推荐", value: "任务建议：先做最容易形成成交势能的一项" },
+                  { label: "AI 推荐", value: "客户应对：立即生成高净值跟进话术" },
                 ].map((item) => (
                   <div key={item.value} className="rounded-[24px] border border-white/8 bg-white/[0.04] p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{item.label}</p>
@@ -427,12 +427,12 @@ export function MemberMobileDashboard({
       </section>
 
       <section className="grid gap-6 xl:grid-cols-12">
-        <Card className="xl:col-span-5 rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(40,14,35,0.86),rgba(22,9,20,0.94))] p-6">
+        <Card className="xl:col-span-5 rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(17,14,11,0.94),rgba(8,7,6,0.98))] p-6">
           <SectionTitle title="今日行动面板" />
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
             <div className="rounded-[28px] border border-white/8 bg-white/[0.04] p-5">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(177,58,134,0.2)] text-[var(--foreground)]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(242,200,107,0.12)] text-[var(--foreground)]">
                   <Target className="h-5 w-5" />
                 </div>
                 <div>
@@ -475,8 +475,8 @@ export function MemberMobileDashboard({
         </Card>
 
         {currentMission ? (
-          <Card className="relative overflow-hidden rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.12),transparent_22%),linear-gradient(180deg,rgba(63,19,49,0.95),rgba(21,8,20,0.98))] p-6 xl:col-span-7">
-            <div className="absolute inset-y-0 right-0 hidden w-[38%] bg-[radial-gradient(circle_at_center,rgba(177,58,134,0.16),transparent_62%)] lg:block" />
+          <Card className="relative overflow-hidden rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.12),transparent_22%),linear-gradient(180deg,rgba(20,17,14,0.98),rgba(8,7,6,0.98))] p-6 xl:col-span-7">
+            <div className="absolute inset-y-0 right-0 hidden w-[38%] bg-[radial-gradient(circle_at_center,rgba(242,200,107,0.08),transparent_62%)] lg:block" />
             <div className="relative">
               <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div className="max-w-2xl">
@@ -489,7 +489,7 @@ export function MemberMobileDashboard({
                     {currentMission.title}
                   </h2>
                   <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
-                    这是今天最直接影响进度与奖励的一步。先把它做完，后面的动作会更顺。
+                    这是今天最直接影响进度与奖励的一步。先把它做完，后面的成交、跟进与会员升级动作会更顺。
                   </p>
                 </div>
 
@@ -548,7 +548,7 @@ export function MemberMobileDashboard({
       </section>
 
       <section className="grid gap-6 xl:grid-cols-12">
-        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(44,15,38,0.92),rgba(20,8,19,0.96))] p-6 xl:col-span-5">
+        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(17,14,11,0.94),rgba(8,7,6,0.98))] p-6 xl:col-span-5">
           <SectionTitle title="快捷操作" />
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {quickActions.map((action) => (
@@ -557,7 +557,7 @@ export function MemberMobileDashboard({
                 href={action.href}
                 className="group rounded-[28px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-5 transition hover:-translate-y-1 hover:border-[rgba(242,200,107,0.14)] hover:bg-[rgba(255,255,255,0.06)]"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(135deg,rgba(242,200,107,0.14),rgba(177,58,134,0.22))] text-[var(--gold)]">
+                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(135deg,rgba(242,200,107,0.14),rgba(255,255,255,0.05))] text-[var(--gold)]">
                   <action.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 text-lg font-semibold text-[var(--foreground)]">{action.title}</h3>
@@ -571,7 +571,7 @@ export function MemberMobileDashboard({
           </div>
         </Card>
 
-        <Card className="rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.1),transparent_20%),linear-gradient(180deg,rgba(57,19,47,0.95),rgba(18,8,18,0.98))] p-6 xl:col-span-7">
+        <Card className="rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.1),transparent_20%),linear-gradient(180deg,rgba(19,16,13,0.98),rgba(8,7,6,0.98))] p-6 xl:col-span-7">
           <SectionTitle title="积分 / 等级 / 奖励" actionLabel="查看完整奖励" href="/member/rewards" />
 
           <div className="mt-6 grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
@@ -583,7 +583,7 @@ export function MemberMobileDashboard({
                     {rewardOverview.currentPoints.toLocaleString()}
                   </p>
                 </div>
-                <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(177,58,134,0.22))] text-[var(--gold)]">
+                <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(255,255,255,0.04))] text-[var(--gold)]">
                   <TrendingUp className="h-6 w-6" />
                 </div>
               </div>
@@ -619,7 +619,7 @@ export function MemberMobileDashboard({
                   className={cn(
                     "relative rounded-[26px] border p-4",
                     reward.status === "current"
-                      ? "border-[rgba(242,200,107,0.18)] bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(177,58,134,0.12))]"
+                      ? "border-[rgba(242,200,107,0.18)] bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(255,255,255,0.04))]"
                       : reward.status === "unlocked"
                         ? "border-white/8 bg-[rgba(255,255,255,0.05)]"
                         : "border-white/8 bg-[rgba(255,255,255,0.03)]",
@@ -668,8 +668,8 @@ export function MemberMobileDashboard({
               className={cn(
                 "rounded-[32px] border-white/8 p-5",
                 index === 0
-                  ? "bg-[linear-gradient(180deg,rgba(62,18,49,0.98),rgba(24,9,22,0.98))]"
-                  : "bg-[linear-gradient(180deg,rgba(41,15,35,0.92),rgba(20,8,18,0.94))]",
+                  ? "bg-[linear-gradient(180deg,rgba(19,16,13,0.98),rgba(8,7,6,0.98))]"
+                  : "bg-[linear-gradient(180deg,rgba(16,14,11,0.94),rgba(8,7,6,0.96))]",
               )}
             >
               <div className="flex items-start justify-between gap-4">
@@ -699,7 +699,7 @@ export function MemberMobileDashboard({
       </section>
 
       <section className="grid gap-6 xl:grid-cols-12">
-        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(44,15,38,0.92),rgba(20,8,19,0.96))] p-6 xl:col-span-6">
+        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(17,14,11,0.94),rgba(8,7,6,0.98))] p-6 xl:col-span-6">
           <SectionTitle title="学习中心" actionLabel="进入学习中心" href="/member/learning" />
           <div className="mt-6 space-y-4">
             {learningModules.slice(0, 3).map((lesson, index) => (
@@ -708,7 +708,7 @@ export function MemberMobileDashboard({
                 className={cn(
                   "rounded-[28px] border border-white/8 p-5",
                   index === 0
-                    ? "bg-[linear-gradient(135deg,rgba(177,58,134,0.16),rgba(255,255,255,0.05))]"
+                    ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(255,255,255,0.04))]"
                     : "bg-[rgba(255,255,255,0.04)]",
                 )}
               >
@@ -741,7 +741,7 @@ export function MemberMobileDashboard({
           </div>
         </Card>
 
-        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(44,15,38,0.92),rgba(20,8,19,0.96))] p-6 xl:col-span-6">
+        <Card className="rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(17,14,11,0.94),rgba(8,7,6,0.98))] p-6 xl:col-span-6">
           <SectionTitle title="最近生成的素材" actionLabel="打开素材库" href="/member/asset-library" />
           <div className="mt-6 space-y-4">
             {recentAssets.map((asset, index) => (
@@ -749,7 +749,7 @@ export function MemberMobileDashboard({
                 key={asset.id}
                 className={cn(
                   "rounded-[28px] border border-white/8 p-5",
-                  index === 0 ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(177,58,134,0.1))]" : "bg-[rgba(255,255,255,0.04)]",
+                  index === 0 ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(255,255,255,0.04))]" : "bg-[rgba(255,255,255,0.04)]",
                 )}
               >
                 <div className="flex items-start justify-between gap-4">

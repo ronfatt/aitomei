@@ -29,7 +29,7 @@ export default function CaptionGeneratorPage() {
           <Badge variant="default">生成结果</Badge>
           <Textarea
             className="mt-4 min-h-96 border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)]"
-            defaultValue="用一抹历久弥新的金色，为这个节庆时刻增添温度与心意。这件作品把优雅、价值感与祝福自然融合在一起，很适合用于家庭聚会与送礼场景。如果你也在寻找一份更有意义、也更耐看的礼物，我很乐意继续和你分享细节。#TOMEI #RayaRadiance #GoldenMoments"
+            defaultValue="Aurex Legacy 这次推出的黑金系列，不只是珠宝作品，更像是一份带着身份感与纪念价值的礼赠提案。无论是企业家送礼、家族纪念，还是想留下更有故事感的收藏选择，它都把高级感、文化表达与长期价值自然融合在一起。如果你也想看更适合你场景的款式，我可以继续帮你整理。#AurexLegacy #LuxuryHeritage #TimelessAsset"
           />
         </Card>
       </section>

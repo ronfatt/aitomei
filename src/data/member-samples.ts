@@ -20,8 +20,8 @@ export const assetLibrarySamples: MediaSampleCardProps[] = [
   },
   {
     kind: "document",
-    title: "GoldNow 销售话术资料卡",
-    description: "用于模拟可回看资料、产品 brief、活动指南等文件类素材，方便 demo 时看起来更完整。",
+    title: "Aurex Legacy 销售话术资料卡",
+    description: "用于模拟可回看资料、品牌 brief、活动指南等文件类素材，方便 demo 时看起来更完整。",
     imageSrc: "/samples/document-goldnow-brief.svg",
     badge: "资料 · 已保存",
     meta: "PDF 简报",
@@ -57,7 +57,7 @@ export const contentStudioSamples: MediaSampleCardProps[] = [
 ];
 
 export const campaignSampleAssets: Record<string, MediaSampleCardProps[]> = {
-  "raya-radiance": [
+  "heritage-launch": [
     {
       kind: "image",
       title: "Raya 主视觉样板",
@@ -75,7 +75,7 @@ export const campaignSampleAssets: Record<string, MediaSampleCardProps[]> = {
       meta: "3 页",
     },
   ],
-  "bridal-signatures": [
+  "founder-circle-preview": [
     {
       kind: "video",
       title: "婚嫁情境短视频样板",
@@ -94,10 +94,10 @@ export const campaignSampleAssets: Record<string, MediaSampleCardProps[]> = {
       meta: "婚嫁主题",
     },
   ],
-  "daily-gold-story": [
+  "digital-provenance-story": [
     {
       kind: "document",
-      title: "每日黄金教育资料卡",
+      title: "数字确权教育资料卡",
       description: "适合资讯式、教育式内容方向的 posting brief。",
       imageSrc: "/samples/document-goldnow-brief.svg",
       badge: "教育简报",
@@ -117,7 +117,7 @@ export const campaignSampleAssets: Record<string, MediaSampleCardProps[]> = {
 export const newsSampleResources: MediaSampleCardProps[] = [
   {
     kind: "document",
-    title: "GoldNow 产品资料摘要",
+    title: "Aurex Legacy 产品资料摘要",
     description: "适合放在资讯页侧边，作为“本周资料更新”样板文件卡。",
     imageSrc: "/samples/document-goldnow-brief.svg",
     badge: "参考 PDF",
@@ -137,27 +137,27 @@ export const newsSampleResources: MediaSampleCardProps[] = [
 export const productSampleVisuals: Record<string, MediaSampleCardProps> = {
   "product-1": {
     kind: "image",
-    title: "Celestial 黄金吊坠样板图",
-    description: "适合放在产品卡片上方，直接把“产品 highlight”从文字变成有画面感的样板。",
+    title: "Heritage Gold Plaque 样板图",
+    description: "适合放在产品卡片上方，直接把“文化珠宝资产”从文字变成有画面感的样板。",
     imageSrc: "/samples/product-celestial-pendant.svg",
     badge: "产品视觉",
-    meta: "吊坠",
+    meta: "金章",
   },
   "product-2": {
     kind: "image",
-    title: "Promise 钻戒样板图",
-    description: "突出婚嫁与承诺主题，更符合高单价珠宝内容的呈现方式。",
+    title: "Signature Legacy Pack 样板图",
+    description: "突出会籍权益与礼遇组合主题，更符合高客单成交方案的呈现方式。",
     imageSrc: "/samples/product-promise-ring.svg",
     badge: "产品视觉",
-    meta: "戒指",
+    meta: "权益套组",
   },
   "product-3": {
     kind: "image",
-    title: "Heritage 金镯样板图",
-    description: "用于节庆与家庭赠礼主题，给产品页补足更完整的视觉层。",
+    title: "Founder Circle Black Card 样板图",
+    description: "用于高净值邀约与圈层礼遇主题，给产品页补足更完整的视觉层。",
     imageSrc: "/samples/product-heritage-bangle.svg",
     badge: "产品视觉",
-    meta: "手镯",
+    meta: "黑卡会籍",
   },
 };
 

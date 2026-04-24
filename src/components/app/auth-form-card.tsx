@@ -41,9 +41,9 @@ const authCopy = {
   },
   signup: {
     eyebrow: "会员启用",
-    title: "创建你的 TOMEI 会员工作台",
+    title: "创建你的 Aurex Legacy 会员工作台",
     description:
-      "设置账号、完成引导流程，并开始安心生成品牌内容。",
+      "设置账号、完成引导流程，并开始进入你的高端珠宝资产会员生态。",
     cta: "创建账号",
     helper: "已经注册？",
     helperHref: "/login",

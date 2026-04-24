@@ -37,31 +37,31 @@ const memberNavigationIcons = {
 } as const;
 
 const memberShellStyle = {
-  "--background": "#12070F",
-  "--foreground": "#F7F4F8",
-  "--surface": "rgba(35,13,30,0.88)",
-  "--muted": "#CDBFD0",
+  "--background": "#060606",
+  "--foreground": "#F5EAD6",
+  "--surface": "rgba(13,12,10,0.92)",
+  "--muted": "#BBAE9C",
   "--border": "rgba(255,255,255,0.08)",
   "--gold": "#F2C86B",
-  "--gold-soft": "rgba(242,200,107,0.26)",
+  "--gold-soft": "rgba(242,200,107,0.16)",
   "--gold-strong": "#D8B15B",
-  "--ring": "rgba(177,58,134,0.42)",
-  "--success": "#7FE2AB",
+  "--ring": "rgba(216,177,91,0.28)",
+  "--success": "#9AD0A8",
   "--warning": "#F2C86B",
   "--panel-border": "rgba(255,255,255,0.08)",
   "--panel-bg":
-    "linear-gradient(180deg,rgba(73,17,56,0.76),rgba(28,10,26,0.92))",
+    "linear-gradient(180deg,rgba(21,18,15,0.92),rgba(10,9,8,0.96))",
   "--panel-muted-border": "rgba(255,255,255,0.06)",
   "--panel-muted-bg": "rgba(255,255,255,0.04)",
   "--panel-shadow":
-    "0 28px 90px rgba(5,0,9,0.45), inset 0 1px 0 rgba(255,255,255,0.05)",
-  "--button-primary-bg": "linear-gradient(135deg,#F2C86B,#D8B15B 38%,#B13A86 100%)",
-  "--button-primary-text": "#1D0C19",
-  "--button-primary-shadow": "0 18px 48px rgba(177,58,134,0.35)",
-  "--button-secondary-bg": "linear-gradient(180deg,rgba(70,24,56,0.92),rgba(40,14,34,0.96))",
-  "--button-secondary-hover": "linear-gradient(180deg,rgba(82,28,65,0.94),rgba(48,18,40,0.98))",
+    "0 28px 90px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)",
+  "--button-primary-bg": "linear-gradient(135deg,#F2C86B,#D8B15B 52%,#8F6A2C 100%)",
+  "--button-primary-text": "#120D07",
+  "--button-primary-shadow": "0 18px 48px rgba(216,177,91,0.2)",
+  "--button-secondary-bg": "linear-gradient(180deg,rgba(34,29,24,0.96),rgba(18,16,13,0.98))",
+  "--button-secondary-hover": "linear-gradient(180deg,rgba(46,39,31,0.96),rgba(24,20,16,1))",
   "--button-secondary-border": "rgba(255,255,255,0.08)",
-  "--button-secondary-text": "#F7F4F8",
+  "--button-secondary-text": "#F5EAD6",
   "--button-ghost-text": "#CDBFD0",
   "--button-ghost-hover": "rgba(255,255,255,0.06)",
   "--button-outline-text": "#F2C86B",
@@ -108,7 +108,7 @@ export function AppShell({
       className={cn(
         "min-h-screen",
         isMember
-          ? "bg-[radial-gradient(circle_at_top_left,rgba(177,58,134,0.22),transparent_24%),radial-gradient(circle_at_86%_12%,rgba(216,177,91,0.14),transparent_22%),linear-gradient(180deg,#12070F_0%,#160914_42%,#0D050C_100%)]"
+          ? "bg-[radial-gradient(circle_at_top_left,rgba(216,177,91,0.12),transparent_24%),radial-gradient(circle_at_86%_12%,rgba(255,255,255,0.03),transparent_20%),linear-gradient(180deg,#050505_0%,#090807_42%,#0c0a09_100%)]"
           : "bg-[radial-gradient(circle_at_top,_rgba(237,223,198,0.45),transparent_36%),linear-gradient(180deg,#f8f3ec_0%,#f5efe8_48%,#f4eee7_100%)]",
       )}
       style={isMember ? memberShellStyle : undefined}
@@ -143,7 +143,7 @@ export function AppShell({
               className={cn(
                 "flex h-11 w-11 items-center justify-center rounded-2xl",
                 isMember
-                  ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(177,58,134,0.22))] text-[var(--gold)]"
+                  ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.14),rgba(255,255,255,0.04))] text-[var(--gold)]"
                   : "bg-[rgba(196,168,114,0.12)] text-[var(--gold-strong)]",
               )}
             >
@@ -173,7 +173,7 @@ export function AppShell({
                     "block rounded-[28px] px-4 py-4 transition",
                     isMember
                       ? active
-                        ? "border border-[rgba(242,200,107,0.18)] bg-[linear-gradient(135deg,rgba(177,58,134,0.18),rgba(255,255,255,0.07))] shadow-[0_16px_40px_rgba(5,0,9,0.22)]"
+                        ? "border border-[rgba(242,200,107,0.16)] bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(255,255,255,0.04))] shadow-[0_16px_40px_rgba(0,0,0,0.22)]"
                         : "border border-transparent bg-transparent opacity-82 hover:opacity-100 hover:border-white/5 hover:bg-white/[0.025]"
                       : active
                         ? "bg-[linear-gradient(135deg,rgba(196,168,114,0.17),rgba(255,255,255,0.92))] shadow-[inset_0_0_0_1px_rgba(196,168,114,0.22)]"
@@ -186,7 +186,7 @@ export function AppShell({
                         className={cn(
                           "mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl",
                           active
-                            ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.18),rgba(177,58,134,0.26))] text-[var(--gold)]"
+                            ? "bg-[linear-gradient(135deg,rgba(242,200,107,0.12),rgba(255,255,255,0.04))] text-[var(--gold)]"
                             : "bg-white/[0.035] text-[var(--muted)]",
                         )}
                       >
@@ -207,7 +207,7 @@ export function AppShell({
             className={cn(
               "mt-6 rounded-[30px] p-5",
               isMember
-                ? "border border-[rgba(242,200,107,0.1)] bg-[linear-gradient(180deg,rgba(58,18,47,0.52),rgba(21,8,20,0.9))] text-white shadow-[0_14px_36px_rgba(7,0,12,0.28)]"
+                ? "border border-[rgba(242,200,107,0.1)] bg-[linear-gradient(180deg,rgba(23,19,15,0.94),rgba(10,9,8,0.98))] text-white shadow-[0_14px_36px_rgba(0,0,0,0.28)]"
                 : "border border-[rgba(196,168,114,0.2)] bg-[linear-gradient(180deg,rgba(32,28,24,0.96),rgba(43,37,31,0.98))] text-white",
             )}
           >
@@ -215,11 +215,11 @@ export function AppShell({
               {isMember ? "AI 助理入口" : "AI 架构就绪"}
             </Badge>
             <p className="font-[family-name:var(--font-display)] text-2xl leading-none">
-              {isMember ? "让 AI 帮你先决定今天最该做什么" : "后续接入依然保持清晰"}
+              {isMember ? "让 AI 先帮你排好今天的成交与跟进节奏" : "后续接入依然保持清晰"}
             </p>
             <p className="mt-3 text-sm leading-6 text-white/72">
               {isMember
-                ? "今天要发什么、先做哪一个任务、文案怎么写、客户跟进怎么讲，都可以直接交给 AI 增长助理。"
+                ? "今天先推什么系列、先跟哪类客户、话术怎么讲、内容怎么发，都可以先交给 Aurex Legacy AI 助理。"
                 : "Supabase、AI 教练、AI 礼宾、海报生成与任务证明审核，已经通过清晰的类型化服务层隔离，方便后续继续扩展。"}
             </p>
             <Link

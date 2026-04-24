@@ -18,27 +18,27 @@ const campaignEditorialDetails: Record<
     imageSrc: string;
   }
 > = {
-  "raya-radiance": {
-    headline: "以温暖送礼与家庭团聚语境，建立节庆黄金内容的高端亲切感。",
+  "heritage-launch": {
+    headline: "以高端礼赠、身份表达与文化资产语境，建立更高净值的黑金沟通感。",
     direction:
-      "这档活动更适合做“送礼有意义”“团圆场景佩戴”“节庆期间的金饰升级感”这类内容，不需要喊价，也不需要做太重的销售语气。",
-    cues: ["家庭节庆", "送礼建议", "柔和金色视觉"],
-    priority: "优先推荐给新会员做第一波海报与 caption 产出",
+      "这档活动更适合做“高端礼赠”“编号收藏”“文化故事”这类内容，不需要喊价，也不需要做太重的销售语气。",
+    cues: ["文化礼赠", "编号收藏", "黑金主视觉"],
+    priority: "优先推荐给新会员做第一波黑金海报与 caption 产出",
     imageSrc: "/samples/campaign-raya-glow.svg",
   },
-  "bridal-signatures": {
-    headline: "婚嫁主题要做得像情感叙事，不像硬销 catalogue。",
+  "founder-circle-preview": {
+    headline: "会籍主题要做得像私享邀约，不像普通会员促销。",
     direction:
-      "会员在发布这类内容时，重点不是介绍规格，而是把承诺、见证与人生阶段感做出来，再自然带到产品推荐。",
-    cues: ["承诺与纪念", "钻戒与婚嫁", "情绪价值内容"],
-    priority: "适合高客单顾客、预约咨询与故事型短视频内容",
+      "会员在发布这类内容时，重点不是解释规则，而是先把顾问服务、闭门活动与圈层感受讲出来，再自然带到产品推荐。",
+    cues: ["黑卡礼遇", "顾问服务", "圈层邀约"],
+    priority: "适合高客单顾客、预约咨询与高净值跟进内容",
     imageSrc: "/samples/product-promise-ring.svg",
   },
-  "daily-gold-story": {
-    headline: "把教育内容做得更简洁、更可信，而不是像冷知识贴文。",
+  "digital-provenance-story": {
+    headline: "把数字确权讲得更简洁、更可信，而不是像技术说明文。",
     direction:
-      "这档活动适合用一句观点、一张视觉、一条轻教育 caption 的组合，让会员更容易形成每日更新节奏。",
-    cues: ["黄金教育", "GoldNow 简报", "每日轻内容"],
+      "这档活动适合用一句观点、一张视觉、一条轻教育 caption 的组合，让会员更容易形成稳定的每日更新节奏。",
+    cues: ["数字确权", "编号证书", "每日轻内容"],
     priority: "适合做连续打卡、轻量社媒曝光与 AI caption 辅助",
     imageSrc: "/samples/document-goldnow-brief.svg",
   },

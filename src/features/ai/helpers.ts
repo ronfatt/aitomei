@@ -14,10 +14,9 @@ export function inferAiCoachContext(
     return "mission";
   }
 
-  if (/(brand|品牌|tomei|goldnow|shariah|黄金|redeem|兑换|gram|0\.1|buy|购买)/i.test(normalized)) {
+  if (/(brand|品牌|aurex|legacy|membership|会员|provenance|确权|rwa|nasdaq|luxury|heritage|jewelry|珠宝|购买)/i.test(normalized)) {
     return "product";
   }
 
   return fallback;
 }
-

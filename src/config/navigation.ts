@@ -2,29 +2,29 @@ import type { NavItem } from "@/types/domain";
 
 export const publicNavigation: NavItem[] = [
   {
-    title: "资产平台",
+    title: "Platform",
     href: "#platform",
-    description: "查看 Aurex Legacy 的黑金会员生态与资产叙事。",
+    description: "Explore the Aurex Legacy luxury platform architecture.",
   },
   {
-    title: "产品层级",
-    href: "#journey",
-    description: "了解入门到黑卡会籍的产品与权益结构。",
+    title: "Collections",
+    href: "#collections",
+    description: "View the luxury product ladder from entry to black card.",
   },
   {
-    title: "会员生态",
-    href: "#ai",
-    description: "查看会员俱乐部、礼遇与服务体验设计。",
+    title: "Membership",
+    href: "#membership",
+    description: "See how private privileges turn purchases into relationships.",
   },
   {
-    title: "数字确权",
-    href: "#capabilities",
-    description: "查看 provenance、编号和未来 RWA 接口逻辑。",
+    title: "Provenance",
+    href: "#provenance",
+    description: "Understand provenance, audit trail and asset readiness.",
   },
   {
-    title: "管理端",
-    href: "#admin",
-    description: "查看运营后台、会员治理与内容中台。",
+    title: "Dashboard",
+    href: "#dashboard",
+    description: "Preview the member and admin dashboard experience.",
   },
 ];
 

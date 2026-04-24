@@ -20,18 +20,17 @@ export interface AiConciergeInsight {
   type: "campaign" | "news" | "mission" | "market";
 }
 
-type GoldNowTopic =
+type AurexTopic =
   | "overview"
-  | "why_gold"
-  | "digital_gold"
-  | "trust"
-  | "shariah"
-  | "entry"
-  | "buy"
-  | "redeem"
-  | "partner"
+  | "positioning"
+  | "membership"
+  | "provenance"
+  | "product_ladder"
+  | "rwa"
+  | "nasdaq"
   | "mlm"
-  | "returns";
+  | "crypto"
+  | "business_model";
 
 function normalizeMessage(message: string) {
   return message.trim().toLowerCase();
@@ -42,48 +41,44 @@ function includesAny(message: string, keywords: string[]) {
 }
 
 function wantsDemoScript(message: string) {
-  return includesAny(message, ["demo", "演示", "怎么讲", "怎么介绍", "话术", "客户问", "人话"]);
+  return includesAny(message, ["demo", "演示", "怎么讲", "怎么介绍", "话术", "客户问", "人话", "现场"]);
 }
 
-function detectTopic(message: string): GoldNowTopic {
-  if (includesAny(message, ["shariah", "伊斯兰", "教法", "halal", "合规"])) {
-    return "shariah";
-  }
-
-  if (includesAny(message, ["兑换", "redeem", "实体", "门店", "shop", "outlet", "领取"])) {
-    return "redeem";
-  }
-
-  if (includesAny(message, ["怎么买", "购买", "buy", "top up", "充值", "gram", "克", "步骤"])) {
-    return "buy";
-  }
-
-  if (includesAny(message, ["0.1", "最低", "入门", "start from", "门槛", "多少钱可以开始"])) {
-    return "entry";
-  }
-
-  if (includesAny(message, ["推荐", "伙伴", "partner", "referral", "奖励", "佣金"])) {
-    return "partner";
-  }
-
-  if (includesAny(message, ["mlm", "multi level", "拉人头", "金字塔", "传销", "downline", "upline"])) {
+function detectTopic(message: string): AurexTopic {
+  if (includesAny(message, ["mlm", "拉人头", "传销", "downline", "upline", "会员盘", "招募"])) {
     return "mlm";
   }
 
-  if (includesAny(message, ["回报", "收益", "return", "speculation", "投机", "保本", "稳赚"])) {
-    return "returns";
+  if (includesAny(message, ["crypto", "nft", "发币", "token", "链上项目", "币圈"])) {
+    return "crypto";
   }
 
-  if (includesAny(message, ["安全", "真实", "真的吗", "backed", "虚拟", "trust", "上市", "tomei"])) {
-    return "trust";
+  if (includesAny(message, ["rwa", "收益", "升值", "投资", "证券化", "回报", "retail promise"])) {
+    return "rwa";
   }
 
-  if (includesAny(message, ["数字黄金", "digital gold", "为什么数字黄金", "优势"])) {
-    return "digital_gold";
+  if (includesAny(message, ["纳斯达克", "nasdaq", "上市", "ipo", "资本市场", "governance"])) {
+    return "nasdaq";
   }
 
-  if (includesAny(message, ["为什么黄金", "why gold", "保值", "抗通胀", "inflation"])) {
-    return "why_gold";
+  if (includesAny(message, ["证书", "确权", "溯源", "provenance", "audit", "编号", "ownership"])) {
+    return "provenance";
+  }
+
+  if (includesAny(message, ["会员", "黑卡", "privilege", "club", "权益账户", "礼遇", "founder circle"])) {
+    return "membership";
+  }
+
+  if (includesAny(message, ["entry", "core", "premium", "elite", "black card", "产品分层", "套餐", "pack"])) {
+    return "product_ladder";
+  }
+
+  if (includesAny(message, ["商业模式", "收入", "会销", "年费", "授权", "business model"])) {
+    return "business_model";
+  }
+
+  if (includesAny(message, ["定位", "是什么", "一句话", "普通珠宝", "为什么不一样", "luxury consumer asset"])) {
+    return "positioning";
   }
 
   return "overview";
@@ -118,150 +113,154 @@ function buildScriptReply(
 
 function buildReply(
   message: string,
-  topic: GoldNowTopic,
+  topic: AurexTopic,
   knowledge: Awaited<ReturnType<typeof getAiCoachKnowledgeBundle>>,
 ) {
   const demoMode = wantsDemoScript(message);
   const { knowledgeCards, objectionScripts } = knowledge;
-  const overviewCard = findCard("platform-positioning", knowledgeCards);
-  const purityCard = findCard("gold-purity", knowledgeCards);
-  const entryCard = findCard("low-entry-point", knowledgeCards);
-  const whyGoldCard = findCard("why-gold", knowledgeCards);
-  const backingCard = findCard("real-gold-backing", knowledgeCards);
-  const redemptionCard = findCard("physical-redemption", knowledgeCards);
-  const trustCard = findCard("tomei-trust-foundation", knowledgeCards);
-  const shariahCard = findCard("shariah-structure", knowledgeCards);
-  const buyFlowCard = findCard("buy-flow", knowledgeCards);
+  const positioningCard = findCard("platform-positioning", knowledgeCards);
+  const threeLayerCard = findCard("three-layer-model", knowledgeCards);
+  const plaqueCard = findCard("heritage-gold-plaque", knowledgeCards);
+  const privilegeCard = findCard("privilege-account", knowledgeCards);
+  const provenanceCard = findCard("digital-provenance", knowledgeCards);
+  const clubCard = findCard("membership-club", knowledgeCards);
+  const ladderCard = findCard("product-ladder", knowledgeCards);
+  const capitalCard = findCard("global-capital-language", knowledgeCards);
+  const rwaCard = findCard("rwa-direction", knowledgeCards);
+  const nasdaqCard = findCard("nasdaq-roadmap", knowledgeCards);
+  const moatCard = findCard("brand-moat", knowledgeCards);
 
   switch (topic) {
     case "overview":
       return [
-        "可以，GoldNow 其实很好讲。",
-        `一句人话版是：${overviewCard?.detail ?? "GoldNow by Tomei 是一个安全、符合 Shariah 的数字黄金平台。"}${purityCard ? ` 另外它也强调 ${purityCard.detail}` : ""}`,
-        `${backingCard?.detail ?? "它不是单纯的虚拟数字点数。"}${redemptionCard ? ` ${redemptionCard.detail}` : ""}`,
+        "可以，Aurex Legacy 最适合先讲成一个高端品牌系统，而不是单一产品。",
+        positioningCard?.detail ??
+          "Aurex Legacy 不是单纯卖珠宝，而是把高端文化金章、珠宝消费权益、数字确权证书和全球会员网络做成一个可持续经营的高端消费资产系统。",
+        threeLayerCard?.detail ??
+          "它最核心的结构，是实物层、会员层、数字层一起运作，而不是只有漂亮的品牌外观。",
         demoMode
-          ? "你 demo 时可以直接接这一句：『它把黄金这件事做得更轻松，但底层还是实物黄金，不是空的概念。』"
-          : `如果客户继续追问，我建议你下一句就带出『${entryCard?.title ?? "从 0.1 克就能开始"}』，这个记忆点很强。`,
+          ? "你 demo 时可以直接这样讲：『它卖的不只是珠宝作品，而是一套把产品、会员身份和数字档案串起来的高端关系系统。』"
+          : "如果客户继续追问，我建议你下一句接会员权益账户或数字确权证书，这两个记忆点最强。",
       ].join("\n\n");
 
-    case "why_gold":
+    case "positioning":
+      return buildScriptReply(findScript("what-is-aurex", objectionScripts), [
+        "一句人话版，我帮你收得更清楚一点。",
+        positioningCard?.detail ??
+          "Aurex Legacy 可以理解成一个把高端珠宝、会员权益和数字确权做成长期关系的 luxury heritage platform。",
+        demoMode
+          ? "你可以接一句：『它不只是在卖一件首饰，而是在建立一个客户愿意长期留在里面的品牌世界。』"
+          : "如果你要，我下一轮可以顺手把这段压成 15 秒口播稿。",
+      ]);
+
+    case "membership":
+      return buildScriptReply(findScript("why-membership-account", objectionScripts), [
+        "会员逻辑其实是 Aurex Legacy 很值得主动讲的地方。",
+        privilegeCard?.detail ??
+          "Jewelry Privilege Account 的重点，是把消费、礼遇、升级和服务变成长期关系，而不是一次性成交。",
+        clubCard?.detail ??
+          "再往上接，就是 Global Membership Club，让客户看到它还有活动、定制、新品优先权和跨区域权益。",
+        demoMode
+          ? "你 demo 时可以这样讲：『它不是卖完就结束，而是从成交开始，把客户带进一个更高端的会员体系。』"
+          : "建议你把 Privilege Account 和 Global Membership Club 连着讲，层次会更完整。",
+      ]);
+
+    case "provenance":
+      return buildScriptReply(findScript("what-is-provenance", objectionScripts), [
+        "数字确权这件事，重点不是科技名词，而是高级感、信任感和长期记录能力。",
+        provenanceCard?.detail ??
+          "每件产品都绑定数字确权证书，用于溯源、防伪、所有权记录和未来资产接口。",
+        demoMode
+          ? "你可以这样讲：『它让每件作品不只是“有货号”，而是有来历、有故事、有编号、有档案。』"
+          : "建议你多用 provenance、ownership record、audit trail 这几个词，会更稳。",
+      ]);
+
+    case "product_ladder":
       return [
-        "这个问题很关键，而且官方资料讲得很清楚。",
-        whyGoldCard?.detail ??
-          "GoldNow 的资料把黄金定位成“保值资产”，不是投机工具。它强调黄金在通胀、货币贬值、地缘政治紧张或市场不确定时，更能守住购买力和长期价值。",
-        "简单说，现金会被通胀慢慢吃掉，但黄金更像是把价值存下来。官方原话的核心意思就是：黄金不是拿来赌短线的，是拿来保存真实财富的。",
+        "Aurex Legacy 的产品层级不是堆 SKU，而是在设计客户升级路径。",
+        ladderCard?.detail ??
+          "它从 Heritage Access Pack 一路走到 Founder Circle / Black Card，用来承接首购、升级、家族传承和顶层客户关系。",
+        plaqueCard?.detail ??
+          "如果你想找最容易切入的产品入口，可以先从 Heritage Gold Plaque 讲起，因为它很适合礼赠、纪念和身份表达场景。",
         demoMode
-          ? "你可以这样对客户讲：『它不是叫你炒黄金，而是让你更容易用小额方式慢慢累积真实资产。』"
-          : "如果你愿意，我下一轮可以顺手帮你把这段整理成 15 秒 demo 口播稿。",
+          ? "你可以现场这样讲：『我们不是只有一件产品，而是从入门、核心到黑卡圈层，客户会一路往上走。』"
+          : "如果你要，我下一步可以帮你把四层 pack 变成一套销售对比话术。",
       ].join("\n\n");
 
-    case "digital_gold":
-      return [
-        "数字黄金会成立，前提不是“数字化”这三个字，而是背后有没有真黄金。",
-        `${entryCard?.detail ?? "GoldNow 的资料强调，数字黄金之所以越来越受欢迎，是因为它可以小额开始、买卖更方便、能长期慢慢累积。"}${redemptionCard ? ` ${redemptionCard.detail}` : ""}`,
-        backingCard?.detail ?? "官方也很明确地说了，数字黄金只有在完全有实物支持、透明、可兑换时才有意义。",
+    case "rwa":
+      return buildScriptReply(findScript("returns-and-rwa", objectionScripts), [
+        "这个问题一定要讲得克制，反而更有专业感。",
+        rwaCard?.detail ??
+          "RWA 方向是未来合规基础设施能力，包括确权、登记、审计和兼容接口，不是当前零售承诺。",
+        capitalCard?.detail ??
+          "它的价值在于让品牌同时拥有 Luxury Brand、Membership Economy、Asset Digitization 和 RWA Optionality 这四条更长期的叙事语言。",
         demoMode
-          ? "你 demo 时可以这样讲：『它把黄金变得更好入手，但不会把黄金变成空的概念。』"
-          : "我建议你把“方便”跟“真实支持”一起讲，这样客户会比较安心。",
-      ].join("\n\n");
-
-    case "trust":
-      return buildScriptReply(findScript("is-this-real-gold", objectionScripts), [
-        "如果客户担心真不真，这里反而是 GoldNow 最好讲的地方。",
-        backingCard?.detail ?? "官方资料写得很直白：每 1 克数字黄金，对应 1 克真实实体黄金。",
-        trustCard?.detail ??
-          "再加上 Tomei 本身是马来西亚上市黄金与珠宝集团，成立于 1968 年，有 50+ 年行业经验和 60+ 零售网点。",
+          ? "你可以直接说：『我们今天讲的不是收益承诺，而是一个未来更容易被资本市场理解的基础设施方向。』"
+          : "建议你把回答锁在 provenance、audit trail、future readiness 这三个表达里。",
       ]);
 
-    case "shariah":
-      return buildScriptReply(findScript("what-makes-it-shariah", objectionScripts), [
-        "这个点我帮你讲得直接一点。",
-        shariahCard?.detail ??
-          "GoldNow 强调自己符合 Shariah，核心不是一句标签，而是结构本身：真实资产支持、没有利息型收益、没有保本承诺、没有保证回报，也不是投机或杠杆式交易。",
+    case "nasdaq":
+      return buildScriptReply(findScript("why-nasdaq-story", objectionScripts), [
+        "纳斯达克路线图在这里更像治理升级路径，不是销售口号。",
+        nasdaqCard?.detail ??
+          "它分成三阶段：先做品牌与收入基础，再做区域扩张与治理升级，最后才谈 capital market readiness。",
         demoMode
-          ? "你 demo 时可以这样讲：『它的重点不是承诺你赚多少，而是让你用合规、透明、真实资产支持的方式持有黄金。』"
-          : "如果客户对 Shariah 很重视，你可以先讲“真实资产 + 无利息 + 无保证回报”这三个关键词。",
-      ]);
-
-    case "entry":
-      return buildScriptReply(findScript("how-much-to-start", objectionScripts), [
-        "这个很好回答，记住一个数字就够了：0.1 克。",
-        entryCard?.detail ??
-          "GoldNow 支持从 0.1 克开始，意思是客户不用一次准备很大笔资金，也可以先开始持有真实黄金。",
-        demoMode
-          ? "你可以这样讲：『它很适合想开始持有黄金、但不想一上来压力太大的人。』"
-          : "建议你把“低门槛”跟“长期累积”一起说，这样客户不会误会成短线投机产品。",
-      ]);
-
-    case "buy":
-      return [
-        "购买流程我帮你整理成 demo 可直接讲的版本。",
-        buyFlowCard?.detail ??
-          "官方英文版的流程是：先到 Top Up 菜单充值 GoldNow Points，金额会从银行账户扣除；充值完成后，再到 Buy 菜单，按你想买的克数输入数量，然后确认购买。",
-        `重点记忆点有两个：第一，${entryCard?.title ?? "最低可以从 0.1 克开始"}；第二，是按克数累积黄金，不需要一次买很大。`,
-        demoMode
-          ? "你可以现场边讲边演示：『先充值，再按克数买黄金，流程很直观。』"
-          : "如果你要，我下一步可以顺手帮你把购买流程写成页面里的“AI 推荐回答模板”。",
-      ].join("\n\n");
-
-    case "redeem":
-      return buildScriptReply(findScript("can-redeem-physical", objectionScripts), [
-        "可以换，而且这正是 GoldNow 很有说服力的一点。",
-        redemptionCard?.detail ??
-          "官方资料强调，GoldNow 不是“只能看不能拿”的虚拟黄金，用户可以兑换实体黄金。",
-        demoMode
-          ? "你可以直接对客户说：『今天是数字化持有，需要时就可以实物化。』"
-          : "建议你 demo 时一定主动讲“全国 Tomei 门店可兑换”，这会让安心感明显上升。",
-      ]);
-
-    case "partner":
-      return buildScriptReply(findScript("is-this-mlm", objectionScripts), [
-        "这个部分要讲得稳一点，不要讲成“保证赚钱”。",
-        "GoldNow 的资料把它定义成推荐与伙伴计划，而且核心原则写得很明确：无保证收入、无投资回报承诺、奖励基于真实交易、并且需要完成 KYC 与合规要求。",
-        demoMode
-          ? "你可以这样讲：『它重视真实交易和长期参与，不是拿高回报口号去推动加入。』"
-          : "如果客户要问伙伴层级和奖励比例，我可以下一步把那一页单独整理成 AI 专用知识卡。",
+          ? "你可以这样讲：『这说明品牌想走长期路线，但今天给客户看的重点，还是产品、会员礼遇和信任基础。』"
+          : "建议你把这段放在客户已经认可品牌定位之后再讲，不要一上来就讲资本故事。",
       ]);
 
     case "mlm":
       return buildScriptReply(findScript("is-this-mlm", objectionScripts), [
-        "这个问题你要回答得非常干净。",
-        "就 GoldNow 资料本身来看，它有推荐与伙伴计划，但官方强调的是基于真实黄金交易的奖励机制。",
+        "这个问题你要回得很干净。",
+        "Aurex Legacy 的定位是高端产品、会员礼遇和数字确权平台，不是 downline / upline 的招募结算系统。",
         demoMode
-          ? "你可以这样对客户讲：『它有伙伴机制，但官方定位是合规、交易驱动、长期参与，不是靠拉人头承诺收入。』"
-          : "如果场景敏感，建议你少讲层级，多讲“真实交易、KYC、无保证回报”。",
+          ? "你可以这样讲：『它不是靠拉人头赚钱，而是靠真实产品、会员关系和品牌服务去建立长期价值。』"
+          : "如果场景敏感，就少讲复杂结构，多讲品牌、产品和会员服务。",
       ]);
 
-    case "returns":
-      return buildScriptReply(findScript("is-there-guaranteed-return", objectionScripts), [
-        "这个我建议你回答得很克制，反而更可信。",
-        whyGoldCard?.detail ??
-          "GoldNow 的官方资料没有把它包装成“稳赚”或“高回报”产品，反而强调黄金更适合做长期保值。",
+    case "crypto":
+      return buildScriptReply(findScript("is-this-crypto", objectionScripts), [
+        "不是，这里不要讲成币圈项目。",
+        provenanceCard?.detail ??
+          "它现在强调的是数字确权、可审计记录和未来接口，而不是面向零售客户做 token 或 NFT 销售。",
         demoMode
-          ? "你可以直接说：『这个产品重点不是短期收益承诺，而是让用户更容易拥有真实黄金。』"
-          : "如果你担心客户一直追问收益，我建议把回答拉回“真实黄金、低门槛、可兑换”这三个事实上。",
+          ? "你可以对客户说：『我们先把真实商品和会员系统做扎实，再谈未来更远的数字基础设施。』"
+          : "建议你把“先有真实商品、再有数字记录”这句话记住，很好用。",
       ]);
+
+    case "business_model":
+      return [
+        "Aurex Legacy 的商业模型不是只靠卖一件珠宝赚钱。",
+        "它的收入结构分成金章销售、珠宝销售、会员收入、活动收入，以及后期的技术服务和国际授权收入。",
+        moatCard?.detail ??
+          "它的护城河来自身份价值、线下履约能力、数字编号体系、高毛利会员模型和未来资本化弹性。",
+        demoMode
+          ? "你可以这样讲：『它卖的是产品，但真正做大的是会员关系、服务收入和品牌资产。』"
+          : "如果你愿意，我可以下一轮把商业模型整理成客户能听懂的 20 秒版本。",
+      ].join("\n\n");
   }
 }
 
-function getSuggestedActions(topic: GoldNowTopic) {
+function getSuggestedActions(topic: AurexTopic) {
   switch (topic) {
-    case "buy":
-      return ["演示 Top Up 与 Buy 流程", "强调 0.1 克起购", "补一句按克数长期累积"];
-    case "entry":
-      return ["强调 0.1 克起购", "补一句长期累积", "避免讲短线收益"];
-    case "redeem":
-      return ["打开兑换流程说明", "强调可到 Tomei 门店领取", "提醒需带身份资料核验"];
-    case "shariah":
-      return ["先说真实资产支持", "再说无利息与无保证回报", "补一句权威顾问背书"];
-    case "trust":
-      return ["强调 1 克对 1 克实体黄金", "提到 Tomei 上市集团背景", "补充 60+ 门店网络"];
-    case "partner":
-      return ["先讲合规原则", "避免讲保证收入", "如被追问再展开伙伴机制"];
+    case "membership":
+      return ["先讲权益账户", "再讲黑卡路径", "最后讲全球礼遇"];
+    case "provenance":
+      return ["强调唯一编号", "补 ownership record", "带出 audit trail"];
+    case "product_ladder":
+      return ["先讲 Entry 入口", "再讲 Black Card", "补一句升级路径"];
+    case "rwa":
+      return ["先讲合规边界", "回到 future readiness", "避免收益承诺"];
+    case "nasdaq":
+      return ["强调三阶段路线", "不要当销售承诺", "拉回品牌基础"];
     case "mlm":
-      return ["先避免绝对化口号", "强调真实交易与 KYC", "主动说明无保证收入承诺"];
+      return ["先否定招募盘", "强调真实产品", "回到会员关系"];
+    case "crypto":
+      return ["先说明不是发币", "强调数字确权", "补真实商品基础"];
+    case "business_model":
+      return ["先讲产品收入", "再讲会员收入", "最后讲长期授权"];
     default:
-      return ["先讲一句人话定义", "再讲真实黄金支持", "最后补 0.1 克与实体兑换"];
+      return ["先讲品牌定位", "再讲会员逻辑", "最后讲数字确权"];
   }
 }
 
@@ -271,7 +270,6 @@ export function getAiCoachSuggestedActionsForMessage(message: string) {
   return getSuggestedActions(topic);
 }
 
-// Placeholder integration surface for future LLM orchestration.
 export async function mockAiCoach(request: AiCoachRequest): Promise<AiCoachResponse> {
   const normalizedMessage = normalizeMessage(request.message);
   const topic = detectTopic(normalizedMessage || request.context);
@@ -282,6 +280,6 @@ export async function mockAiCoach(request: AiCoachRequest): Promise<AiCoachRespo
     suggestedActions: getSuggestedActions(topic),
     provider: "mock",
     model: "local-demo",
-    notice: "未检测到 OpenAI 连接，当前使用本地 demo 知识回答。",
+    notice: "未检测到 OpenAI 连接，当前使用本地 Aurex Legacy 知识回答。",
   };
 }

@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/app/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { goldnowKnowledgeSourceNote } from "@/features/ai/knowledge/goldnow";
+import { aurexKnowledgeSourceNote } from "@/features/ai/knowledge/aurex";
 
 export default function AiConciergePage() {
   return (
@@ -18,7 +18,7 @@ export default function AiConciergePage() {
           ["会员重点", "先讲清楚 Privilege Account：不是一次性卖货，而是长期权益与服务关系。"],
           ["信任基础", "它的设计逻辑是用真实商品、会员体系和可审计的编号证书，去承接长期品牌价值。"],
           ["成交切口", "先从 Heritage Gold Plaque 或 Signature Legacy Pack 讲起，更容易进入高端礼赠与身份表达场景。"],
-          ["当前知识来源", goldnowKnowledgeSourceNote],
+          ["当前知识来源", aurexKnowledgeSourceNote],
         ].map(([title, detail]) => (
           <Card key={title} className="p-6">
             <Badge variant="neutral">主动提示卡</Badge>

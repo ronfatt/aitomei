@@ -4,27 +4,27 @@ import type { CSSProperties } from "react";
 import { PublicHeader } from "@/components/layout/public-header";
 
 const publicShellStyle = {
-  "--background": "#050505",
-  "--foreground": "#F5EAD6",
-  "--surface": "rgba(14,12,10,0.96)",
-  "--muted": "#BBAE9C",
-  "--border": "rgba(216,177,91,0.14)",
-  "--gold": "#F2C86B",
-  "--gold-soft": "rgba(242,200,107,0.16)",
-  "--gold-strong": "#D8B15B",
-  "--ring": "rgba(216,177,91,0.24)",
+  "--background": "#050403",
+  "--foreground": "#F4EBDD",
+  "--surface": "rgba(14,11,8,0.94)",
+  "--muted": "#A99C8A",
+  "--border": "rgba(214,177,94,0.18)",
+  "--gold": "#D6B15E",
+  "--gold-soft": "rgba(214,177,94,0.14)",
+  "--gold-strong": "#C89B3C",
+  "--ring": "rgba(214,177,94,0.22)",
   "--success": "#9AD0A8",
-  "--warning": "#F2C86B",
+  "--warning": "#D6B15E",
 } as CSSProperties;
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <div
-      className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(216,177,91,0.08),transparent_22%),linear-gradient(180deg,#030303_0%,#070606_48%,#0a0908_100%)]"
+      className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(214,177,94,0.08),transparent_18%),linear-gradient(180deg,#050403_0%,#090705_48%,#050403_100%)]"
       style={publicShellStyle}
     >
       <PublicHeader />
-      <main className="mx-auto w-full max-w-7xl px-6 py-8 lg:px-10 lg:py-12">{children}</main>
+      <main className="mx-auto w-full max-w-[1280px] px-5 py-8 lg:px-8 lg:py-12">{children}</main>
     </div>
   );
 }

@@ -145,7 +145,7 @@ export async function getAiCoachConversationBootstrap(userId: string, authMode: 
         createdAt: session.created_at,
         updatedAt: session.updated_at,
         messages: conversationMessages,
-        suggestedActions: ["先讲一句人话定义", "再讲真实黄金支持", "最后补实体兑换"],
+        suggestedActions: ["先讲品牌定位", "再讲会员逻辑", "最后讲数字确权"],
         provider: assistantMetadata.provider,
         model: assistantMetadata.model,
         notice: assistantMetadata.notice ?? null,

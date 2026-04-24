@@ -78,14 +78,14 @@ interface StreamReplyOptions {
 
 const STORAGE_KEY = "tomei.ai_coach.conversations.v2";
 const SAVED_SNIPPETS_KEY = "tomei.ai_coach.saved_snippets.v1";
-const DEFAULT_SUGGESTED_ACTIONS = ["先讲一句人话定义", "再讲真实黄金支持", "最后补实体兑换"];
+const DEFAULT_SUGGESTED_ACTIONS = ["先讲品牌定位", "再讲会员逻辑", "最后讲数字确权"];
 
 const welcomeQuickQuestions = [
   "一句话介绍 Aurex Legacy",
-  "这是不是 MLM？",
-  "它的会员权益怎么讲？",
-  "帮我写跟进话术",
-  "模拟客户追问",
+  "它和普通珠宝品牌有什么不同？",
+  "会员权益账户怎么讲？",
+  "数字确权证书有什么用？",
+  "RWA 方向怎么讲才合规？",
   "生成 demo 讲解话术",
 ] as const;
 
@@ -95,16 +95,16 @@ const commonScenarios = [
     prompt: "请用一句人话介绍 Aurex Legacy，语气专业但自然。",
   },
   {
-    title: "20 秒讲解",
-    prompt: "请把 Aurex Legacy 讲成 20 秒销售介绍，突出文化珠宝资产、会员权益与数字确权。",
+    title: "会员逻辑",
+    prompt: "请把 Aurex Legacy 的会员权益账户讲成 20 秒销售介绍，突出长期关系与高端礼遇。",
   },
   {
-    title: "WhatsApp 跟进",
-    prompt: "请生成一段 WhatsApp 跟进文案，邀请客户继续了解 Aurex Legacy。",
+    title: "数字确权",
+    prompt: "请帮我把 Aurex Legacy 的数字确权证书讲得更好懂，适合现场 demo。",
   },
   {
     title: "Demo 开场白",
-    prompt: "请帮我生成一段适合 demo 开场的 Aurex Legacy 讲解话术，控制在 30 秒内。",
+    prompt: "请帮我生成一段适合 demo 开场的 Aurex Legacy 讲解话术，控制在 30 秒内，突出 heritage、membership、provenance。",
   },
 ] as const;
 
@@ -294,7 +294,20 @@ function buildFollowUpActions(message: string) {
 }
 
 function keywordScore(query: string, value: string) {
-  const keywords = ["mlm", "实体", "黄金", "shariah", "兑换", "demo", "whatsapp", "客户", "风险", "回报"];
+  const keywords = [
+    "mlm",
+    "会员",
+    "黑卡",
+    "provenance",
+    "确权",
+    "证书",
+    "rwa",
+    "纳斯达克",
+    "demo",
+    "客户",
+    "收益",
+    "crypto",
+  ];
   return keywords.reduce((score, keyword) => {
     if (query.includes(keyword) && value.toLowerCase().includes(keyword.toLowerCase())) {
       return score + 1;
@@ -322,25 +335,28 @@ function buildSourceSummary(
   knowledgeCards: AiKnowledgeCardRecord[],
   objectionScripts: AiObjectionScriptRecord[],
 ) {
-  const shariahCount =
-    knowledgeCards.filter((item) => item.tag.toLowerCase().includes("shariah")).length +
-    objectionScripts.filter((item) => item.objection.toLowerCase().includes("shariah")).length;
+  const membershipCount =
+    knowledgeCards.filter((item) => item.tag.includes("会员") || item.title.toLowerCase().includes("membership")).length +
+    objectionScripts.filter((item) => item.objection.includes("会员") || item.objection.includes("黑卡")).length;
+  const provenanceCount =
+    knowledgeCards.filter((item) => item.tag.includes("确权") || item.detail.toLowerCase().includes("provenance")).length +
+    objectionScripts.filter((item) => item.objection.includes("证书") || item.objection.toLowerCase().includes("provenance")).length;
 
   return [
     {
-      label: "Aurex FAQ",
+      label: "Aurex Core",
       detail: `${Math.min(knowledgeCards.length, 3)} 条核心产品知识`,
     },
     {
-      label: "Shariah FAQ",
-      detail: `${Math.max(1, Math.min(shariahCount, 3))} 条结构说明`,
+      label: "Membership Logic",
+      detail: `${Math.max(1, Math.min(membershipCount, 3))} 条会员结构说明`,
     },
     {
-      label: "Demo 脚本",
-      detail: `${Math.min(sourceDocuments.length, 2)} 份 demo 参考`,
+      label: "Provenance Notes",
+      detail: `${Math.max(1, Math.min(provenanceCount, 3))} 条确权与记录说明`,
     },
     {
-      label: "销售异议库",
+      label: "Demo Scripts",
       detail: `${Math.min(objectionScripts.length, 4)} 条常见应对`,
     },
   ];
@@ -1151,7 +1167,7 @@ export function AiCoachLivePanel({
                 <div className="max-w-[88%] rounded-[28px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.03))] px-4 py-4 shadow-[0_14px_30px_rgba(0,0,0,0.14)] sm:max-w-[78%]">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--gold-strong)]">AI 教练</p>
                   <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">
-                    早安。今天你可以直接问我 Aurex Legacy 怎么介绍、客户异议怎么回，或者让我帮你写 WhatsApp 跟进话术。
+                    早安。今天你可以直接问我 Aurex Legacy 的品牌定位、会员权益、数字确权，或者让我帮你整理一段 demo 讲解话术。
                   </p>
                 </div>
               </div>
@@ -1198,7 +1214,7 @@ export function AiCoachLivePanel({
               <Textarea
                 value={prompt}
                 onChange={(event) => setPrompt(event.target.value)}
-                placeholder="问我 Aurex Legacy 怎么介绍 / 问我客户异议怎么回应 / 让我帮你写跟进话术"
+                placeholder="问我 Aurex Legacy 怎么介绍 / 问我会员逻辑怎么讲 / 让我帮你整理数字确权话术"
                 className="min-h-24 border-none bg-transparent px-0 py-0 text-sm shadow-none placeholder:text-[var(--muted)]/75 focus:ring-0"
               />
               <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-[rgba(255,255,255,0.08)] pt-3">
@@ -1305,10 +1321,10 @@ export function AiCoachLivePanel({
                 className="rounded-[20px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-4 py-3"
               >
                 <div className="flex items-center gap-2">
-                  {item.label === "Aurex FAQ" ? <DatabaseZap className="size-4 text-[var(--gold)]" /> : null}
-                  {item.label === "Shariah FAQ" ? <ShieldCheck className="size-4 text-[var(--gold)]" /> : null}
-                  {item.label === "Demo 脚本" ? <Sparkles className="size-4 text-[var(--gold)]" /> : null}
-                  {item.label === "销售异议库" ? <Languages className="size-4 text-[var(--gold)]" /> : null}
+                  {item.label === "Aurex Core" ? <DatabaseZap className="size-4 text-[var(--gold)]" /> : null}
+                  {item.label === "Membership Logic" ? <ShieldCheck className="size-4 text-[var(--gold)]" /> : null}
+                  {item.label === "Provenance Notes" ? <Sparkles className="size-4 text-[var(--gold)]" /> : null}
+                  {item.label === "Demo Scripts" ? <Languages className="size-4 text-[var(--gold)]" /> : null}
                   <p className="text-sm font-semibold text-[var(--foreground)]">{item.label}</p>
                 </div>
                 <p className="mt-2 text-xs leading-6 text-[var(--muted)]">{item.detail}</p>

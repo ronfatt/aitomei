@@ -1,14 +1,14 @@
 import type { DashboardMetric } from "@/types/domain";
 
 import {
-  goldnowKnowledgeCards,
-  goldnowKnowledgeSourceDocuments,
-  goldnowKnowledgeSourceNote,
-  goldnowObjectionScripts,
-  type GoldNowKnowledgeCard,
-  type GoldNowKnowledgeSourceDocument,
-  type GoldNowObjectionScript,
-} from "@/features/ai/knowledge/goldnow";
+  aurexKnowledgeCards,
+  aurexKnowledgeSourceDocuments,
+  aurexKnowledgeSourceNote,
+  aurexObjectionScripts,
+  type AurexKnowledgeCard,
+  type AurexKnowledgeSourceDocument,
+  type AurexObjectionScript,
+} from "@/features/ai/knowledge/aurex";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { hasSupabaseEnv, hasSupabaseAdminEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -20,17 +20,17 @@ type KnowledgeSourceRow = Database["public"]["Tables"]["ai_knowledge_sources"]["
 type KnowledgeEntryRow = Database["public"]["Tables"]["ai_knowledge_entries"]["Row"];
 type ObjectionScriptRow = Database["public"]["Tables"]["ai_objection_scripts"]["Row"];
 
-export interface AiKnowledgeSourceRecord extends GoldNowKnowledgeSourceDocument {
+export interface AiKnowledgeSourceRecord extends AurexKnowledgeSourceDocument {
   status: RecordStatus;
   source: KnowledgeRecordSource;
 }
 
-export interface AiKnowledgeCardRecord extends GoldNowKnowledgeCard {
+export interface AiKnowledgeCardRecord extends AurexKnowledgeCard {
   status: RecordStatus;
   source: KnowledgeRecordSource;
 }
 
-export interface AiObjectionScriptRecord extends GoldNowObjectionScript {
+export interface AiObjectionScriptRecord extends AurexObjectionScript {
   status: RecordStatus;
   source: KnowledgeRecordSource;
 }
@@ -77,17 +77,17 @@ function buildMetrics(
 }
 
 function getMockOverview(): AiKnowledgeAdminOverview {
-  const sourceDocuments: AiKnowledgeSourceRecord[] = goldnowKnowledgeSourceDocuments.map((document) => ({
+  const sourceDocuments: AiKnowledgeSourceRecord[] = aurexKnowledgeSourceDocuments.map((document) => ({
     ...document,
     status: "active",
     source: "mock",
   }));
-  const knowledgeCards: AiKnowledgeCardRecord[] = goldnowKnowledgeCards.map((card) => ({
+  const knowledgeCards: AiKnowledgeCardRecord[] = aurexKnowledgeCards.map((card) => ({
     ...card,
     status: "active",
     source: "mock",
   }));
-  const objectionScripts: AiObjectionScriptRecord[] = goldnowObjectionScripts.map((script) => ({
+  const objectionScripts: AiObjectionScriptRecord[] = aurexObjectionScripts.map((script) => ({
     ...script,
     status: "active",
     source: "mock",
@@ -101,6 +101,20 @@ function getMockOverview(): AiKnowledgeAdminOverview {
     source: "mock",
     hasWritableStore: hasSupabaseAdminEnv(),
   };
+}
+
+function hasLegacyGoldNowKnowledge(
+  sourceDocuments: AiKnowledgeSourceRecord[],
+  knowledgeCards: AiKnowledgeCardRecord[],
+  objectionScripts: AiObjectionScriptRecord[],
+) {
+  const haystack = JSON.stringify({
+    sourceDocuments,
+    knowledgeCards,
+    objectionScripts,
+  }).toLowerCase();
+
+  return haystack.includes("goldnow") || haystack.includes("tomei") || haystack.includes("shariah");
 }
 
 function mapSourceRow(row: KnowledgeSourceRow): AiKnowledgeSourceRecord {
@@ -192,6 +206,10 @@ async function loadSupabaseKnowledge(): Promise<AiKnowledgeAdminOverview | null>
     const knowledgeCards = resolvedEntryRows.map((row) => mapKnowledgeEntryRow(row, sourceSlugById));
     const objectionScripts = resolvedScriptRows.map(mapObjectionScriptRow);
 
+    if (hasLegacyGoldNowKnowledge(sourceDocuments, knowledgeCards, objectionScripts)) {
+      return null;
+    }
+
     return {
       metrics: buildMetrics(sourceDocuments, knowledgeCards, objectionScripts),
       sourceDocuments,
@@ -219,6 +237,6 @@ export async function getAiCoachKnowledgeBundle(): Promise<AiCoachKnowledgeBundl
     knowledgeCards: overview.knowledgeCards.filter((item) => item.status !== "archived"),
     objectionScripts: overview.objectionScripts.filter((item) => item.status !== "archived"),
     source: overview.source,
-    sourceNote: goldnowKnowledgeSourceNote,
+    sourceNote: aurexKnowledgeSourceNote,
   };
 }

@@ -81,14 +81,14 @@ function buildAiCoachInstructions(input: {
   context: ReturnType<typeof inferAiCoachContext>;
 }) {
   return [
-    "你是 TOMEI Member Growth Platform 里的 AI 教练，也是 GoldNow demo 现场的官方知识助手。",
+    "你是 Aurex Legacy Member Platform 里的 AI 教练，也是 Aurex Legacy demo 现场的官方知识助手。",
     `当前会员名称：${input.memberName}。当前问题上下文：${input.context}。`,
     "你的角色不是冷冰冰客服，而是专业、支持型、会主动带话术的品牌教练。",
     "回答默认用简体中文；如果用户明确用英文或马来文提问，再切换语言。",
     "回答风格要像真人在帮销售现场 demo：先给结论，再解释，再主动补一句“你可以这样跟客户讲”。",
     "语气要自然、口语化、有判断力，但不能油腻、不能夸大、不能乱承诺收益。",
-    "任何涉及 GoldNow、Shariah、实体黄金、兑换、0.1 克起购、Tomei 背景、伙伴计划时，优先依据提供的知识资料回答。",
-    "这个平台不是 MLM、不是 downline/upline 招募系统、不是保证收入模型；如果被问到相关问题，要明确回到真实交易、合规要求、无保证回报。",
+    "任何涉及 Aurex Legacy 的品牌定位、会员逻辑、数字确权、RWA 方向、纳斯达克路线、产品阶梯或是否 MLM 时，优先依据提供的知识资料回答。",
+    "这个平台不是 MLM、不是 downline/upline 招募系统、不是发币项目、也不是保证收入模型；如果被问到相关问题，要明确回到真实产品、会员关系、provenance、audit trail 与 future readiness。",
     "如果资料没有明确写的数字、比例、收益、法律承诺，不要编造。你可以直接说“这版 demo 目前先按已载入的官方资料回答”。",
     "输出必须是 JSON，包含 reply 和 suggestedActions。",
     "reply 用 2 到 4 小段文字，适合直接给客户 demo 看。",
@@ -103,19 +103,19 @@ function buildAiCoachStreamingInstructions(input: {
   context: ReturnType<typeof inferAiCoachContext>;
 }) {
   return [
-    "你是 TOMEI Member Growth Platform 里的 AI 教练，也是 GoldNow demo 现场的官方知识助手。",
+    "你是 Aurex Legacy Member Platform 里的 AI 教练，也是 Aurex Legacy demo 现场的官方知识助手。",
     `当前会员名称：${input.memberName}。当前问题上下文：${input.context}。`,
     "你要用简体中文回答，风格像专业但很会带 demo 的真人顾问。",
     "请先直接回答，再补一句“你可以这样跟客户讲”。",
     "回答自然、主动、口语化，但不能夸张承诺，不能乱编收益、比例或未给出的规则。",
-    "如果问题涉及 GoldNow、Shariah、实体兑换、最低门槛、Tomei 背景或是否 MLM，优先依据下面资料作答。",
+    "如果问题涉及 Aurex Legacy 的品牌定位、会员权益、数字确权、RWA 方向、纳斯达克路线或是否 MLM，优先依据下面资料作答。",
     "不要输出 JSON，不要输出代码块，不要输出标题前缀，只输出适合直接展示给会员看的正文。",
     buildKnowledgeDigest(input.knowledge),
   ].join("\n\n");
 }
 
 function buildFallbackNotice() {
-  return "未配置 OPENAI_API_KEY，当前自动回退到本地 demo 知识模式。";
+  return "未配置 OPENAI_API_KEY，当前自动回退到本地 Aurex Legacy 知识模式。";
 }
 
 function extractOutputText(payload: unknown) {
@@ -184,7 +184,7 @@ export async function generateAiCoachReply(
   if (!normalizedMessage) {
     return {
       reply: "你直接把客户会问的话丢给我就行，我会先帮你讲人话版，再补一条你下一句可以怎么接。",
-      suggestedActions: ["先问产品定位", "再问信任基础", "最后问兑换方式"],
+      suggestedActions: ["先问品牌定位", "再问会员逻辑", "最后问数字确权"],
       provider: "mock",
       model: "local-demo",
       notice: "问题为空，已返回默认引导。",
@@ -296,7 +296,7 @@ export async function createAiCoachStreamingResponse(
         model: config.hasOpenAiApiKey && config.provider === "openai" ? config.model : "local-demo",
         notice:
           config.hasOpenAiApiKey && config.provider === "openai"
-            ? "GoldNow 官方资料已注入，正在生成实时回答。"
+            ? "Aurex Legacy 官方资料已注入，正在生成实时回答。"
             : buildFallbackNotice(),
       });
 
@@ -304,7 +304,7 @@ export async function createAiCoachStreamingResponse(
         emit({
           type: "done",
           reply: "你直接把客户会问的话丢给我就行，我会先帮你讲人话版，再补一条你下一句可以怎么接。",
-          suggestedActions: ["先问产品定位", "再问信任基础", "最后问兑换方式"],
+          suggestedActions: ["先问品牌定位", "再问会员逻辑", "最后问数字确权"],
           provider: "mock",
           model: "local-demo",
           sessionId: options.sessionId ?? null,

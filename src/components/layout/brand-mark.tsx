@@ -19,10 +19,10 @@ export function BrandMark({
       </div>
       {!compact ? (
         <div className="space-y-1">
-          <p className="font-[family-name:var(--font-display)] text-2xl leading-none tracking-[0.08em] text-[var(--foreground)]">
+          <p className="font-[family-name:var(--font-display)] text-2xl leading-none tracking-[0.08em] text-[rgba(244,235,221,0.98)]">
             AUREX LEGACY
           </p>
-          <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--muted)]">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-[rgba(244,235,221,0.74)]">
             Luxury Heritage Member Platform
           </p>
         </div>

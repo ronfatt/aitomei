@@ -65,6 +65,33 @@ body {
   }
 }
 
+@keyframes gold-sweep {
+  0% {
+    transform: translate3d(-12%, 0, 0) rotate(0deg);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate3d(6%, -2%, 0) rotate(3deg);
+    opacity: 0.32;
+  }
+  100% {
+    transform: translate3d(16%, 0, 0) rotate(0deg);
+    opacity: 0.15;
+  }
+}
+
+@keyframes gold-breathe {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.52;
+    transform: scale(1.04);
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -107,6 +134,18 @@ a {
   animation: luxury-fade-lift 0.8s ease-out both;
 }
 
+.luxury-fade-lift-delay-1 {
+  animation: luxury-fade-lift 0.8s ease-out 0.08s both;
+}
+
+.luxury-fade-lift-delay-2 {
+  animation: luxury-fade-lift 0.8s ease-out 0.16s both;
+}
+
+.luxury-fade-lift-delay-3 {
+  animation: luxury-fade-lift 0.8s ease-out 0.24s both;
+}
+
 .luxury-shimmer {
   position: relative;
   overflow: hidden;
@@ -125,6 +164,32 @@ a {
   transform: translateX(-120%);
   animation: luxury-shimmer 5.5s ease-in-out infinite;
   pointer-events: none;
+}
+
+.gold-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.gold-sweep::after {
+  content: "";
+  position: absolute;
+  inset: -18% -8%;
+  background: linear-gradient(
+    110deg,
+    transparent 18%,
+    rgba(242, 200, 107, 0.08) 34%,
+    rgba(255, 244, 214, 0.18) 46%,
+    rgba(242, 200, 107, 0.08) 58%,
+    transparent 74%
+  );
+  mix-blend-mode: screen;
+  animation: gold-sweep 11s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.gold-breathe {
+  animation: gold-breathe 6s ease-in-out infinite;
 }
 
 .editorial-photo-slot {

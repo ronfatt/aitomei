@@ -102,14 +102,20 @@ const capitalSignals = [
   },
 ] as const;
 
+const luxuryCardClass =
+  "rounded-[30px] border border-[rgba(216,177,91,0.14)] bg-[linear-gradient(180deg,rgba(18,15,12,0.98),rgba(9,8,7,0.98))] shadow-[inset_0_1px_0_rgba(255,255,255,0.03),0_18px_50px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-0.5 hover:border-[rgba(216,177,91,0.2)]";
+
+const luxuryCardSoftClass =
+  "rounded-[28px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] transition duration-300 hover:border-[rgba(216,177,91,0.16)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))]";
+
 export default function LandingPage() {
   return (
-    <div className="space-y-8 bg-[linear-gradient(180deg,#050505_0%,#080706_100%)] pb-8 lg:space-y-10">
+    <div className="space-y-10 bg-[linear-gradient(180deg,#030303_0%,#070606_100%)] pb-10 lg:space-y-12">
       <LandingHero />
 
       <section
         id="platform"
-        className="grid gap-6 rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(9,8,7,0.98),rgba(13,11,10,0.96))] px-6 py-8 shadow-[0_28px_90px_rgba(0,0,0,0.32)] lg:grid-cols-[0.92fr_1.08fr] lg:px-10 lg:py-10"
+        className="luxury-fade-lift grid gap-7 rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(9,8,7,0.98),rgba(13,11,10,0.96))] px-6 py-9 shadow-[0_28px_90px_rgba(0,0,0,0.32)] lg:grid-cols-[0.92fr_1.08fr] lg:px-10 lg:py-11"
       >
         <div className="space-y-6">
           <div className="space-y-4">
@@ -126,7 +132,7 @@ export default function LandingPage() {
             {platformLayers.map((item) => (
               <div
                 key={item.title}
-                className="rounded-[28px] border border-[rgba(216,177,91,0.1)] bg-[rgba(255,255,255,0.02)] p-5"
+                className={cn(luxuryCardSoftClass, "p-5")}
               >
                 <p className="text-xs uppercase tracking-[0.24em] text-[var(--gold)]">Platform Layer</p>
                 <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-[rgba(245,234,214,0.94)]">
@@ -139,10 +145,10 @@ export default function LandingPage() {
         </div>
 
         <div className="grid gap-4">
-          <div className="rounded-[34px] border border-[rgba(216,177,91,0.12)] bg-[radial-gradient(circle_at_top_right,rgba(216,177,91,0.1),transparent_20%),linear-gradient(180deg,rgba(20,17,14,0.98),rgba(11,10,9,0.98))] p-6">
+          <div className="rounded-[34px] border border-[rgba(216,177,91,0.12)] bg-[radial-gradient(circle_at_top_right,rgba(216,177,91,0.1),transparent_20%),linear-gradient(180deg,rgba(20,17,14,0.98),rgba(11,10,9,0.98))] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03),0_18px_50px_rgba(0,0,0,0.2)]">
             <p className="text-xs uppercase tracking-[0.24em] text-[var(--gold)]">Problem to Solution</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[26px] border border-[rgba(216,177,91,0.08)] bg-[rgba(255,255,255,0.02)] p-5">
+              <div className={cn(luxuryCardSoftClass, "p-5")}>
                 <p className="text-sm uppercase tracking-[0.18em] text-[rgba(242,227,198,0.52)]">行业痛点</p>
                 <ul className="mt-4 space-y-3 text-sm leading-7 text-[rgba(242,227,198,0.7)]">
                   <li>高客单、低频复购</li>
@@ -151,7 +157,7 @@ export default function LandingPage() {
                   <li>RWA 热，但缺少真实消费场景</li>
                 </ul>
               </div>
-              <div className="rounded-[26px] border border-[rgba(216,177,91,0.08)] bg-[rgba(255,255,255,0.02)] p-5">
+              <div className={cn(luxuryCardSoftClass, "p-5")}>
                 <p className="text-sm uppercase tracking-[0.18em] text-[rgba(242,227,198,0.52)]">解决方案</p>
                 <ul className="mt-4 space-y-3 text-sm leading-7 text-[rgba(242,227,198,0.7)]">
                   <li>高端文化金章与珠宝组合成交</li>
@@ -167,7 +173,7 @@ export default function LandingPage() {
             {capitalSignals.map((item) => (
               <div
                 key={item.title}
-                className="rounded-[28px] border border-[rgba(216,177,91,0.1)] bg-[rgba(255,255,255,0.02)] p-5"
+                className={cn(luxuryCardSoftClass, "p-5")}
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[rgba(216,177,91,0.16)] text-[var(--gold)]">
                   <item.icon className="h-5 w-5" />
@@ -184,7 +190,7 @@ export default function LandingPage() {
 
       <section
         id="journey"
-        className="rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(8,7,6,0.98),rgba(12,10,9,0.96))] px-6 py-10 shadow-[0_28px_90px_rgba(0,0,0,0.32)] lg:px-10 lg:py-12"
+        className="luxury-fade-lift-delay-1 rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(8,7,6,0.98),rgba(12,10,9,0.96))] px-6 py-11 shadow-[0_28px_90px_rgba(0,0,0,0.32)] lg:px-10 lg:py-14"
       >
         <div className="mx-auto max-w-5xl text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">产品层级</p>
@@ -200,7 +206,7 @@ export default function LandingPage() {
           {productLadder.map((item) => (
             <Card
               key={item.title}
-              className="rounded-[32px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-8 shadow-none"
+              className={cn(luxuryCardClass, "p-8")}
             >
               <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(216,177,91,0.16)] bg-[rgba(216,177,91,0.08)] text-lg font-semibold tracking-[0.12em] text-[var(--gold)]">
                 {item.tier}
@@ -216,7 +222,7 @@ export default function LandingPage() {
 
       <section
         id="ai"
-        className="overflow-hidden rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[radial-gradient(circle_at_top,rgba(216,177,91,0.12),transparent_22%),linear-gradient(180deg,#090807_0%,#0f0d0b_100%)] px-6 py-10 shadow-[0_30px_100px_rgba(0,0,0,0.34)] lg:px-10 lg:py-12"
+        className="luxury-fade-lift-delay-2 overflow-hidden rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[radial-gradient(circle_at_top,rgba(216,177,91,0.12),transparent_22%),linear-gradient(180deg,#090807_0%,#0f0d0b_100%)] px-6 py-11 shadow-[0_30px_100px_rgba(0,0,0,0.34)] lg:px-10 lg:py-14"
       >
         <div className="mx-auto max-w-5xl text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">会员生态</p>
@@ -232,7 +238,7 @@ export default function LandingPage() {
           {membershipSignals.map((item) => (
             <div
               key={item.title}
-              className="rounded-[34px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-7"
+              className="rounded-[34px] border border-[rgba(216,177,91,0.14)] bg-[linear-gradient(180deg,rgba(18,15,12,0.98),rgba(8,7,6,0.98))] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.03),0_18px_50px_rgba(0,0,0,0.18)]"
             >
               <div className="flex h-16 w-16 items-center justify-center rounded-[22px] border border-[rgba(216,177,91,0.16)] bg-[rgba(216,177,91,0.08)] text-[var(--gold)]">
                 <item.icon className="h-7 w-7" />
@@ -248,7 +254,7 @@ export default function LandingPage() {
 
       <section
         id="capabilities"
-        className="rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(8,7,6,0.98),rgba(12,10,9,0.96))] px-6 py-10 shadow-[0_28px_90px_rgba(0,0,0,0.32)] lg:px-10 lg:py-12"
+        className="luxury-fade-lift-delay-3 rounded-[38px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(8,7,6,0.98),rgba(12,10,9,0.96))] px-6 py-11 shadow-[0_28px_90px_rgba(0,0,0,0.32)] lg:px-10 lg:py-14"
       >
         <div className="mx-auto max-w-5xl text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">数字确权</p>
@@ -277,7 +283,7 @@ export default function LandingPage() {
           ].map((item) => (
             <Card
               key={item.title}
-              className="rounded-[32px] border border-[rgba(216,177,91,0.1)] bg-[rgba(255,255,255,0.02)] p-8 shadow-none"
+              className={cn(luxuryCardClass, "p-8")}
             >
               <p className="text-xs uppercase tracking-[0.24em] text-[var(--gold)]">Digital Layer</p>
               <h3 className="mt-6 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[rgba(245,234,214,0.94)]">
@@ -289,7 +295,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="admin" className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+      <section id="admin" className="luxury-fade-lift-delay-3 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-[36px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(8,7,6,0.98),rgba(13,11,10,0.96))] p-8 shadow-[0_22px_70px_rgba(0,0,0,0.28)] lg:p-10">
           <Badge className="w-fit">运营后台已就绪</Badge>
           <h2 className="mt-5 font-[family-name:var(--font-display)] text-5xl tracking-[-0.05em] text-[rgba(245,234,214,0.96)] lg:text-6xl">
@@ -301,14 +307,20 @@ export default function LandingPage() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="/api/demo-login?role=member"
-              className={cn(buttonVariants({ size: "lg" }), "h-14 px-8 text-base")}
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "h-14 border border-[rgba(216,177,91,0.36)] bg-[linear-gradient(135deg,#f2c86b,#d8b15b_55%,#8f6a2c_100%)] px-8 text-base text-[#140e08] shadow-[0_18px_40px_rgba(216,177,91,0.18)] hover:brightness-[1.04]",
+              )}
             >
               进入会员端
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
             <Link
               href="/api/demo-login?role=admin"
-              className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "h-14 px-8 text-base")}
+              className={cn(
+                buttonVariants({ variant: "secondary", size: "lg" }),
+                "h-14 border-[rgba(216,177,91,0.16)] bg-[linear-gradient(180deg,rgba(18,15,12,0.98),rgba(9,8,7,0.98))] px-8 text-base text-[rgba(245,234,214,0.9)] hover:bg-[linear-gradient(180deg,rgba(24,20,16,0.98),rgba(10,9,8,1))]",
+              )}
             >
               进入管理后台
             </Link>
@@ -324,7 +336,7 @@ export default function LandingPage() {
           ].map((metric) => (
             <Card
               key={metric.label}
-              className="rounded-[30px] border border-[rgba(216,177,91,0.1)] bg-[rgba(255,255,255,0.02)] p-6 shadow-none"
+              className={cn(luxuryCardClass, "p-6")}
             >
               <p className="text-xs uppercase tracking-[0.24em] text-[rgba(242,227,198,0.5)]">{metric.label}</p>
               <p className="mt-5 font-[family-name:var(--font-display)] text-4xl tracking-[-0.04em] text-[rgba(245,234,214,0.94)]">
@@ -336,7 +348,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="rounded-[34px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(8,7,6,0.98),rgba(12,10,9,0.96))] px-6 py-7 text-center shadow-[0_20px_60px_rgba(0,0,0,0.24)] lg:px-10">
+      <section className="luxury-fade-lift-delay-3 rounded-[34px] border border-[rgba(216,177,91,0.1)] bg-[linear-gradient(180deg,rgba(8,7,6,0.98),rgba(12,10,9,0.96))] px-6 py-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.24)] lg:px-10">
         <div className="flex flex-col items-center gap-4 lg:flex-row lg:justify-between">
           <div className="space-y-3 text-left">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">Aurex Legacy Demo</p>
@@ -345,12 +357,21 @@ export default function LandingPage() {
             </h2>
           </div>
           <div className="flex flex-wrap gap-4">
-            <Link href="/api/demo-login?role=member" className={cn(buttonVariants({ size: "lg" }), "h-14 px-8 text-base")}>
+            <Link
+              href="/api/demo-login?role=member"
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "h-14 border border-[rgba(216,177,91,0.36)] bg-[linear-gradient(135deg,#f2c86b,#d8b15b_55%,#8f6a2c_100%)] px-8 text-base text-[#140e08] shadow-[0_18px_40px_rgba(216,177,91,0.18)]",
+              )}
+            >
               会员演示
             </Link>
             <Link
               href="/api/demo-login?role=admin"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-14 px-8 text-base")}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "h-14 border-[rgba(216,177,91,0.24)] bg-[rgba(255,255,255,0.02)] px-8 text-base text-[rgba(245,234,214,0.88)] hover:bg-[rgba(216,177,91,0.08)] hover:text-[rgba(245,234,214,0.96)]",
+              )}
             >
               管理端演示
             </Link>

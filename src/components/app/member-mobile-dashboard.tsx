@@ -10,15 +10,15 @@ import {
   CalendarClock,
   ChevronRight,
   FileImage,
-  Flame,
   Gift,
-  Medal,
   MessageSquareQuote,
   PlayCircle,
+  ShieldCheck,
   Sparkles,
   Star,
   Target,
   TrendingUp,
+  Users,
   Zap,
   WandSparkles,
 } from "lucide-react";
@@ -37,6 +37,52 @@ interface AssetPreview {
   title: string;
   detail: string;
   status: string;
+}
+
+interface OwnedPlaquePreview {
+  id: string;
+  title: string;
+  series: string;
+  purchaseDate: string;
+  provenanceStatus: string;
+  privilegeTag: string;
+}
+
+interface MemberPortfolioReference {
+  collectionCount: number;
+  referenceValue: string;
+  todayChange: string;
+  todayChangePercent: string;
+  disclaimer: string;
+}
+
+interface InvitedMembersOverview {
+  invitedCount: number;
+  activeCount: number;
+  upgradedCount: number;
+  note: string;
+}
+
+interface InvitedMemberPreview {
+  id: string;
+  name: string;
+  status: string;
+  focus: string;
+}
+
+interface MemberRelationshipSignals {
+  activationRate: string;
+  certificateReady: string;
+  privilegeReserve: string;
+  topFocusPack: string;
+  monthlyMovement: string;
+}
+
+interface MemberConsoleMoment {
+  id: string;
+  title: string;
+  detail: string;
+  when: string;
 }
 
 const suggestedPrompts = [
@@ -130,6 +176,14 @@ function getCurrentTier(rewardOverview: RewardOverview) {
   );
 }
 
+function getPlaqueStatusSummary(ownedPlaques: OwnedPlaquePreview[]) {
+  return {
+    issued: ownedPlaques.filter((item) => item.provenanceStatus.includes("已签发") || item.provenanceStatus.includes("已归档"))
+      .length,
+    reviewing: ownedPlaques.filter((item) => item.provenanceStatus.includes("审核")).length,
+  };
+}
+
 function SectionTitle({
   title,
   actionLabel,
@@ -161,6 +215,12 @@ export function MemberMobileDashboard({
   campaigns,
   learningModules,
   recentAssets,
+  ownedPlaques,
+  memberPortfolioReference,
+  invitedMembersOverview,
+  invitedMembers,
+  memberRelationshipSignals,
+  memberConsoleMoments,
 }: {
   displayName: string;
   missions: Mission[];
@@ -168,6 +228,12 @@ export function MemberMobileDashboard({
   campaigns: Campaign[];
   learningModules: LearningModule[];
   recentAssets: AssetPreview[];
+  ownedPlaques: OwnedPlaquePreview[];
+  memberPortfolioReference: MemberPortfolioReference;
+  invitedMembersOverview: InvitedMembersOverview;
+  invitedMembers: InvitedMemberPreview[];
+  memberRelationshipSignals: MemberRelationshipSignals;
+  memberConsoleMoments: MemberConsoleMoment[];
 }) {
   const router = useRouter();
   const [coachPrompt, setCoachPrompt] = useState("");
@@ -182,10 +248,10 @@ export function MemberMobileDashboard({
   const nextGap = rewardOverview.nextMilestonePoints
     ? Math.max(rewardOverview.nextMilestonePoints - rewardOverview.currentPoints, 0)
     : 0;
-  const completedCount = missions.filter((mission) => mission.status === "completed").length;
-  const streakDays = Math.max(3, Math.min(14, completedCount + 3));
   const todayRewardPoints = currentMission?.rewardPoints ?? 150;
   const progressGain = Math.max(6, Math.round((100 - rewardOverview.progressPercent) / 7));
+  const latestPlaque = ownedPlaques[0];
+  const plaqueStatusSummary = getPlaqueStatusSummary(ownedPlaques);
 
   const todayMustDo = useMemo(
     () => [
@@ -317,22 +383,22 @@ export function MemberMobileDashboard({
                     icon: Target,
                   },
                   {
-                    label: "当前积分",
-                    value: rewardOverview.currentPoints.toLocaleString(),
-                    detail: "再完成一点就能升级",
+                    label: "我的金章",
+                    value: `${memberPortfolioReference.collectionCount} 枚`,
+                    detail: "已进入私人藏品档案",
                     icon: Gift,
                   },
                   {
-                    label: "连续打卡",
-                    value: `${streakDays} 天`,
-                    detail: "保持节奏最重要",
-                    icon: Flame,
+                    label: "邀请激活",
+                    value: `${invitedMembersOverview.activeCount} 位`,
+                    detail: "保持关系活跃最重要",
+                    icon: Users,
                   },
                   {
-                    label: "今日优先级",
-                    value: "01",
-                    detail: currentMission?.title ?? "继续任务",
-                    icon: Medal,
+                    label: "参考变动",
+                    value: memberPortfolioReference.todayChange,
+                    detail: `${memberPortfolioReference.todayChangePercent} · 非结算依据`,
+                    icon: TrendingUp,
                   },
                 ].map((item) => (
                   <div key={item.label} className="flex min-h-[156px] flex-col rounded-[26px] border border-white/8 bg-white/[0.04] p-4 backdrop-blur-sm">
@@ -424,6 +490,272 @@ export function MemberMobileDashboard({
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-12">
+        <Card className="xl:col-span-7 rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.1),transparent_22%),linear-gradient(180deg,rgba(20,17,14,0.98),rgba(8,7,6,0.98))] p-6">
+          <SectionTitle title="会员资产与关系视图" actionLabel="查看藏品档案" href="/member/profile" />
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="rounded-[28px] border border-white/8 bg-white/5 p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">我的金章收藏</p>
+                  <p className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-[var(--foreground)]">
+                    {memberPortfolioReference.collectionCount}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                    已进入你的 Aurex Legacy 私人藏品档案
+                  </p>
+                </div>
+                <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-[linear-gradient(135deg,rgba(242,200,107,0.16),rgba(255,255,255,0.04))] text-[var(--gold)]">
+                  <Gift className="h-6 w-6" />
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-[24px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">最近购入</p>
+                <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">
+                  {latestPlaque?.title ?? "Aurex Heritage Gold Plaque"}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                  {latestPlaque?.series ?? "Heritage Launch Collection"} · {latestPlaque?.purchaseDate ?? "最近购入"}
+                </p>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                {ownedPlaques.slice(0, 3).map((plaque) => (
+                  <div key={plaque.id} className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-[var(--foreground)]">{plaque.title}</p>
+                        <p className="mt-1 text-sm text-[var(--muted)]">{plaque.series}</p>
+                      </div>
+                      <Badge variant="neutral">{plaque.provenanceStatus}</Badge>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-[var(--gold)]">{plaque.privilegeTag}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              <div className="rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">今日参考价值变动</p>
+                    <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[var(--gold)]">
+                      {memberPortfolioReference.todayChange}
+                    </p>
+                    <p className="mt-2 text-sm text-[var(--foreground)]">
+                      {memberPortfolioReference.todayChangePercent} · 参考总值 {memberPortfolioReference.referenceValue}
+                    </p>
+                  </div>
+                  <TrendingUp className="h-6 w-6 text-[var(--gold)]" />
+                </div>
+                <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{memberPortfolioReference.disclaimer}</p>
+              </div>
+
+              <div className="rounded-[28px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">邀请成员</p>
+                    <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[var(--foreground)]">
+                      {invitedMembersOverview.invitedCount}
+                    </p>
+                    <p className="mt-2 text-sm text-[var(--muted)]">保留高端会员关系视图，不展示层级返佣结构</p>
+                  </div>
+                  <Users className="h-6 w-6 text-[var(--gold)]" />
+                </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  {[
+                    { label: "已激活", value: invitedMembersOverview.activeCount },
+                    { label: "已升级", value: invitedMembersOverview.upgradedCount },
+                    { label: "证书状态", value: "正常" },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-[20px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-3">
+                      <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{item.label}</p>
+                      <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[28px] border border-white/8 bg-[rgba(255,255,255,0.035)] p-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(242,200,107,0.18)] text-[var(--gold)]">
+                    <ShieldCheck className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">推荐关系说明</p>
+                    <p className="mt-1 text-sm text-[var(--foreground)]">只展示邀请与活跃状态，不展示敏感树状结构</p>
+                  </div>
+                </div>
+                <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{invitedMembersOverview.note}</p>
+                <div className="mt-4 space-y-3">
+                  {invitedMembers.slice(0, 3).map((member) => (
+                    <div key={member.id} className="flex items-center justify-between gap-3 rounded-[20px] border border-white/8 bg-[rgba(255,255,255,0.04)] px-4 py-3">
+                      <div>
+                        <p className="text-sm font-semibold text-[var(--foreground)]">{member.name}</p>
+                        <p className="mt-1 text-xs text-[var(--muted)]">{member.focus}</p>
+                      </div>
+                      <Badge variant={member.status === "已升级" ? "default" : member.status === "已激活" ? "success" : "neutral"}>
+                        {member.status}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="xl:col-span-5 rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(17,14,11,0.94),rgba(8,7,6,0.98))] p-6">
+          <SectionTitle title="账户状态总览" actionLabel="查看会员档案" href="/member/profile" />
+          <div className="mt-6 space-y-4">
+            {[
+              {
+                title: "权益账户状态",
+                detail: `当前会籍：${currentTier?.title ?? "Legacy Signature"}，距离下一等级还差 ${nextGap.toLocaleString()} 分。`,
+              },
+              {
+                title: "证书签发状态",
+                detail: `已签发 / 已归档 ${plaqueStatusSummary.issued} 枚，审核中 ${plaqueStatusSummary.reviewing} 枚。`,
+              },
+              {
+                title: "关系网络活跃",
+                detail: `共邀请 ${invitedMembersOverview.invitedCount} 位成员，其中 ${invitedMembersOverview.activeCount} 位已激活，${invitedMembersOverview.upgradedCount} 位已升级。`,
+              },
+              {
+                title: "参考价值提示",
+                detail: memberPortfolioReference.disclaimer,
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-[24px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-5">
+                <p className="text-base font-semibold text-[var(--foreground)]">{item.title}</p>
+                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.detail}</p>
+              </div>
+            ))}
+
+            <div className="rounded-[24px] border border-white/8 bg-[linear-gradient(135deg,rgba(242,200,107,0.08),rgba(255,255,255,0.04))] p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">本周关系动能</p>
+                  <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">继续推动高质量激活，而不是扩大层级结构</p>
+                </div>
+                <ShieldCheck className="h-5 w-5 text-[var(--gold)]" />
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: "新加入", value: invitedMembersOverview.invitedCount - invitedMembersOverview.activeCount },
+                  { label: "已激活", value: invitedMembersOverview.activeCount },
+                  { label: "已升级", value: invitedMembersOverview.upgradedCount },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[18px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-3">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{item.label}</p>
+                    <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Card>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-12">
+        <Card className="xl:col-span-7 rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.1),transparent_22%),linear-gradient(180deg,rgba(19,16,13,0.98),rgba(8,7,6,0.98))] p-6">
+          <SectionTitle title="Black Card Console" actionLabel="查看会籍详情" href="/member/rewards" />
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
+            <div className="rounded-[28px] border border-white/8 bg-white/5 p-5">
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">本月会籍动能</p>
+              <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[var(--foreground)]">
+                {memberRelationshipSignals.monthlyMovement}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                当前节奏更适合继续做激活、升级和证书补录，而不是扩张敏感层级结构。
+              </p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: "激活率", value: memberRelationshipSignals.activationRate },
+                  { label: "证书就绪", value: memberRelationshipSignals.certificateReady },
+                  { label: "权益储备", value: memberRelationshipSignals.privilegeReserve },
+                  { label: "主推套餐", value: memberRelationshipSignals.topFocusPack },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{item.label}</p>
+                    <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">本月升级动态</p>
+                  <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">让会员关系、证书和礼遇状态一起往上走</p>
+                </div>
+                <TrendingUp className="h-5 w-5 text-[var(--gold)]" />
+              </div>
+
+              <div className="mt-5 space-y-4">
+                {memberConsoleMoments.map((item, index) => (
+                  <div key={item.id} className="relative rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-4">
+                    <div className="absolute left-4 top-5 h-2.5 w-2.5 rounded-full bg-[var(--gold)] shadow-[0_0_18px_rgba(242,200,107,0.45)]" />
+                    {index < memberConsoleMoments.length - 1 ? (
+                      <div className="absolute bottom-[-16px] left-[21px] top-[31px] w-px bg-[linear-gradient(180deg,rgba(242,200,107,0.28),rgba(255,255,255,0.02))]" />
+                    ) : null}
+                    <div className="pl-6">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-semibold text-[var(--foreground)]">{item.title}</p>
+                        <Badge variant="neutral">{item.when}</Badge>
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{item.detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="xl:col-span-5 rounded-[34px] border-white/8 bg-[linear-gradient(180deg,rgba(17,14,11,0.94),rgba(8,7,6,0.98))] p-6">
+          <SectionTitle title="关系表现" />
+
+          <div className="mt-6 space-y-4">
+            {[
+              {
+                title: "关系激活质量",
+                value: memberRelationshipSignals.activationRate,
+                detail: "相比只看人数，更值得看激活和后续升级质量。",
+              },
+              {
+                title: "证书补录进度",
+                value: memberRelationshipSignals.certificateReady,
+                detail: "证书状态越完整，越像高端会员资产系统，而不是普通销售台账。",
+              },
+              {
+                title: "当前主推焦点",
+                value: memberRelationshipSignals.topFocusPack,
+                detail: "当前更适合继续围绕主力会籍和升级路径做高端表达。",
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-[24px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{item.title}</p>
+                    <p className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[var(--foreground)]">{item.value}</p>
+                  </div>
+                  <Users className="h-5 w-5 text-[var(--gold)]" />
+                </div>
+                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
       </section>
 
       <section className="grid gap-6 xl:grid-cols-12">

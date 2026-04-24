@@ -1,7 +1,13 @@
 import { MemberMobileDashboard } from "@/components/app/member-mobile-dashboard";
 import {
   campaigns,
+  memberConsoleMoments,
+  memberRelationshipSignals,
+  invitedMembers,
+  invitedMembersOverview,
   learningModules,
+  memberPortfolioReference,
+  ownedPlaques,
   recentGeneratedAssets,
 } from "@/data/mock-data";
 import { requireRole } from "@/lib/auth/session";
@@ -27,6 +33,12 @@ export default async function MemberDashboardPage() {
       campaigns={campaigns}
       learningModules={learningModules}
       recentAssets={[...recentGeneratedAssets]}
+      ownedPlaques={[...ownedPlaques]}
+      memberPortfolioReference={memberPortfolioReference}
+      invitedMembersOverview={invitedMembersOverview}
+      invitedMembers={[...invitedMembers]}
+      memberRelationshipSignals={memberRelationshipSignals}
+      memberConsoleMoments={[...memberConsoleMoments]}
     />
   );
 }

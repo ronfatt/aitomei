@@ -367,6 +367,98 @@ export const recentGeneratedAssets = [
   },
 ] as const;
 
+export const ownedPlaques = [
+  {
+    id: "plaque-1",
+    title: "Aurex Heritage Gold Plaque No.018",
+    series: "Heritage Launch Collection",
+    purchaseDate: "12 Apr 2026",
+    provenanceStatus: "已签发证书",
+    privilegeTag: "可升级 Signature Legacy Pack",
+  },
+  {
+    id: "plaque-2",
+    title: "Founder Preview Gold Plaque No.006",
+    series: "Founder Circle Preview",
+    purchaseDate: "04 Apr 2026",
+    provenanceStatus: "审核中",
+    privilegeTag: "已锁定闭门活动席位",
+  },
+  {
+    id: "plaque-3",
+    title: "Family Heritage Gold Plaque No.021",
+    series: "Family Heritage Edition",
+    purchaseDate: "28 Mar 2026",
+    provenanceStatus: "已归档",
+    privilegeTag: "支持家族档案补录",
+  },
+] as const;
+
+export const memberPortfolioReference = {
+  collectionCount: 3,
+  referenceValue: "RM 128,800",
+  todayChange: "+RM 860",
+  todayChangePercent: "+0.68%",
+  disclaimer: "仅供参考，不构成收益承诺或结算依据。",
+} as const;
+
+export const invitedMembersOverview = {
+  invitedCount: 18,
+  activeCount: 12,
+  upgradedCount: 3,
+  note: "仅展示邀请关系与活跃状态，不展示层级返佣结构。",
+} as const;
+
+export const invitedMembers = [
+  {
+    id: "invite-1",
+    name: "Nur Alia",
+    status: "已激活",
+    focus: "Heritage Access Pack",
+  },
+  {
+    id: "invite-2",
+    name: "Jason Lim",
+    status: "跟进中",
+    focus: "Signature Legacy Pack",
+  },
+  {
+    id: "invite-3",
+    name: "Aisyah Rahman",
+    status: "已升级",
+    focus: "Founder Circle Preview",
+  },
+] as const;
+
+export const memberRelationshipSignals = {
+  activationRate: "67%",
+  certificateReady: "2 / 3",
+  privilegeReserve: "RM 18,400",
+  topFocusPack: "Signature Legacy Pack",
+  monthlyMovement: "+3 激活 / +1 升级",
+} as const;
+
+export const memberConsoleMoments = [
+  {
+    id: "console-1",
+    title: "Founder Preview Plaque 进入证书审核",
+    detail: "建议本周内补齐家族档案说明，可提升高端沟通完整度。",
+    when: "今天",
+  },
+  {
+    id: "console-2",
+    title: "本周新增 3 位已激活邀请成员",
+    detail: "当前最强兴趣集中在 Signature Legacy Pack。",
+    when: "本周",
+  },
+  {
+    id: "console-3",
+    title: "Privilege reserve 保持稳定",
+    detail: "适合继续引导到黑卡礼遇、会籍升级与闭门活动场景。",
+    when: "本月",
+  },
+] as const;
+
 export const memberActivities: ActivityItem[] = [
   {
     id: "activity-1",

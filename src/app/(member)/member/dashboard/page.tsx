@@ -8,6 +8,7 @@ import {
   learningModules,
   memberPortfolioReference,
   ownedPlaques,
+  products,
   recentGeneratedAssets,
 } from "@/data/mock-data";
 import { requireRole } from "@/lib/auth/session";
@@ -39,6 +40,7 @@ export default async function MemberDashboardPage() {
       invitedMembers={[...invitedMembers]}
       memberRelationshipSignals={memberRelationshipSignals}
       memberConsoleMoments={[...memberConsoleMoments]}
+      showcaseProducts={products.slice(0, 4)}
     />
   );
 }

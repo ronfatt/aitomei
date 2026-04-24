@@ -30,7 +30,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import type { RewardOverview } from "@/lib/supabase/repositories";
-import type { Campaign, LearningModule, Mission } from "@/types/domain";
+import type { Campaign, LearningModule, Mission, ProductHighlight } from "@/types/domain";
 
 interface AssetPreview {
   id: string;
@@ -221,6 +221,7 @@ export function MemberMobileDashboard({
   invitedMembers,
   memberRelationshipSignals,
   memberConsoleMoments,
+  showcaseProducts,
 }: {
   displayName: string;
   missions: Mission[];
@@ -234,6 +235,7 @@ export function MemberMobileDashboard({
   invitedMembers: InvitedMemberPreview[];
   memberRelationshipSignals: MemberRelationshipSignals;
   memberConsoleMoments: MemberConsoleMoment[];
+  showcaseProducts: ProductHighlight[];
 }) {
   const router = useRouter();
   const [coachPrompt, setCoachPrompt] = useState("");
@@ -754,6 +756,69 @@ export function MemberMobileDashboard({
                 <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.detail}</p>
               </div>
             ))}
+          </div>
+        </Card>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-12">
+        <Card className="xl:col-span-12 rounded-[34px] border-[rgba(242,200,107,0.14)] bg-[radial-gradient(circle_at_top_right,rgba(242,200,107,0.08),transparent_20%),linear-gradient(180deg,rgba(19,16,13,0.98),rgba(8,7,6,0.98))] p-6">
+          <SectionTitle title="今日推荐藏品与商品区" actionLabel="查看完整商品区" href="/member/products" />
+
+          <div className="mt-6 grid gap-4 xl:grid-cols-[0.9fr_2.1fr]">
+            <div className="rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-5">
+              <Badge variant="default">会员商品区</Badge>
+              <h3 className="mt-4 text-3xl font-semibold tracking-[-0.045em] text-[var(--foreground)]">
+                从编号藏品到金章，再到高端珠宝陈列
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                商品页不只是展示 SKU，而是把唯一编号、确权状态、会员权限和珠宝故事一起呈现，让会员更像在看私人藏品控制台。
+              </p>
+
+              <div className="mt-5 grid gap-3">
+                {[
+                  { label: "编号藏品", value: `${showcaseProducts.filter((item) => item.assetType === "numbered-collectible").length} 件` },
+                  { label: "金章区", value: `${showcaseProducts.filter((item) => item.assetType === "gold-plaque").length} 件` },
+                  { label: "珠宝展示区", value: `${showcaseProducts.filter((item) => item.assetType === "jewelry").length} 件` },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.04)] px-4 py-3">
+                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">{item.label}</p>
+                    <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {showcaseProducts.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/member/products/${product.id}`}
+                  className="group rounded-[28px] border border-white/8 bg-[rgba(255,255,255,0.04)] p-5 transition hover:-translate-y-1 hover:border-[rgba(242,200,107,0.18)] hover:bg-[rgba(255,255,255,0.06)]"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <Badge variant={product.assetType === "numbered-collectible" ? "default" : product.assetType === "gold-plaque" ? "warning" : "neutral"}>
+                        {product.category}
+                      </Badge>
+                      <p className="mt-4 text-lg font-semibold leading-7 text-[var(--foreground)]">{product.name}</p>
+                    </div>
+                    <div className="rounded-full border border-[rgba(242,200,107,0.18)] px-3 py-1 text-[11px] font-medium tracking-[0.16em] text-[var(--gold)]">
+                      {product.editionCode}
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{product.memberAccessLabel}</p>
+                  <div className="mt-5 space-y-2 rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.035)] p-4">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">确权状态</p>
+                    <p className="text-sm font-semibold text-[var(--foreground)]">{product.provenanceLabel}</p>
+                    <p className="text-sm text-[var(--gold)]">{product.priceRange}</p>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[var(--gold)]">
+                    查看藏品详情
+                    <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </Card>
       </section>

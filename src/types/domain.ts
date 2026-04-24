@@ -86,6 +86,13 @@ export interface ProductHighlight {
   id: string;
   name: string;
   category: string;
+  assetType: "numbered-collectible" | "gold-plaque" | "jewelry";
+  collection: string;
+  editionCode: string;
+  provenanceLabel: string;
+  memberAccessLabel: string;
+  materialNote: string;
+  availability: string;
   story: string;
   priceRange: string;
   spotlight: string;
